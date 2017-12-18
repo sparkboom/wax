@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "syntax-trailing-function-commas",
+    "transform-object-assign",
+    "transform-object-rest-spread",
+    "transform-export-extensions",
+    "transform-class-properties"
+  ],
+  "presets": [
+    "env",
+    "react"
+  ]
+}

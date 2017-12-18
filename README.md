@@ -1,2 +1,2 @@
 # wax
-A visual language
+A Visual Language
