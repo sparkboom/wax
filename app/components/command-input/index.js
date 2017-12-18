@@ -34,5 +34,5 @@ const Input = styled.input`
 `;
 
 export default props => (
-  <Input type="text" />
+  <Input type="text" {...props} />
 );

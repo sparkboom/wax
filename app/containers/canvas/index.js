@@ -1,11 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { routes, getRoutePathname } from '../../routes';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import {connect} from 'react-redux';
+
 import styled from 'styled-components';
 import {CommandInput} from '../../components';
 
-const InputContainer = styled.div`
+import * as actions from './actions';
+
+const InputContainer = styled.div `
   display: flex;
   text-align: center;
   position: absolute;
@@ -19,14 +20,22 @@ const InputContainer = styled.div`
 class Canvas extends React.Component {
 
   render() {
+    let {inputChange, currentInput, inputSet} = this.props;
     return (
     <div>
-
       <InputContainer>
-        <CommandInput />
-      </InputContainer>);
-    </div>)
+        <CommandInput
+          autoFocus
+          onChange={inputChange}
+          onInput={inputSet} />
+      </InputContainer>
+    </div>);
   }
 }
 
-export default withRouter(connect()(Canvas));
+export default connect(props => ({
+  currentInput: props.canvas.currentInput
+}), dispatch => ({
+  inputChange: event => dispatch(actions.inputChange(event.target.value)),
+  inputSet: event => dispatch(actions.inputSet(event.target.value)),
+}))(Canvas);

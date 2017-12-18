@@ -19,12 +19,7 @@ const Frame = styled.div`
 class App extends React.Component {
 
   render() {
-    return (
-      <Frame>
-        <Switch>
-          <Route path={'/home'} component={Canvas}/>
-        </Switch>
-      </Frame>);
+    return <Frame><Switch><Route path={'/home'} component={Canvas}/></Switch></Frame>
   }
 }
 
