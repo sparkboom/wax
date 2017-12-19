@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import tokens from '../../style-tokens';
 
 const Input = styled.input`
 
-  color: ${tokens.textColor};
+  color: ${p => p.theme.textColor};
 
   margin: 0;
   max-width: 100%;

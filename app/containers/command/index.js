@@ -1,8 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {CommandInput} from '../../components';
-import {InputContainer} from './private';
+import {InputContainer, CommandInput} from './private';
 
 import * as actions from './actions';
 
