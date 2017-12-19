@@ -31,6 +31,7 @@ const Input = styled.input`
   box-shadow: none;
 
   font-size: 40px;
+  font-weight: lighter;
 `;
 
 export default props => (

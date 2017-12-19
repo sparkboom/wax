@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import routingReducer from './routing';
-import canvasReducer from '../containers/canvas/reducer';
+import commandReducer from '../containers/command/reducer';
 
 export const routing = 'routing';
 
 export default {
   routing: routingReducer,
-  canvas: canvasReducer,
+  command: commandReducer,
 };
