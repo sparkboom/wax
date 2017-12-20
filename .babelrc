@@ -4,7 +4,8 @@
     "transform-object-assign",
     "transform-object-rest-spread",
     "transform-export-extensions",
-    "transform-class-properties"
+    "transform-class-properties",
+    "transform-function-bind"
   ],
   "presets": [
     "env",
