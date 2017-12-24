@@ -15,7 +15,7 @@ class CommandLine extends React.Component {
   inputRef = null;
 
   onKeyPress = e => {
-    console.log('onKeyPress', e);
+    console.log('onKeyPress', e, e.key);
     if (keycode(e) === 'enter'){
       this.props.inputSet(e);
     }else if (!isEmpty(e.key)) {
@@ -26,15 +26,21 @@ class CommandLine extends React.Component {
   };
 
   onKeyDown = e => {
-    console.log('onKeyDown', keycode(e), {left: keycode.codes.left}, e);
+    console.log('onKeyDown', keycode(e),  e);
     if (e.target !== this.inputRef){
       return;
     }else if (keycode(e) === 'left' || keycode(e) === 'right'){
       this.props.moveCaret(keycode(e));
+    }else if (keycode(e) === 'backspace' && this.props.caretIndex>0){
+      this.props.inputReplace('', this.props.caretIndex-1, 1);
     }else {
       console.debug('onKeyDown event not handled', e);
     }
   };
+
+  onSelectCaretIndex = index => {
+    this.props.setCaret(index);
+  }
 
   componentWillMount() {
     document.addEventListener("keydown", ::this.onKeyDown);
@@ -50,15 +56,16 @@ class CommandLine extends React.Component {
     <div>
       <RickInputContainer>
         <RichInput
+          autoFocus
           inputRef={r => this.inputRef = r}
           value={currentInput}
           caretIndex={caretIndex}
+          onSelectCaretIndex={this.onSelectCaretIndex}
           onKeyDown={this.onKeyDown}
           onKeyPress={this.onKeyPress} />
       </RickInputContainer>
       <InputContainer>
         <CommandInput
-          autoFocus
           value={currentInput}
           onChange={this.props.inputChange} />
       </InputContainer>
@@ -72,6 +79,8 @@ export default connect(props => ({
 }), dispatch => ({
   inputChange: event => dispatch(actions.inputChange(event.target.value)),
   inputSet: event => dispatch(actions.inputSet(event.target.value)),
+  inputReplace: (newValue, index, selectionLength) => dispatch(actions.inputReplace(newValue, index, selectionLength)),
   inputInsert: event => dispatch(actions.inputInsert(event.key)),
   moveCaret: event => dispatch(actions.moveCaret(event)),
+  setCaret: index => dispatch(actions.setCaret(index)),
 }))(CommandLine);
