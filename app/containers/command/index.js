@@ -8,6 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 
 const RickInputContainer = styled(InputContainer)`
   bottom: 8rem;
+  user-select: none;
 `;
 
 class CommandLine extends React.Component {
@@ -31,7 +32,7 @@ class CommandLine extends React.Component {
       return;
     }else if (keycode(e) === 'left' || keycode(e) === 'right'){
       this.props.moveCaret(keycode(e));
-    }else if (keycode(e) === 'backspace' && this.props.caretIndex>0){
+    }else if (keycode(e) === 'backspace' && this.props.caretIndex > 0){
       this.props.inputReplace('', this.props.caretIndex-1, 1);
     }else {
       console.debug('onKeyDown event not handled', e);

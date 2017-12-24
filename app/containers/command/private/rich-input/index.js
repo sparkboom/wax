@@ -2,6 +2,7 @@ import React from 'react';
 import styled, {keyframes, withTheme} from 'styled-components';
 import { createSelector } from 'reselect';
 import { getNodeCharIndex } from '../../../../lib/text-width';
+import last from 'lodash/last';
 
 const blink = keyframes`
   from, to {
@@ -50,14 +51,18 @@ const RichInput = styled.div`
   }
 `;
 
-const TextBlock = styled.p`
+const InlineTextBlock = styled.span`
   display: inline-block;
+  cursor: text;
 `;
+
+const UNICODE_NARROW_NOBREAK_SPACE = '\u202F';
 
 const getValue = p => p.value;
 const getCaretIndex = p => p.caretIndex;
-const getPreText = createSelector(getValue, getCaretIndex, (value, caretIndex) => value.substr(0, caretIndex));
-const getPostText = createSelector(getValue, getCaretIndex, (value, caretIndex) => value.substring(caretIndex, value.length));
+// In future use a scanner here
+const getPreText = createSelector(getValue, getCaretIndex, (value, caretIndex) => value.substr(0, caretIndex).replace(/\s/g, UNICODE_NARROW_NOBREAK_SPACE) );
+const getPostText = createSelector(getValue, getCaretIndex, (value, caretIndex) => value.substring(caretIndex, value.length).replace(/\s/g, UNICODE_NARROW_NOBREAK_SPACE) );
 
 class RichInputContainer extends React.Component {
 
@@ -72,6 +77,8 @@ class RichInputContainer extends React.Component {
   };
 
   render() {
+    let preText = getPreText(this.props);
+    let postText = getPostText(this.props);
 
     return (
       <RichInput
@@ -79,15 +86,13 @@ class RichInputContainer extends React.Component {
         onKeyPress={this.props.onKeyPress}
         innerRef={this.props.inputRef}
         >
-          <span
+          <InlineTextBlock
             ref={r => this.pretextSpan = r}
             onMouseDown={e => this.onMouseDown(e, this.pretextSpan)}
-            >{getPreText(this.props)}</span>
-          <Caret></Caret>
-          <span
+            >{preText}</InlineTextBlock><Caret /><InlineTextBlock
             ref={r => this.posttextSpan = r}
             onMouseDown={e => this.onMouseDown(e, this.posttextSpan)}
-            >{getPostText(this.props)}</span>
+            >{postText}</InlineTextBlock>
       </RichInput>
     );
   }
