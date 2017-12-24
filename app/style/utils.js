@@ -1,11 +1,6 @@
 import {css} from 'styled-components';
 
-export function backGradient({spotlightColor,backColor}){
-  const shape = 'ellipse';
-  const fillType = 'cover';
-  const from = '0%';
-  const to = '100%';
-  const position = '50% 80%';
+export function backGradient({spotlightColor = 'grey',backColor = 'black', shape='ellipse', fillType = 'cover', from = '0%', to = '100%', position = '50% 80%'}){
   return css`
     background: ${spotlightColor}; /* Old browsers */
     background: -moz-radial-gradient(${position}, ${shape} ${fillType}, ${spotlightColor} ${from}, ${backColor} ${to}); /* FF3.6-15 */
