@@ -1,8 +1,9 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { connect } from 'react-redux';
 import CommandLine from '../command';
 
-class App extends React.Component {
+class App extends React.Component<{}> {
 
   render() {
     return (

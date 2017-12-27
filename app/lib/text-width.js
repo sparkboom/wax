@@ -1,31 +1,65 @@
-export function getWidthOfCanvasText(txt, fontname, fontsize){
-    if(getWidthOfCanvasText.c === undefined){
-        getWidthOfCanvasText.c=document.createElement('canvas');
-        getWidthOfCanvasText.ctx=getWidthOfCanvasText.c.getContext('2d');
-    }
-    getWidthOfCanvasText.ctx.font = fontsize + ' ' + fontname;
-    return getWidthOfCanvasText.ctx.measureText(txt).width;
+// @flow
+
+type CaretPosition = {
+  +offsetNode : HTMLElement,
+  +offset : number,
+  +getClientRect : any => mixed,
 }
 
-export function getWidthOfSpanText(txt, fontname, fontsize){
-  if(getWidthOfSpanText.e === undefined){
-    getWidthOfSpanText.e = document.createElement('span');
-    getWidthOfSpanText.e.style.display = "none";
-    document.body.appendChild(getWidthOfSpanText.e);
+type Range = {
+  +colapsed : boolean,
+  +commonAncestorContainer : HTMLElement,
+  +endContainer : HTMLElement,
+  +endOffset : number,
+  +startContainer : HTMLElement,
+  +startOffset : number,
+};
+
+type FirefoxExperimentalDocument = {
+  caretPositionFromPoint : (x : number, y : number) => ?CaretPosition
+}
+
+type NonStandardDocument = {
+  caretRangeFromPoint : (x : number, y : number) => ?Range
+}
+
+declare var document : Document & FirefoxExperimentalDocument & NonStandardDocument;
+
+let _canvas : ?HTMLCanvasElement = null;
+let _ctx : ?CanvasRenderingContext2D  = null;
+let _span : ?HTMLSpanElement = null;
+
+export function getWidthOfCanvasText(txt : string, fontname : string, fontsize : string) : ?number{
+  if(!_canvas){
+    _canvas = (document.createElement('canvas') : HTMLCanvasElement);
+    _ctx = _canvas.getContext('2d');
   }
-  getWidthOfSpanText.e.style.fontSize = fontsize;
-  getWidthOfSpanText.e.style.fontFamily = fontname;
-  getWidthOfSpanText.e.innerText = txt;
-  return getWidthOfSpanText.e.offsetWidth;
+  if (_ctx){
+    _ctx.font = fontsize + ' ' + fontname;
+    return _ctx.measureText(txt).width;
+  }
+  return null;
 }
 
-export function getCharIndexFromX(txt, fontname, fontsize, x){
+export function getWidthOfSpanText(txt : string, fontname : string, fontsize : string) : number{
+  if(!_span){
+    _span = document.createElement('span');
+    _span.style.display = "none";
+    document.body && document.body.appendChild(_span);
+  }
+  _span.style.fontSize = fontsize;
+  _span.style.fontFamily = fontname;
+  _span.innerText = txt;
+  return _span.offsetWidth;
+}
+
+export function getCharIndexFromX(txt : string, fontname : string, fontsize : string, x: number) : number {
   let delta = Infinity;
   let i;
   for(i=0; i<= txt.length; i++){
     const str = txt.substr(0,i);
     const w = i===0? 0: getWidthOfSpanText(txt, fontname, fontsize);
-    newDelta = Math.abs(w-x)
+    let newDelta : number = Math.abs(w-x)
     if (newDelta >= delta){
       break;
     }
@@ -42,28 +76,34 @@ export function getCharIndexFromX(txt, fontname, fontsize, x){
 * Warning - methods caretPositionFromPoint and caretRangeFromPoint are not fully supported on browsers, and alternative
 * implementations may need to be considered if we are to use the browser as a platform.
 */
-export function getNodeCharIndex({clientX, clientY}) {
-  let textNode;
-  let offset;
-  let range
-  if (document.caretPositionFromPoint) {
+type CharIndex = {
+  textNode : HTMLElement,
+  offset : number,
+  range : mixed,
+};
 
-    range = document.caretPositionFromPoint(clientX, clientY);
-    textNode = range.offsetNode;
-    offset = range.offset;
-  } else if (document.caretRangeFromPoint) {
-
-    range = document.caretRangeFromPoint(clientX, clientY);
-    textNode = range.startContainer;
-    offset = range.startOffset;
-  } else {
-
-    console.error('Caret position not available in this browser');
+export function getNodeCharIndex({clientX, clientY} : {clientX:number, clientY :number}) : ?CharIndex{
+  let range: mixed;
+  if (!!document.caretPositionFromPoint) {
+    if (range = document.caretPositionFromPoint(clientX, clientY)){
+      return {
+        textNode : range.offsetNode,
+        offset : range.offset,
+        range
+      };
+    }
   }
 
-  return {
-    textNode,
-    offset,
-    range,
+  if (!!document.caretRangeFromPoint) {
+    if (range = document.caretRangeFromPoint(clientX, clientY)){
+      return {
+        textNode : range.startContainer,
+        offset : range.startOffset,
+        range
+      };
+    }
   }
+
+  console.error('Caret position not available in this browser');
+  return null;
 }

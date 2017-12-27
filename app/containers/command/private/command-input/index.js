@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import styled from 'styled-components';
 
@@ -33,6 +34,8 @@ const Input = styled.input`
   font-weight: lighter;
 `;
 
-export default props => (
+type Props = {};
+
+export default (props: Props) => (
   <Input type="text" {...props} />
 );

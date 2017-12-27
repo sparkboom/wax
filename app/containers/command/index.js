@@ -1,21 +1,35 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import keycode from 'keycode';
-import {InputContainer, CommandInput, RichInput} from './private';
+import {InputContainer, CommandInput, RichInput, RichInputContainer} from './private';
 import * as actions from './actions';
 import styled from 'styled-components';
 import isEmpty from 'lodash/isEmpty';
 
-const RickInputContainer = styled(InputContainer)`
-  bottom: 8rem;
-  user-select: none;
-`;
+type Keycode = any => string;
+type PropsDispatch = {
+  inputInsert : any => void,
+  inputSet : any => void,
+  inputReplace : any => void,
+  inputChange : any => void
+  inputInsert : any => void,
+  moveCaret : any => void,
+  setCaret : any => void
+};
+type PropsValues = {
+  currentInput : string,
+  caretIndex : number,
+};
+type Props = PropsValues | PropsDispatch;
 
-class CommandLine extends React.Component {
+declare var document : Document;
+declare var keycode : Keycode;
 
-  inputRef = null;
+class CommandLine extends React.Component<PropsValues> {
 
-  onKeyPress = e => {
+  inputRef : ?HTMLInputElement = null;
+
+  onKeyPress = (e : SyntheticKeyboardEvent) => {
     console.log('onKeyPress', e, e.key);
     if (keycode(e) === 'enter'){
       this.props.inputSet(e);
@@ -26,9 +40,9 @@ class CommandLine extends React.Component {
     }
   };
 
-  onKeyDown = e => {
+  onKeyDown = (e : SyntheticKeyboardEvent) => {
     console.log('onKeyDown', keycode(e),  e);
-    if (e.target !== this.inputRef){
+    if (e.currentTarget !== this.inputRef){
       return;
     }else if (keycode(e) === 'left' || keycode(e) === 'right'){
       this.props.moveCaret(keycode(e));
@@ -44,18 +58,18 @@ class CommandLine extends React.Component {
   }
 
   componentWillMount() {
-    document.addEventListener("keydown", ::this.onKeyDown);
+    document.addEventListener('keydown', ::this.onKeyDown);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", ::this.onKeyDown);
+    document.removeEventListener('keydown', ::this.onKeyDown);
   }
 
   render() {
     let {currentInput, caretIndex} = this.props;
     return (
     <div>
-      <RickInputContainer>
+      <RichInputContainer>
         <RichInput
           autoFocus
           inputRef={r => this.inputRef = r}
@@ -64,7 +78,7 @@ class CommandLine extends React.Component {
           onSelectCaretIndex={this.onSelectCaretIndex}
           onKeyDown={this.onKeyDown}
           onKeyPress={this.onKeyPress} />
-      </RickInputContainer>
+      </RichInputContainer>
       <InputContainer>
         <CommandInput
           value={currentInput}
@@ -74,12 +88,12 @@ class CommandLine extends React.Component {
   }
 }
 
-export default connect(props => ({
-  currentInput: props.command.currentInput,
-  caretIndex: props.command.caretIndex,
+export default connect(state => ({
+  currentInput: state.command.currentInput,
+  caretIndex: state.command.caretIndex,
 }), dispatch => ({
-  inputChange: event => dispatch(actions.inputChange(event.target.value)),
-  inputSet: event => dispatch(actions.inputSet(event.target.value)),
+  inputChange: event => dispatch(actions.inputChange(event.currentTarget.value)),
+  inputSet: event => dispatch(actions.inputSet(event.currentTarget.value)),
   inputReplace: (newValue, index, selectionLength) => dispatch(actions.inputReplace(newValue, index, selectionLength)),
   inputInsert: event => dispatch(actions.inputInsert(event.key)),
   moveCaret: event => dispatch(actions.moveCaret(event)),

@@ -1,16 +1,22 @@
-import {INPUT_CHANGE, INPUT_INSERT, INPUT_REPLACE, MOVE_CARET, SET_CARET} from './constants';
+import {INPUT_CHANGE, INPUT_INSERT, INPUT_REPLACE, MOVE_CARET, SET_CARET} from './action-types';
 import {insert} from 'underscore.string';
+import {CommandAction} from './actions';
 
-const initialState = {
+type CommandState = {
+  +currentInput : string,
+  +caretIndex : number,
+};
+
+const initialState : CommandState = {
   currentInput : '',
   caretIndex : 0,
 };
 
-const confine = (val, min, max) => Math.max(Math.min(val, max), min);
-const moveCaretDelta = d => ({left: -1, right:1}[d]);
-const insertSplice = (string, replaceStr, index, length) => string.slice(0,index) + replaceStr + string.slice(index+length);
+const confine : (number, number, number) => number = (val, min, max) => Math.max(Math.min(val, max), min);
+const moveCaretDelta : CaretDirection => -1 | 1 = (d : 'left' | 'right') : number => ({left: -1, right:1}[d]);
+const insertSplice : (string, string, number, number) => string = (string, replaceStr, index, length) => string.slice(0,index) + replaceStr + string.slice(index+length);
 
-export default(state = initialState, action) => {
+export default (state : CommandState = initialState, action : CommandAction) : CommandState => {
   switch (action.type) {
     case INPUT_CHANGE:
       return {...state, currentInput: action.inputText, caretIndex: action.inputText.length}
