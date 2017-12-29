@@ -12,7 +12,7 @@ type PropsDispatch = {
   inputSet : any => void,
   inputReplace : any => void,
   moveCaret : any => void,
-  setCaret : (index: number) => void
+  setCaret : (index: number) => void,
 };
 type PropsValues = {
   currentInput : string,
@@ -20,9 +20,7 @@ type PropsValues = {
 };
 type Props = PropsValues | PropsDispatch;
 
-type MyDoc
-
-declare var document : Document;
+declare var document : EventTarget;
 
 class CommandLine extends React.Component<Props> {
 
@@ -40,8 +38,8 @@ class CommandLine extends React.Component<Props> {
     }
   };
 
-  onKeyDown = (e : KeyboardEvent) => {
-    let code = keycode(e);
+  onKeyDown : KeyboardEventListener = (e : KeyboardEvent) => {
+    let code : string = keycode(e);
     console.log('onKeyDown', code,  e);
     if (e.target !== this.inputRef){
       return;
