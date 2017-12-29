@@ -19,6 +19,9 @@ type PropsValues = {
   caretIndex : number,
 };
 type Props = PropsValues | PropsDispatch;
+
+type MyDoc
+
 declare var document : Document;
 
 class CommandLine extends React.Component<Props> {
@@ -38,12 +41,13 @@ class CommandLine extends React.Component<Props> {
   };
 
   onKeyDown = (e : KeyboardEvent) => {
-    console.log('onKeyDown', keycode(e),  e);
-    if (e.currentTarget !== this.inputRef){
+    let code = keycode(e);
+    console.log('onKeyDown', code,  e);
+    if (e.target !== this.inputRef){
       return;
-    }else if (keycode(e) === 'left' || keycode(e) === 'right'){
-      this.props.moveCaret(keycode(e));
-    }else if (keycode(e) === 'backspace' && this.props.caretIndex > 0){
+    }else if (code === 'left' || code === 'right'){
+      this.props.moveCaret(code);
+    }else if (code === 'backspace' && this.props.caretIndex > 0){
       this.props.inputReplace('', this.props.caretIndex-1, 1);
     }else {
       console.debug('onKeyDown event not handled', e);
