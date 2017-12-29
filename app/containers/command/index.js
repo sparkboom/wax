@@ -6,41 +6,38 @@ import * as actions from './actions';
 import styled from 'styled-components';
 import isEmpty from 'lodash/isEmpty';
 
-type Keycode = any => string;
 type PropsDispatch = {
+  inputChange : (event : SyntheticInputEvent ) => void,
   inputInsert : any => void,
   inputSet : any => void,
   inputReplace : any => void,
-  inputChange : any => void
-  inputInsert : any => void,
   moveCaret : any => void,
-  setCaret : any => void
+  setCaret : (index: number) => void
 };
 type PropsValues = {
   currentInput : string,
   caretIndex : number,
 };
 type Props = PropsValues | PropsDispatch;
-
 declare var document : Document;
-declare var keycode : Keycode;
 
-class CommandLine extends React.Component<PropsValues> {
+class CommandLine extends React.Component<Props> {
 
   inputRef : ?HTMLInputElement = null;
 
-  onKeyPress = (e : SyntheticKeyboardEvent) => {
+  onKeyPress = (e : SyntheticKeyboardEvent<HTMLDivElement>)=> {
     console.log('onKeyPress', e, e.key);
-    if (keycode(e) === 'enter'){
+    let code : string = keycode(e);
+    if (code === 'enter'){
       this.props.inputSet(e);
     }else if (!isEmpty(e.key)) {
       this.props.inputInsert(e);
     }else {
-      console.log('Did not handle keypress event', keycode(e));
+      console.log('Did not handle keypress event', code);
     }
   };
 
-  onKeyDown = (e : SyntheticKeyboardEvent) => {
+  onKeyDown = (e : KeyboardEvent) => {
     console.log('onKeyDown', keycode(e),  e);
     if (e.currentTarget !== this.inputRef){
       return;
@@ -53,7 +50,7 @@ class CommandLine extends React.Component<PropsValues> {
     }
   };
 
-  onSelectCaretIndex = index => {
+  onSelectCaretIndex = (index : number) => {
     this.props.setCaret(index);
   }
 
@@ -76,7 +73,6 @@ class CommandLine extends React.Component<PropsValues> {
           value={currentInput}
           caretIndex={caretIndex}
           onSelectCaretIndex={this.onSelectCaretIndex}
-          onKeyDown={this.onKeyDown}
           onKeyPress={this.onKeyPress} />
       </RichInputContainer>
       <InputContainer>
@@ -91,11 +87,11 @@ class CommandLine extends React.Component<PropsValues> {
 export default connect(state => ({
   currentInput: state.command.currentInput,
   caretIndex: state.command.caretIndex,
-}), dispatch => ({
+} : PropsValues), dispatch => ({
   inputChange: event => dispatch(actions.inputChange(event.currentTarget.value)),
   inputSet: event => dispatch(actions.inputSet(event.currentTarget.value)),
   inputReplace: (newValue, index, selectionLength) => dispatch(actions.inputReplace(newValue, index, selectionLength)),
   inputInsert: event => dispatch(actions.inputInsert(event.key)),
   moveCaret: event => dispatch(actions.moveCaret(event)),
   setCaret: index => dispatch(actions.setCaret(index)),
-}))(CommandLine);
+} : PropsDispatch))(CommandLine);

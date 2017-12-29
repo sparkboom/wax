@@ -10,6 +10,18 @@ import { ConnectedRouter, routerMiddleware, push } from 'react-router-redux';
 import App from './containers';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+import { injectGlobal } from 'styled-components';
+
+injectGlobal`
+  html, body, #app {
+    height: 100%;
+    background-color: #000;
+    overflow: hidden;
+    font-family: 'Barlow', Helvetica, Arial, sans-serif;
+    font-weight: lighter;
+  }
+`;
+
 const middleware = [
   routerMiddleware(history),
   thunk,

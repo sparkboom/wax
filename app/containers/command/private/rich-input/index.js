@@ -52,7 +52,9 @@ class RichInputContainer extends React.Component<Props> {
           <InlineTextBlock
             ref={r => this.pretextSpan = r}
             onMouseDown={(e: MouseEvent) => this.onMouseDown(e, this.pretextSpan)}
-            >{preText}</InlineTextBlock><Caret /><InlineTextBlock
+            >{preText}</InlineTextBlock>
+          <Caret />
+          <InlineTextBlock
             ref={r => this.posttextSpan = r}
             onMouseDown={(e: MouseEvent) => this.onMouseDown(e, this.posttextSpan)}
             >{postText}</InlineTextBlock>

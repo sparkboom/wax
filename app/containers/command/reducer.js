@@ -1,6 +1,7 @@
 import {INPUT_CHANGE, INPUT_INSERT, INPUT_REPLACE, MOVE_CARET, SET_CARET} from './action-types';
 import {insert} from 'underscore.string';
 import {CommandAction} from './actions';
+import type {CaretDirection} from './actions';
 
 type CommandState = {
   +currentInput : string,
@@ -13,7 +14,7 @@ const initialState : CommandState = {
 };
 
 const confine : (number, number, number) => number = (val, min, max) => Math.max(Math.min(val, max), min);
-const moveCaretDelta : CaretDirection => -1 | 1 = (d : 'left' | 'right') : number => ({left: -1, right:1}[d]);
+const moveCaretDelta : CaretDirection => -1 | 1 = (d : CaretDirection) : number => ({left: -1, right:1}[d]);
 const insertSplice : (string, string, number, number) => string = (string, replaceStr, index, length) => string.slice(0,index) + replaceStr + string.slice(index+length);
 
 export default (state : CommandState = initialState, action : CommandAction) : CommandState => {
@@ -29,6 +30,7 @@ export default (state : CommandState = initialState, action : CommandAction) : C
     case SET_CARET:
       return {...state, caretIndex: confine( action.index, 0, state.currentInput.length)}
     default:
+      (action: empty);
       return state;
   }
 };

@@ -1,6 +1,10 @@
+// @flow
+
 import styled from 'styled-components';
 
-export default styled.span`
+const InlineTextBlock = styled.span`
   display: inline-block;
   cursor: text;
 `;
+
+export default InlineTextBlock;

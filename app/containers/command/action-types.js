@@ -1,16 +1,23 @@
 // @flow
 
-export const INPUT_CHANGE : 'COMMAND:INPUT_CHANGE' = 'COMMAND:INPUT_CHANGE';
-export const INPUT_SET : 'COMMAND:INPUT_SET' = 'COMMAND:INPUT_SET';
-export const INPUT_INSERT : 'COMMAND:INPUT_INSERT' = 'COMMAND:INPUT_INSERT';
-export const INPUT_REPLACE : 'COMMAND:INPUT_REPLACE' = 'COMMAND:INPUT_REPLACE';
-export const MOVE_CARET : 'COMMAND:MOVE_CARET' = 'COMMAND:MOVE_CARET';
-export const SET_CARET : 'COMMAND:SET_CARET' = 'COMMAND:SET_CARET';
+export type InputChangeActionType = 'COMMAND:INPUT_CHANGE';
+export type InputSetActionType = 'COMMAND:INPUT_SET';
+export type InputInsertActionType = 'COMMAND:INPUT_INSERT';
+export type InputReplaceActionType = 'COMMAND:INPUT_REPLACE';
+export type MoveCaretActionType = 'COMMAND:MOVE_CARET';
+export type SetCaretActionType = 'COMMAND:SET_CARET';
+
+export const INPUT_CHANGE : InputChangeActionType = 'COMMAND:INPUT_CHANGE';
+export const INPUT_SET : InputSetActionType = 'COMMAND:INPUT_SET';
+export const INPUT_INSERT : InputInsertActionType = 'COMMAND:INPUT_INSERT';
+export const INPUT_REPLACE : InputReplaceActionType = 'COMMAND:INPUT_REPLACE';
+export const MOVE_CARET : MoveCaretActionType = 'COMMAND:MOVE_CARET';
+export const SET_CARET : SetCaretActionType = 'COMMAND:SET_CARET';
 
 export type CommandActionType =
-  | typeof INPUT_CHANGE
-  | typeof INPUT_SET
-  | typeof INPUT_INSERT
-  | typeof INPUT_REPLACE
-  | typeof MOVE_CARET
-  | typeof SET_CARET;
+  | InputChangeActionType
+  | InputSetActionType
+  | InputInsertActionType
+  | InputReplaceActionType
+  | MoveCaretActionType
+  | SetCaretActionType;

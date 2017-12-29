@@ -1,2 +1,2 @@
-export wax : Theme from './wax';
+export wax from './wax';
 export type {ITheme} from './itheme';

@@ -1,6 +1,9 @@
+// @flow
+
+import * as React from 'react';
 import styled from 'styled-components';
 
-export default styled.div`
+const InputContainer = styled.div`
   display: flex;
   text-align: center;
   position: absolute;
@@ -10,3 +13,5 @@ export default styled.div`
   left: 0;
   right: 0;
 `;
+
+export default (props: {}) => <InputContainer {...props} />;
