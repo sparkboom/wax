@@ -4,13 +4,13 @@ import * as React from 'React';
 import styled from 'styled-components';
 import type {ITheme} from './theme.type';
 
-export type InnerRichInputProps = {
+type Props = {
   theme : ITheme
 };
 
 const InnerRichInput = styled.div`
 
-  color: ${(p: InnerRichInputProps) => p.theme.textColor};
+  color: ${(p: Props) => p.theme.textColor};
   margin: 0;
   max-width: 100%;
   flex: 1 0 auto;
@@ -32,4 +32,4 @@ const InnerRichInput = styled.div`
   }
 `;
 
-export default (props : InnerRichInputProps) => <InnerRichInput {...props} />;
+export default (props : Props) => <InnerRichInput {...props} />;

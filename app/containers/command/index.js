@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import keycode from 'keycode';
-import {InputContainer, CommandInput, RichInput, RichInputContainer} from './private';
+import {CommandInput, RichInput, RichInputContainer} from './private';
 import * as actions from './actions';
 import styled from 'styled-components';
 import isEmpty from 'lodash/isEmpty';
@@ -18,6 +18,13 @@ type PropsValues = {
   currentInput : string,
   caretIndex : number,
 };
+type State = {
+  command? : {
+    currentInput : ?string,
+    caretIndex : ?number,
+  }
+};
+
 type Props = PropsValues | PropsDispatch;
 
 declare var document : EventTarget;
@@ -40,7 +47,7 @@ class CommandLine extends React.Component<Props> {
 
   onKeyDown : KeyboardEventListener = (e : KeyboardEvent) => {
     let code : string = keycode(e);
-    console.log('onKeyDown', code,  e);
+    console.log('onKeyDown', code,  e, e.target, this.inputRef);
     if (e.target !== this.inputRef){
       return;
     }else if (code === 'left' || code === 'right'){
@@ -52,10 +59,6 @@ class CommandLine extends React.Component<Props> {
     }
   };
 
-  onSelectCaretIndex = (index : number) => {
-    this.props.setCaret(index);
-  }
-
   componentWillMount() {
     document.addEventListener('keydown', ::this.onKeyDown);
   }
@@ -65,7 +68,7 @@ class CommandLine extends React.Component<Props> {
   }
 
   render() {
-    let {currentInput, caretIndex} = this.props;
+    let {currentInput, caretIndex, setCaret} = this.props;
     return (
     <div>
       <RichInputContainer>
@@ -74,22 +77,20 @@ class CommandLine extends React.Component<Props> {
           inputRef={r => this.inputRef = r}
           value={currentInput}
           caretIndex={caretIndex}
-          onSelectCaretIndex={this.onSelectCaretIndex}
+          onSelectCaretIndex={setCaret}
           onKeyPress={this.onKeyPress} />
       </RichInputContainer>
-      <InputContainer>
-        <CommandInput
-          value={currentInput}
-          onChange={this.props.inputChange} />
-      </InputContainer>
+      <CommandInput
+        value={currentInput}
+        onChange={this.props.inputChange} />
     </div>);
   }
 }
 
-export default connect(state => ({
+export default connect((state : State) : PropsValues => ({
   currentInput: state.command.currentInput,
   caretIndex: state.command.caretIndex,
-} : PropsValues), dispatch => ({
+}), (dispatch : Dispatch) => ({
   inputChange: event => dispatch(actions.inputChange(event.currentTarget.value)),
   inputSet: event => dispatch(actions.inputSet(event.currentTarget.value)),
   inputReplace: (newValue, index, selectionLength) => dispatch(actions.inputReplace(newValue, index, selectionLength)),
