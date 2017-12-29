@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import type {ITheme} from './theme.type';
 
 type Props = {
-  theme : ITheme
+  theme : ITheme,
+  value : string,
 };
 
 const InnerRichInput = styled.div`
@@ -18,18 +19,18 @@ const InnerRichInput = styled.div`
   text-align: center;
   line-height: 1.2em;
   padding: .7em 1em;
-  background: rgba(0, 0, 0, 0.15);
   border-radius: 0.5em;
   box-shadow: none;
 
   font-family: system-ui;
   font-size: 40px;
   font-weight: lighter;
-  border: solid thin blue;
 
-  &:focus {
-    border: solid thin red;
+  &.focussed {
+    background: rgba(136, 51, 85, 0.15);
   }
+
+  ${ (p: Props) => p.value && p.value.length === 0 && 'display: none;' }
 `;
 
 export default (props : Props) => <InnerRichInput {...props} />;

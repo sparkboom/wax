@@ -31,58 +31,18 @@ declare var document : EventTarget;
 
 class CommandLine extends React.Component<Props> {
 
-  inputRef : ?HTMLInputElement = null;
-
-  onKeyPress = (e : SyntheticKeyboardEvent<HTMLDivElement>)=> {
-    console.log('onKeyPress', e, e.key);
-    let code : string = keycode(e);
-    if (code === 'enter'){
-      this.props.inputSet(e);
-    }else if (!isEmpty(e.key)) {
-      this.props.inputInsert(e);
-    }else {
-      console.log('Did not handle keypress event', code);
-    }
-  };
-
-  onKeyDown : KeyboardEventListener = (e : KeyboardEvent) => {
-    let code : string = keycode(e);
-    console.log('onKeyDown', code,  e, e.target, this.inputRef);
-    if (e.target !== this.inputRef){
-      return;
-    }else if (code === 'left' || code === 'right'){
-      this.props.moveCaret(code);
-    }else if (code === 'backspace' && this.props.caretIndex > 0){
-      this.props.inputReplace('', this.props.caretIndex-1, 1);
-    }else {
-      console.debug('onKeyDown event not handled', e);
-    }
-  };
-
-  componentWillMount() {
-    document.addEventListener('keydown', ::this.onKeyDown);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', ::this.onKeyDown);
-  }
-
   render() {
-    let {currentInput, caretIndex, setCaret} = this.props;
+    let {currentInput, caretIndex, setCaret, inputChange} = this.props;
     return (
     <div>
       <RichInputContainer>
         <RichInput
-          autoFocus
-          inputRef={r => this.inputRef = r}
+          caretIndex={caretIndex}
           value={currentInput}
           caretIndex={caretIndex}
-          onSelectCaretIndex={setCaret}
-          onKeyPress={this.onKeyPress} />
+          onTextChange={inputChange}
+          onSelectCaretIndex={setCaret} />
       </RichInputContainer>
-      <CommandInput
-        value={currentInput}
-        onChange={this.props.inputChange} />
     </div>);
   }
 }

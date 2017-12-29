@@ -10,6 +10,6 @@ export default styled.div`
   padding: 20px 60px;
   left: 0;
   right: 0;
-  bottom: 8rem;
+  bottom: 0;
   user-select: none;
 `;

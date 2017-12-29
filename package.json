@@ -59,6 +59,7 @@
     "yargs": "^10.0.3"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "deep-extend": "^0.5.0",
     "ejs": "^2.5.6",
     "epimetheus": "^1.0.46",
