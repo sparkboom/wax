@@ -3,21 +3,24 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { getNodeCharIndex } from '../../../../../lib/text-width';
+import type {ITheme} from './theme.type';
 
 type Props = {
-  onSelectCaretIndex: (caretIndex: number) => void,
+  onTextSelect: (number => void),
   children: mixed,
-  caretIndex: number,
+  isSelected: boolean,
+  theme: ITheme,
 };
 
 type MouseEvent = SyntheticMouseEvent<HTMLSpanElement>;
 
-const InlineTextBlock = styled.span`
+const InnerInlineTextBlock = styled.span`
   display: inline-block;
   cursor: text;
+  color: ${(p: Props) => p.isSelected? p.theme.selectedTextColor : p.theme.textColor};
 `;
 
-class SelectableTextBlock extends React.Component<Props> {
+export class InlineTextBlock extends React.Component<Props> {
 
   onMouseDown = (event: MouseEvent) => {
     let selectionInfo = getNodeCharIndex(event);
@@ -26,16 +29,17 @@ class SelectableTextBlock extends React.Component<Props> {
       return;
     }
     let newIndex : number = selectionInfo.offset;
-    this.props.onSelectCaretIndex && this.props.onSelectCaretIndex(newIndex);
+    this.props.onTextSelect && this.props.onTextSelect(newIndex);
   };
 
   render() {
+    let {children, isSelected} = this.props;
     return (
-      <InlineTextBlock onMouseDown={(e: MouseEvent) => this.onMouseDown(e)} >
-        {this.props.children}
-      </InlineTextBlock>
+      <InnerInlineTextBlock isSelected={isSelected} onMouseDown={(e: MouseEvent) => this.onMouseDown(e)} >
+        {children}
+      </InnerInlineTextBlock>
     );
   }
 }
 
-export default SelectableTextBlock;
+export const SelectedInlineTextBlock = (props : Props) => <InlineTextBlock {...props} isSelected={true} />

@@ -1,5 +1,6 @@
 // @flow
 
 export interface ITheme {
-  textColor : string
+  textColor : string,
+  selectedTextColor : string,
 };

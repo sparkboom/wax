@@ -26,6 +26,8 @@ const InnerRichInput = styled.div`
   font-size: 40px;
   font-weight: lighter;
 
+  background: rgba(136, 51, 85, 0.05);
+
   &.focussed {
     background: rgba(136, 51, 85, 0.15);
   }

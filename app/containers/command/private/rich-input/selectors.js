@@ -1,15 +1,26 @@
 // @flow
 import {createSelector} from 'reselect';
 
-type Props = {
-  value : string,
-  caretIndex : number,
+type Selection = {
+  start: number,
+  length: number,
 };
+
+type Props = {
+  text : string,
+  selection : Selection
+};
+
+type StringSelector = (props: Props) => string;
 
 const UNICODE_NARROW_NOBREAK_SPACE : string = '\u202F';
 
-const getValue = (props: Props) => props.value;
-const getCaretIndex = (props : Props) => props.caretIndex;
+// Make sure spaces are replaced with a nobreak space for better rendering
+const replaceWs = str => str.replace(/\s/g, UNICODE_NARROW_NOBREAK_SPACE);
 
-export const getPreText : (props: Props) => string = createSelector(getValue, getCaretIndex, (value : string , caretIndex : number) : string => value.substr(0, caretIndex).replace(/\s/g, UNICODE_NARROW_NOBREAK_SPACE) );
-export const getPostText : (props: Props) => string = createSelector(getValue, getCaretIndex, (value : string, caretIndex : number) : string => value.substring(caretIndex, value.length).replace(/\s/g, UNICODE_NARROW_NOBREAK_SPACE) );
+const getText = (props: Props) => props.text || '';
+const getSelection = (props : Props) => props.selection;
+
+export const getPreText : StringSelector = createSelector(getText, getSelection, (text : string , selection : Selection) : string => replaceWs(text.substr(0, selection.start)) );
+export const getSelectedText : StringSelector = createSelector(getText, getSelection, (text : string, selection : Selection) : string => replaceWs(text.substr(selection.start, selection.length)) );
+export const getPostText : StringSelector = createSelector(getText, getSelection, (text : string, selection : Selection) : string => replaceWs(text.substr(selection.start + selection.length)) );
