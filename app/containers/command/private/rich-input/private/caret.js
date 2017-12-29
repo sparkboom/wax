@@ -17,16 +17,15 @@ const blink = keyframes`
   }
 `;
 
-const Caret = styled.div`
-  display: inline-block;
+const Caret = styled.span`
+  display: inline;
   font-size: 1em;
-  height: 1.2em;
+  height: 1em;
   border-left: solid thin ${(props: Props) => props.theme.textColor};
   max-width: 0px;
   animation: 1s ${blink} step-end infinite;
   position: relative;
   left: 0;
-  top: 10px;
   padding: 0;
   margin: 0;
 `;

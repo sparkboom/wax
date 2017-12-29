@@ -9,24 +9,25 @@ type Props = {
   value : string,
 };
 
-const InnerRichInput = styled.div`
+const InnerRichInput = styled.pre`
 
   color: ${(p: Props) => p.theme.textColor};
   margin: 0;
   max-width: 100%;
-  flex: 1 0 auto;
   outline: 0;
   text-align: center;
-  line-height: 1.2em;
-  padding: .7em 1em;
+  padding: 0.2em 0.2em;
   border-radius: 0.5em;
-  box-shadow: none;
+
+  white-space: pre-wrap;
+  word-wrap: break-word;
 
   font-family: system-ui;
   font-size: 40px;
   font-weight: lighter;
 
   background: rgba(136, 51, 85, 0.05);
+  overflow-y: scroll;
 
   &.focussed {
     background: rgba(136, 51, 85, 0.15);

@@ -15,7 +15,7 @@ type Props = {
 type MouseEvent = SyntheticMouseEvent<HTMLSpanElement>;
 
 const InnerInlineTextBlock = styled.span`
-  display: inline-block;
+  display: inline;
   cursor: text;
   color: ${(p: Props) => p.isSelected? p.theme.selectedTextColor : p.theme.textColor};
 `;
