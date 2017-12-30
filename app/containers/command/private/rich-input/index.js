@@ -40,11 +40,13 @@ class RichInput extends React.Component<Props, State> {
 
   onInputKeyPress = (event:KeyboardEvent) => {
 
-    let {onCompletePrediction, text} = this.props;
+    let {onCompletePrediction, onExecuteActions, text, tokens} = this.props;
     let code:string = keycode(event);
     let prediction:string = getPredictionText(this.props);
     if (code === 'enter' && prediction.length>0){
       onCompletePrediction(text+prediction);
+    } else if (code === 'enter' && text.length === 0 && tokens.length > 0 ){
+      onExecuteActions(text+prediction);
     }
   };
 
