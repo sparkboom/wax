@@ -1,11 +1,5 @@
 // @flow
-
-export type TextChangeActionType = 'COMMAND:TEXT_CHANGE';
-export type SetSelectionActionType = 'COMMAND:SET_SELECTION';
+import type {TextChangeActionType, SetSelectionActionType} from './types';
 
 export const TEXT_CHANGE : TextChangeActionType = 'COMMAND:TEXT_CHANGE';
 export const SET_SELECTION : SetSelectionActionType = 'COMMAND:SET_SELECTION';
-
-export type CommandActionType =
-  | TextChangeActionType
-  | SetSelectionActionType;

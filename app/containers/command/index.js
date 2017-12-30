@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import {connect} from 'react-redux';
 import keycode from 'keycode';
@@ -5,46 +7,41 @@ import {CommandInput, RichInput, RichInputContainer} from './private';
 import * as actions from './actions';
 import styled from 'styled-components';
 import isEmpty from 'lodash/isEmpty';
+import type {CommandState, CommandDispatch, CommandAction, State} from './types';
 
 type PropsDispatch = {
-  changeText : (event : SyntheticInputEvent ) => void,
-  changeSelection : (start: number, length: number) => void,
+  changeText : string => void,
+  changeSelection : (number, number) => void,
 };
-type PropsValues = {
-  text : string,
-  selection : {
-    start: number,
-    length: number,
-  },
-};
-type State = {
-  command? : PropsValues
-};
-
-type Props = PropsValues | PropsDispatch;
-
-declare var document : EventTarget;
+type PropsValues = CommandState;
+type Props = PropsValues & PropsDispatch;
 
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {text, selection, changeText, changeSelection} = this.props;
+    let {text, selection, changeText, changeSelection, knownCommands} = this.props;
     return (
     <div>
       <RichInputContainer>
         <RichInput
           text={text}
           selection={selection}
-          onTextChange={changeText}
+          knownCommands={knownCommands}
+          onTextChange={event => changeText(event.currentTarget.value)}
           onSelectionChange={changeSelection} />
       </RichInputContainer>
     </div>);
   }
 }
 
-export default connect((state : State) : PropsValues => ({
+
+const connectProps:(State => PropsValues) = state => ({
   ...state.command
-}), (dispatch : Dispatch) => ({
-  changeText: event => dispatch(actions.textChange(event.currentTarget.value)),
+});
+
+const connectDispatch:(CommandDispatch => PropsDispatch) = dispatch => ({
+  changeText: newText => dispatch(actions.textChange(newText)),
   changeSelection: (start, length) => dispatch(actions.selectionChange(start, length)),
-} : PropsDispatch))(CommandLine);
+});
+
+export default connect(connectProps, connectDispatch)(CommandLine);

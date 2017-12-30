@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import {withTheme} from 'styled-components';
-import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput} from './private';
-import {getPreText, getSelectedText, getPostText} from './selectors';
+import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput, PredictionInlineTextBlock} from './private';
+import {getPreText, getSelectedText, getPostText, getPredictionText} from './selectors';
 import classNames from 'classnames';
 import {setCaretIndex} from '../../../../lib/selection';
 import type {SelectableInputElement} from '../../../../lib/selection';
@@ -16,6 +16,7 @@ type Props = {
     start: number,
     length: number,
   },
+  knownCommands: Array<string>,
   theme: any,
 };
 type State = {
@@ -87,6 +88,7 @@ class RichInput extends React.Component<Props, State> {
           { this.state.isFocussed && selection.length===0 && <Caret /> }
           <SelectedInlineTextBlock onTextSelect={(index : number) => this.setSelection(index + selection.start)}>{getSelectedText(this.props)}</SelectedInlineTextBlock>
           <InlineTextBlock onTextSelect={(index : number) => this.setSelection(index + selection.start + selection.length)}>{getPostText(this.props)}</InlineTextBlock>
+          <PredictionInlineTextBlock>{getPredictionText(this.props)}</PredictionInlineTextBlock>
         </InnerRichInput>
 
         <HiddenInput

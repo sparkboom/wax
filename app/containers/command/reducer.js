@@ -1,27 +1,20 @@
 import {TEXT_CHANGE, SET_SELECTION} from './action-types';
 import {insert} from 'underscore.string';
 import {CommandAction} from './actions';
-import type {CaretDirection} from './actions';
-
-type CommandState = {
-  +text : string,
-  +selection : {
-    start : number,
-    length : number,
-  },
-};
+import type {CommandState} from './types';
 
 const initialState : CommandState = {
   text : '',
   selection : {
     start: 0,
     end: 0
-  }
+  },
+  knownCommands : [ 'clear', 'square', 'triangle', 'circle' ],
 };
 
-const confine : (number, number, number) => number = (val, min, max) => Math.max(Math.min(val, max), min);
+const confine : (number, number, number) => number = (val:number, min:number, max:number) => Math.max(Math.min(val, max), min);
 
-export default (state : CommandState = initialState, action : CommandAction) : CommandState => {
+export default (state:CommandState = initialState, action:CommandAction) : CommandState => {
   switch (action.type) {
     case TEXT_CHANGE:
       return {
