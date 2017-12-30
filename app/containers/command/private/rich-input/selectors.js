@@ -1,4 +1,5 @@
 // @flow
+
 import {createSelector} from 'reselect';
 import type {Selection, CommandState} from '../../types';
 
@@ -24,8 +25,7 @@ export const getPredictionText:StringSelector = createSelector(getLowercaseText,
   if(lcaseText.length === 0){
     return '';
   }
-  let prediction:string = knownCommands.find(cmd => cmd.startsWith(lcaseText) ) || '';
+  let prediction:string = knownCommands.find(cmd => cmd.startsWith(lcaseText)) || '';
   prediction = prediction.substr(lcaseText.length);
-  console.log('getPredictionText',prediction,lcaseText, knownCommands);
   return prediction.length===0? '':replaceWs(prediction);
 });

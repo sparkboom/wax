@@ -2,12 +2,7 @@
 
 import * as React from 'React';
 import styled from 'styled-components';
-import type {ITheme} from './theme.type';
-
-type Props = {
-  theme : ITheme,
-  value : string,
-};
+import type {Props} from './types';
 
 const InnerRichInput = styled.pre`
 
@@ -33,7 +28,7 @@ const InnerRichInput = styled.pre`
     background: rgba(136, 51, 85, 0.15);
   }
 
-  ${ (p: Props) => p.value && p.value.length === 0 && 'display: none;' }
+  ${ (p: Props) => p.children && p.children.length === 0 && 'display: none;' }
 `;
 
-export default (props : Props) => <InnerRichInput {...props} />;
+export default (props:Props) => <InnerRichInput {...props} />;

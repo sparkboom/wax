@@ -7,18 +7,8 @@ import {getPreText, getSelectedText, getPostText, getPredictionText} from './sel
 import classNames from 'classnames';
 import {setCaretIndex} from '../../../../lib/selection';
 import type {SelectableInputElement} from '../../../../lib/selection';
+import type {Props} from './types';
 
-type Props = {
-  onTextChange: (SyntheticInputEvent<> => void),
-  onSelectionChange: ((number, number) => void),
-  text: string,
-  selection: {
-    start: number,
-    length: number,
-  },
-  knownCommands: Array<string>,
-  theme: any,
-};
 type State = {
   isFocussed : boolean
 };
@@ -30,7 +20,8 @@ class RichInput extends React.Component<Props, State> {
   constructor(props : Props){
     super(props);
     this.state = {
-      isFocussed : false};
+      isFocussed : false
+    };
   }
 
   setFocus = (event : Event) => {
@@ -53,15 +44,9 @@ class RichInput extends React.Component<Props, State> {
   }
 
   onSelectionChange = event => {
+
     let input = this.inputRef;
-
-    if (!input){
-      return;
-    }
-
-    console.log('input.selectionStart', input.selectionStart);
-    console.log('input.selectionEnd - input.selectionStart', input.selectionEnd - input.selectionStart);
-    this.props.onSelectionChange(input.selectionStart, input.selectionEnd - input.selectionStart);
+    input && this.props.onSelectionChange(input.selectionStart, input.selectionEnd - input.selectionStart);
   };
 
   componentDidMount() {

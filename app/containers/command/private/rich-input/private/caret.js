@@ -2,11 +2,7 @@
 
 import * as React from 'react';
 import styled, {keyframes} from 'styled-components';
-import type {ITheme} from './theme.type';
-
-type Props = {
-  theme : ITheme
-};
+import type {Props} from './types';
 
 const blink = keyframes`
   from, to {

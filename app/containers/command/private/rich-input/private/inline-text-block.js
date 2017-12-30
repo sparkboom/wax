@@ -3,33 +3,26 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { getNodeCharIndex } from '../../../../../lib/text-width';
-import type {ITheme} from './theme.type';
+import type {Props} from './types';
 
-type TextBlockType =
-  | 'NORMAL'
-  | 'SELECTION';
-
-type Props = {
-  onTextSelect: (number => void),
-  children: mixed,
-  type: TextBlockType,
-  theme: ITheme,
+type TextBlockProps = Props & {
+  onTextSelect?: (number => void),
+  type?: 'NORMAL' | 'SELECTION',
 };
-
 type MouseEvent = SyntheticMouseEvent<HTMLSpanElement>;
 
 const InnerInlineTextBlock = styled.span`
   display: inline;
   cursor: text;
-  color: ${(p: Props) => {
+  color: ${(p:TextBlockProps) => {
     return {
       'NORMAL' : p.theme.textColor,
       'SELECTION' : p.theme.selectedTextColor,
-    }[p.type];
+    }[p.type || 'NORMAL'];
   }}
 `;
 
-export class InlineTextBlock extends React.Component<Props> {
+export class InlineTextBlock extends React.Component<TextBlockProps> {
 
   onMouseDown = (event: MouseEvent) => {
     let selectionInfo = getNodeCharIndex(event);
@@ -44,14 +37,14 @@ export class InlineTextBlock extends React.Component<Props> {
   render() {
     let {children, type} = this.props;
     return (
-      <InnerInlineTextBlock type={type || 'NORMAL'} onMouseDown={(e:MouseEvent) => this.onMouseDown(e)} >
+      <InnerInlineTextBlock type={type} onMouseDown={(e:MouseEvent) => this.onMouseDown(e)} >
         {children}
       </InnerInlineTextBlock>
     );
   }
 }
 
-export const SelectedInlineTextBlock = (props : Props) => <InlineTextBlock {...props} type="SELECTION" />
+export const SelectedInlineTextBlock = (props:Props) => <InlineTextBlock {...props} type="SELECTION" />
 
 export const PredictionInlineTextBlock = styled.span`
   display: inline;
