@@ -1,4 +1,4 @@
-import {TEXT_CHANGE, SET_SELECTION} from './action-types';
+import {TEXT_CHANGE, SET_SELECTION, COMPLETE_PREDICTION} from './action-types';
 import {insert} from 'underscore.string';
 import {CommandAction} from './actions';
 import type {CommandState} from './types';
@@ -33,6 +33,21 @@ export default (state:CommandState = initialState, action:CommandAction) : Comma
           start: confine( action.start, 0, state.text.length),
           length: confine( action.length, 0, state.text.length-action.start)
         }
+      }
+    case COMPLETE_PREDICTION:
+      return {
+        ...state,
+        text: '',
+        selection: {
+          start: 0,
+          length: 0,
+        },
+        tokens: [
+          ...state.tokens, {
+            type: 'CREATE_SHAPE',
+            shape: action.prediction,
+          }
+        ]
       }
     default:
       (action: empty);

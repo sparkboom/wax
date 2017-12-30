@@ -5,6 +5,7 @@ import {withTheme} from 'styled-components';
 import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput, PredictionInlineTextBlock} from './private';
 import {getPreText, getSelectedText, getPostText, getPredictionText} from './selectors';
 import classNames from 'classnames';
+import keycode from 'keycode';
 import {setCaretIndex} from '../../../../lib/selection';
 import type {SelectableInputElement} from '../../../../lib/selection';
 import type {Props} from './types';
@@ -36,6 +37,16 @@ class RichInput extends React.Component<Props, State> {
     this.inputRef && setCaretIndex(this.inputRef, selectionStart)
     onSelectionChange && onSelectionChange(selectionStart, 0);
   }
+
+  onInputKeyPress = (event:KeyboardEvent) => {
+
+    let {onCompletePrediction, text} = this.props;
+    let code:string = keycode(event);
+    let prediction:string = getPredictionText(this.props);
+    if (code === 'enter' && prediction.length>0){
+      onCompletePrediction(text+prediction);
+    }
+  };
 
   onSelectionChange = event => {
     let input = this.inputRef;
@@ -73,7 +84,8 @@ class RichInput extends React.Component<Props, State> {
           innerRef={ref => this.inputRef = ref}
           onFocus={() => this.setState({isFocussed:true})}
           onBlur={() => this.setState({isFocussed:false})}
-          onChange={event => onTextChange(event.target.value)}
+          onChange={(event:any) => onTextChange(event.target.value)}
+          onKeyPress={this.onInputKeyPress}
           value={text}  />
       </div>
     );

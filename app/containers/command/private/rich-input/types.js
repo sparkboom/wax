@@ -1,8 +1,9 @@
 // @flow
 
 export type Props = {
-  onTextChange: (string => void),
-  onSelectionChange: ((number, number) => void),
+  onTextChange: string=>void,
+  onSelectionChange: (number, number)=>void,
+  onCompletePrediction: string=>void,
 
   text: string,
   selection: {

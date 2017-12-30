@@ -2,16 +2,15 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import keycode from 'keycode';
 import {CommandInput, RichInput, RichInputContainer} from './private';
 import * as actions from './actions';
 import styled from 'styled-components';
-import isEmpty from 'lodash/isEmpty';
 import type {CommandState, CommandDispatch, CommandAction, State} from './types';
 
 type PropsDispatch = {
-  changeText : string => void,
-  changeSelection : (number, number) => void,
+  changeText : string=>void,
+  changeSelection : (number, number)=>void,
+  completePrediction : string=>void,
 };
 type PropsValues = CommandState;
 type Props = PropsValues & PropsDispatch;
@@ -19,7 +18,7 @@ type Props = PropsValues & PropsDispatch;
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {text, selection, changeText, changeSelection, knownCommands} = this.props;
+    let {text, selection, changeText, knownCommands, changeSelection, completePrediction} = this.props;
     return (
     <div>
       <RichInputContainer>
@@ -28,7 +27,8 @@ class CommandLine extends React.Component<Props> {
           selection={selection}
           knownCommands={knownCommands}
           onTextChange={changeText}
-          onSelectionChange={changeSelection} />
+          onSelectionChange={changeSelection}
+          onCompletePrediction={completePrediction} />
       </RichInputContainer>
     </div>);
   }
@@ -42,6 +42,7 @@ const connectProps:(State => PropsValues) = state => ({
 const connectDispatch:(CommandDispatch => PropsDispatch) = dispatch => ({
   changeText: newText => dispatch(actions.textChange(newText)),
   changeSelection: (start, length) => dispatch(actions.selectionChange(start, length)),
+  completePrediction: prediction => dispatch(actions.completePrediction(prediction)),
 });
 
 export default connect(connectProps, connectDispatch)(CommandLine);
