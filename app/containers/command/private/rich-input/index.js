@@ -14,9 +14,7 @@ type State = {
 };
 
 class RichInput extends React.Component<Props, State> {
-
   inputRef : ?SelectableInputElement = null;
-
   constructor(props : Props){
     super(props);
     this.state = {
@@ -25,26 +23,21 @@ class RichInput extends React.Component<Props, State> {
   }
 
   setFocus = (event : Event) => {
-
     if (document.activeElement === this.inputRef){
       return;
     }
-
     this.setState({isFocussed:true});
     this.inputRef && this.inputRef.focus();
     event.preventDefault();
   };
 
   setSelection(selectionStart) {
-    console.log('setCaretPosition', this, selectionStart);
-
     let {onSelectionChange} = this.props;
     this.inputRef && setCaretIndex(this.inputRef, selectionStart)
     onSelectionChange && onSelectionChange(selectionStart, 0);
   }
 
   onSelectionChange = event => {
-
     let input = this.inputRef;
     input && this.props.onSelectionChange(input.selectionStart, input.selectionEnd - input.selectionStart);
   };
@@ -80,7 +73,7 @@ class RichInput extends React.Component<Props, State> {
           innerRef={ref => this.inputRef = ref}
           onFocus={() => this.setState({isFocussed:true})}
           onBlur={() => this.setState({isFocussed:false})}
-          onChange={onTextChange}
+          onChange={event => onTextChange(event.target.value)}
           value={text}  />
       </div>
     );

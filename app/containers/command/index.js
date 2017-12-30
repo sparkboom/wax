@@ -27,7 +27,7 @@ class CommandLine extends React.Component<Props> {
           text={text}
           selection={selection}
           knownCommands={knownCommands}
-          onTextChange={event => changeText(event.currentTarget.value)}
+          onTextChange={changeText}
           onSelectionChange={changeSelection} />
       </RichInputContainer>
     </div>);

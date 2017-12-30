@@ -1,7 +1,6 @@
 module.exports = (workflow, gulp, $, config) => {
   workflow.subtask('watch:app', () => {
     gulp.watch(`${config.dirs.app.root}/**/*.{js,jsx}`, ['build:app', 'babel:app']);
-    gulp.watch(`${config.dirs.app.root}/**/*.scss`, ['build:app:css']);
   });
 
   workflow.subtask('watch:server', () => $.nodemon({

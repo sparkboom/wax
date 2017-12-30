@@ -10,6 +10,7 @@ const initialState : CommandState = {
     end: 0
   },
   knownCommands : [ 'clear', 'square', 'triangle', 'circle' ],
+  tokens: [],
 };
 
 const confine : (number, number, number) => number = (val:number, min:number, max:number) => Math.max(Math.min(val, max), min);

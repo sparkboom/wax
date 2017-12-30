@@ -17,9 +17,9 @@ const InnerRichInput = styled.pre`
   white-space: pre-wrap;
   word-wrap: break-word;
 
-  font-family: system-ui;
+  font-family: 'Montserrat', sans-serif;
   font-size: 40px;
-  font-weight: lighter;
+  font-weight: 100;
 
   background: rgba(136, 51, 85, 0.05);
   overflow-y: scroll;

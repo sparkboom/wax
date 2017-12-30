@@ -1,7 +1,7 @@
 // @flow
 
 export type Props = {
-  onTextChange: (SyntheticInputEvent<> => void),
+  onTextChange: (string => void),
   onSelectionChange: ((number, number) => void),
 
   text: string,

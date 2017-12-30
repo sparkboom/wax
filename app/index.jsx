@@ -13,12 +13,14 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { injectGlobal } from 'styled-components';
 
 injectGlobal`
+  @import url('https://fonts.googleapis.com/css?family=Montserrat:100,300');
+
   html, body, #app {
     height: 100%;
     background-color: #000;
     overflow: hidden;
-    font-family: 'Barlow', Helvetica, Arial, sans-serif;
-    font-weight: lighter;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
   }
 `;
 
