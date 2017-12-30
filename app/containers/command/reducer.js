@@ -45,7 +45,7 @@ export default (state:CommandState = initialState, action:CommandAction) : Comma
         tokens: [
           ...state.tokens, {
             type: 'CREATE_SHAPE',
-            shape: action.prediction,
+            args: {shape: action.prediction},
           }
         ]
       }

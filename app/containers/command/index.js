@@ -18,7 +18,7 @@ type Props = PropsValues & PropsDispatch;
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {text, selection, changeText, knownCommands, changeSelection, completePrediction} = this.props;
+    let {text, selection, changeText, knownCommands, tokens, changeSelection, completePrediction} = this.props;
     return (
     <div>
       <RichInputContainer>
@@ -26,6 +26,7 @@ class CommandLine extends React.Component<Props> {
           text={text}
           selection={selection}
           knownCommands={knownCommands}
+          tokens={tokens}
           onTextChange={changeText}
           onSelectionChange={changeSelection}
           onCompletePrediction={completePrediction} />

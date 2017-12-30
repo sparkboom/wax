@@ -51,3 +51,13 @@ export const PredictionInlineTextBlock = styled.span`
   cursor: text;
   color: #777777;
 `;
+
+export const TokenInlineTextBlock = styled.span`
+  display: inline;
+  color: #aaaaaa;
+  border: solid thin #777777;
+  font-size: 24px;
+  border-radius: 6px;
+  margin-right: 10px;
+  padding: 1px 7px;
+`;

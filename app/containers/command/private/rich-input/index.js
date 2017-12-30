@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {withTheme} from 'styled-components';
-import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput, PredictionInlineTextBlock} from './private';
+import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput, PredictionInlineTextBlock, TokenInlineTextBlock} from './private';
 import {getPreText, getSelectedText, getPostText, getPredictionText} from './selectors';
 import classNames from 'classnames';
 import keycode from 'keycode';
@@ -64,7 +64,7 @@ class RichInput extends React.Component<Props, State> {
   }
 
   render() {
-    const {text, selection, onTextChange, onSelectionChange} = this.props;
+    const {text, selection, tokens, onTextChange, onSelectionChange} = this.props;
 
     const innerRichInputClassName : string = classNames({
       focussed: this.state.isFocussed
@@ -73,6 +73,7 @@ class RichInput extends React.Component<Props, State> {
     return (
       <div style={{width: '100%'}} onClick={this.setFocus} >
         <InnerRichInput className={innerRichInputClassName}>
+          { tokens.map( (t,i) => <TokenInlineTextBlock key={i}>{t.args.shape}</TokenInlineTextBlock> ) }
           <InlineTextBlock onTextSelect={(index : number) => this.setSelection(index)}>{getPreText(this.props)}</InlineTextBlock>
           { this.state.isFocussed && selection.length===0 && <Caret /> }
           <SelectedInlineTextBlock onTextSelect={(index : number) => this.setSelection(index + selection.start)}>{getSelectedText(this.props)}</SelectedInlineTextBlock>
