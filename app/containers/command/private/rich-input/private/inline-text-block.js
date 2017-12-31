@@ -53,7 +53,7 @@ export const PredictionInlineTextBlock = styled.span`
 `;
 
 export const TokenInlineTextBlock = styled.span`
-  display: inline;
+  display: inline-block;
   color: #aaaaaa;
   border: solid thin #777777;
   font-size: 24px;

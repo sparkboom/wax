@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-// import {CommandInput, RichInput, RichInputContainer} from './private';
+import {RegularPolygon} from './private';
 // import * as actions from './actions';
 // import type {} from './types';
 
@@ -42,7 +42,7 @@ class Layout {
 }
 
 const createSquare = (layout, i) => (<rect key={i} {...layout.getNextCoords()} width={Width} height={Height} {...Style} />);
-const createTriangle = (layout, i) => null;
+const createTriangle = (layout, i) => (<RegularPolygon key={i} vertexCount="3" {...layout.getNextCoords()}  {...Style} />);
 const createCircle = (layout, i) => (<circle key={i} {...layout.getNextCCoords()} r={Radius} {...Style} />);
 const getShape = shape => {
 
@@ -62,7 +62,6 @@ class Canvas extends React.Component<{}> {
   render() {
 
     this.layout.reset();
-
     let {items} = this.props;
 
     return (
