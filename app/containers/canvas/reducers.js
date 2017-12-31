@@ -1,12 +1,14 @@
 import {EXECUTE_COMMAND} from '../app/action-types';
+import {TOGGLE_SELECTION} from './action-types';
 import type {CanvasState} from './types';
+import includes from 'lodash/includes';
 
 const initialState : CanvasState = {
   items: [],
+  selection: [],
 }
 
 const executeCommandReducer = (state = initialState, command) => {
-  console.log('executeCommandReducer canvas action', command);
   switch (command.shape) {
     case 'square':
     case 'triangle':
@@ -28,11 +30,15 @@ const executeCommandReducer = (state = initialState, command) => {
 };
 
 export default (state = initialState, action) => {
-  console.log('canvas action', action, EXECUTE_COMMAND);
-
   switch (action.type) {
     case EXECUTE_COMMAND:
       return executeCommandReducer(state, action.command);
+    case TOGGLE_SELECTION:
+      let unsetId = includes(state.selection, action.id);
+      return {
+        ...state,
+        selection: unsetId? [] : [action.id],
+      };
     default:
       (action: empty);
       return state;
