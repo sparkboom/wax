@@ -9,7 +9,7 @@ const initialState : CommandState = {
     start: 0,
     end: 0
   },
-  knownCommands : [ 'clear', 'square', 'triangle', 'circle' ],
+  knownCommands : [ 'clear', 'square', 'triangle', 'circle', 'selectall', 'unselectall', 'clearother' ],
   tokens: [],
 };
 
