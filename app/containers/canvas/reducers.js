@@ -34,10 +34,18 @@ export default (state = initialState, action) => {
     case EXECUTE_COMMAND:
       return executeCommandReducer(state, action.command);
     case TOGGLE_SELECTION:
-      let unsetId = includes(state.selection, action.id);
+      let selection;
+      if (action.metaKey){
+        selection = includes(state.selection, action.id)? [...state.selection]: [...state.selection,action.id];
+      } else if (state.selection.length>1) {
+        selection = [action.id];
+      } else {
+        selection = includes(state.selection, action.id)? []: [action.id];
+      }
+
       return {
         ...state,
-        selection: unsetId? [] : [action.id],
+        selection,
       };
     default:
       (action: empty);

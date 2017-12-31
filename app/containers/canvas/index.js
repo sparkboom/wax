@@ -12,6 +12,12 @@ class Canvas extends React.Component<{}> {
 
   layout = new Layout();
 
+  onClickItem = (event, id) => {
+
+    const {toggleSelection} = this.props;
+    toggleSelection(id, event.metaKey);
+  };
+
   render() {
 
     this.layout.reset();
@@ -25,7 +31,7 @@ class Canvas extends React.Component<{}> {
               shape={shape}
               layout={this.layout}
               className={getShapeClassName(i)}
-              onClick={() => toggleSelection(i)} />) }
+              onClick={event => this.onClickItem(event, i)} />) }
     </svg>
     );
   }
@@ -35,7 +41,7 @@ const connectProps:(State => PropsValues) = state => ({
   ...state.canvas
 });
 const connectDispatch = dispatch => ({
-  toggleSelection: id => dispatch(actions.toggleSelection(id))
+  toggleSelection: (id, metaKey) => dispatch(actions.toggleSelection(id, metaKey))
 });
 
 export default connect(connectProps, connectDispatch)(Canvas);
