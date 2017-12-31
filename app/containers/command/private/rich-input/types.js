@@ -7,4 +7,5 @@ export type Props = CommandState & {
   onCompletePrediction: string=>void,
   onExecuteActions: Array<mixed>=>void,
   theme: any,
+  tokens: Array<mixed>,
 };

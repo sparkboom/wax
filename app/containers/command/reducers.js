@@ -1,4 +1,4 @@
-import {TEXT_CHANGE, SET_SELECTION, COMPLETE_PREDICTION, EXECUTE_ACTIONS} from './action-types';
+import {TEXT_CHANGE, SET_SELECTION, COMPLETE_PREDICTION, REMOVE_TOKENS} from './action-types';
 import {insert} from 'underscore.string';
 import {CommandAction} from './actions';
 import type {CommandState} from './types';
@@ -49,14 +49,9 @@ export default (state:CommandState = initialState, action:CommandAction) : Comma
           }
         ]
       }
-    case EXECUTE_ACTIONS:
+    case REMOVE_TOKENS:
       return {
         ...state,
-        text: '',
-        selection: {
-          start: 0,
-          length: 0,
-        },
         tokens: []
       }
     default:

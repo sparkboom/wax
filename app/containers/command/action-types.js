@@ -1,7 +1,7 @@
 // @flow
-import type {TextChangeActionType, SetSelectionActionType, CompletePredictionActionType, ExecuteActionsActionType} from './types';
+import type {TextChangeActionType, SetSelectionActionType, CompletePredictionActionType, RemoveTokensActionType} from './types';
 
 export const TEXT_CHANGE:TextChangeActionType = 'COMMAND:TEXT_CHANGE';
 export const SET_SELECTION:SetSelectionActionType = 'COMMAND:SET_SELECTION';
 export const COMPLETE_PREDICTION:CompletePredictionActionType = 'COMMAND:COMPLETE_PREDICTION';
-export const EXECUTE_ACTIONS:ExecuteActionsActionType = 'COMMAND:EXECUTE_ACTIONS';
+export const REMOVE_TOKENS:RemoveTokensActionType = 'COMMAND:REMOVE_TOKENS';
