@@ -1,59 +1,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {RegularPolygon} from './private';
+import {Shape} from './private';
+import {Step, MaxX, Width, Height, Radius, Style} from './constants';
+import Layout from './lib/layout';
 // import * as actions from './actions';
 // import type {} from './types';
-
-const Step = 50;
-const MaxX = 800;
-const Width = 30;
-const Height = 30;
-const Radius = (Width + Height)/2/2;
-const Style = {stroke: 'red', fill: 'transparent', strokeWidth: 2};
-
-class Layout {
-
-  coords = {x:0, y:50};
-
-  reset = () => {
-
-    this.coords = {x:0, y:50};
-  }
-
-  getNextCoords = () => {
-
-    if (this.coords.x > MaxX - Step){
-      this.coords.x = Step;
-      this.coords.y += Step;
-    } else {
-      this.coords.x += Step;
-    }
-    return this.coords;
-  }
-
-  getNextCCoords = () => {
-
-    let c = this.getNextCoords();
-    return {
-      cx: c.x+Radius,
-      cy: c.y+Radius,
-    };
-  }
-}
-
-const createSquare = (layout, i) => (<rect key={i} {...layout.getNextCoords()} width={Width} height={Height} {...Style} />);
-const createTriangle = (layout, i) => (<RegularPolygon key={i} vertexCount="3" {...layout.getNextCoords()}  {...Style} />);
-const createCircle = (layout, i) => (<circle key={i} {...layout.getNextCCoords()} r={Radius} {...Style} />);
-const getShape = shape => {
-
-  const map = {
-    'square' : createSquare,
-    'triangle' : createTriangle,
-    'circle' : createCircle,
-  };
-  return map[shape];
-};
-
 
 class Canvas extends React.Component<{}> {
 
@@ -66,7 +17,7 @@ class Canvas extends React.Component<{}> {
 
     return (
     <svg width="100%" height="100%">
-      { items.map(({shape}, i) => getShape(shape)(this.layout, i)) }
+      { items.map( ({shape}, i) => <Shape key={i} shape={shape} layout={this.layout} />) }
     </svg>
     );
   }

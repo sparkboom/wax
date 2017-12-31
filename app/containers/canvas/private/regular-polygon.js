@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Width, Height} from '../constants';
 
 export default ({vertexCount, x, y, width=Width, height=Height, ...props}) => {
 
