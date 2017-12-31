@@ -1,21 +1,30 @@
+// @flow
+
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Shape} from './private';
-import {Step, MaxX, Width, Height, Radius, Style} from './constants';
+import {Step, MaxX, Width, Height, Radius} from './constants';
 import Layout from './lib/layout';
 import * as actions from './actions';
 import classNames from 'classnames';
 import includes from 'lodash/includes';
-// import type {} from './types';
+import type {State, CanvasState, CanvasDispatch} from './types';
 
-class Canvas extends React.Component<{}> {
+type PropsValues = CanvasState;
+type PropsDispatch = {
+  toggleSelection: (number,boolean)=>void,
+  removeSelection: ()=>void,
+};
+type Props = PropsValues & PropsDispatch;
+
+class Canvas extends React.Component<Props> {
 
   layout = new Layout();
 
-  onClickItem = (event, id) => {
+  onClickItem = (event:MouseEvent, id:number) => {
 
     const {toggleSelection} = this.props;
-    toggleSelection(id, event.metaKey);
+    toggleSelection(id, !!event.metaKey);
   };
 
   render() {
@@ -37,9 +46,10 @@ class Canvas extends React.Component<{}> {
 }
 
 const connectProps:(State => PropsValues) = state => ({
-  ...state.canvas
+  items: state.canvas.items,
+  selection: state.canvas.selection,
 });
-const connectDispatch = dispatch => ({
+const connectDispatch:(CanvasDispatch => PropsDispatch) = dispatch => ({
   toggleSelection: (id, metaKey) => dispatch(actions.toggleSelection(id, metaKey)),
   removeSelection: () => dispatch(actions.removeSelection())
 });

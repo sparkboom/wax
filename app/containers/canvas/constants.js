@@ -1,3 +1,5 @@
+// @flow
+
 export const Step = 50;
 export const MaxX = 800;
 export const Width = 30;

@@ -1,4 +1,5 @@
 // @flow
+
 import {TOGGLE_SELECTION, REMOVE_SELECTION} from './action-types';
 import type {ToggleSelectionAction, RemoveSelectionAction} from './types';
 

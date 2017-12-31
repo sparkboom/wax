@@ -1,16 +1,21 @@
+// @flow
+
 import {EXECUTE_COMMAND} from '../app/action-types';
 import {TOGGLE_SELECTION, REMOVE_SELECTION} from './action-types';
-import type {CanvasState} from './types';
 import includes from 'lodash/includes';
 import range from 'lodash/range';
 import filter from 'lodash/filter';
+import type {CanvasState, Command, CanvasAction} from './types';
 
-const initialState : CanvasState = {
+type CommandReducer = (CanvasState, Command) => CanvasState;
+type CanvasReducer = (CanvasState, CanvasAction) => CanvasState;
+
+const initialState:CanvasState = {
   items: [],
   selection: [],
 }
 
-const executeCommandReducer = (state = initialState, command) => {
+const executeCommandReducer:CommandReducer = (state = initialState, command) => {
   switch (command.shape) {
     case 'square':
     case 'triangle':
@@ -22,13 +27,13 @@ const executeCommandReducer = (state = initialState, command) => {
     case 'clear':
       return {
         ...state,
-        items: _.filter(state.items, (item, i) => !includes(state.selection, i)),
+        items: filter(state.items, (item:mixed, i:number) => !includes(state.selection, i)),
         selection: [],
       };
     case 'clearother':
       return {
         ...state,
-        items: _.filter(state.items, (item, i) => includes(state.selection, i)),
+        items: filter(state.items, (item:mixed, i:number) => includes(state.selection, i)),
         selection: [],
       };
     case 'selectall':
@@ -42,13 +47,12 @@ const executeCommandReducer = (state = initialState, command) => {
         selection: [],
       };
     default:
-      (command: empty);
       return state;
   }
 
 };
 
-export default (state = initialState, action) => {
+const canvasReducer:CanvasReducer = (state = initialState, action) => {
   switch (action.type) {
     case EXECUTE_COMMAND:
       return executeCommandReducer(state, action.command);
@@ -75,5 +79,6 @@ export default (state = initialState, action) => {
       (action: empty);
       return state;
   }
-
 };
+
+export default canvasReducer;
