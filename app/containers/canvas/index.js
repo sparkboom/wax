@@ -19,13 +19,12 @@ class Canvas extends React.Component<{}> {
   };
 
   render() {
-
+    let {items, toggleSelection, selection, removeSelection} = this.props;
     this.layout.reset();
-    let {items, toggleSelection, selection} = this.props;
     let getShapeClassName = id => classNames({selected : includes(selection, id) });
 
     return (
-    <svg width="100%" height="100%">
+    <svg width="100%" height="100%" onClick={removeSelection}>
       { items.map( ({shape}, i) => <Shape
               key={i}
               shape={shape}
@@ -41,7 +40,8 @@ const connectProps:(State => PropsValues) = state => ({
   ...state.canvas
 });
 const connectDispatch = dispatch => ({
-  toggleSelection: (id, metaKey) => dispatch(actions.toggleSelection(id, metaKey))
+  toggleSelection: (id, metaKey) => dispatch(actions.toggleSelection(id, metaKey)),
+  removeSelection: () => dispatch(actions.removeSelection())
 });
 
 export default connect(connectProps, connectDispatch)(Canvas);

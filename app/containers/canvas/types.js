@@ -13,8 +13,11 @@ export type CanvasState = {
 };
 
 export type ToggleSelectionActionType = 'APP:TOGGLE_SELECTION';
+export type RemoveSelectionActionType = 'APP:REMOVE_SELECTION';
 
-export type ToggleSelectionAction = {type:ToggleSelectionActionType, id:number};
+
+export type ToggleSelectionAction = {type:ToggleSelectionActionType, id:number, metaKey: boolean};
+export type RemoveSelectionAction = {type:ToggleSelectionActionType};
 
 // export type CanvasDispatch = CanvasAction => void;
 export type State = {

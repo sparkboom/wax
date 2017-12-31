@@ -1,5 +1,5 @@
 import {EXECUTE_COMMAND} from '../app/action-types';
-import {TOGGLE_SELECTION} from './action-types';
+import {TOGGLE_SELECTION, REMOVE_SELECTION} from './action-types';
 import type {CanvasState} from './types';
 import includes from 'lodash/includes';
 import range from 'lodash/range';
@@ -65,6 +65,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         selection,
+      };
+    case REMOVE_SELECTION:
+      return {
+        ...state,
+        selection: [],
       };
     default:
       (action: empty);
