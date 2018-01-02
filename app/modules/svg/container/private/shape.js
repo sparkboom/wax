@@ -5,14 +5,17 @@ import styled from 'styled-components';
 
 export const Square = ({layout, ...props}) => (<rect {...layout.getNextCoords()} width={Width} height={Height} {...props} />);
 export const Triangle = ({layout, ...props}) => (<RegularPolygon vertexCount="3" {...layout.getNextCoords()}  {...props} />);
-export const Circle = ({layout, ...props}) => (<circle {...layout.getNextCCoords()} r={Radius} {...props} />);
+export const Circle = ({layout, ...props}) => {
+  let c = layout.getNextCoords();
+  return (<circle cx={c.x+Radius} cy={c.y+Radius} r={Radius} {...props} />)
+};
 const _Shape =({shape, ...props}) => {
   const map = {
     'square' : Square,
     'triangle' : Triangle,
     'circle' : Circle,
   };
-  return map[shape](props);
+  return map[shape](props) || null;
 };
 
 

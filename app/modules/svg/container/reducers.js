@@ -1,20 +1,17 @@
 // @flow
 
-import {EXECUTE_COMMAND} from '../app/action-types';
 import {TOGGLE_SELECTION, REMOVE_SELECTION} from './action-types';
 import includes from 'lodash/includes';
 import range from 'lodash/range';
 import filter from 'lodash/filter';
-import type {CanvasState, Command, CanvasAction} from './types';
+import type {SVGState, Command, SVGAction} from './types';
 
-type CommandReducer = (CanvasState, Command) => CanvasState;
-type CanvasReducer = (CanvasState, CanvasAction) => CanvasState;
-
-const initialState:CanvasState = {
+const initialState:SVGState = {
   items: [],
   selection: [],
 }
 
+type CommandReducer = (SVGState, Command) => SVGState;
 const executeCommandReducer:CommandReducer = (state = initialState, command) => {
   switch (command.shape) {
     case 'square':
@@ -52,14 +49,17 @@ const executeCommandReducer:CommandReducer = (state = initialState, command) => 
 
 };
 
-const canvasReducer:CanvasReducer = (state = initialState, action) => {
+type SVGReducer = (SVGState, SVGAction) => SVGState;
+const svgReducer:SVGReducer = (state = initialState, action:SVGAction) => {
   switch (action.type) {
-    case EXECUTE_COMMAND:
+
+    case 'APP:EXECUTE_COMMAND':
       return executeCommandReducer(state, action.command);
+
     case TOGGLE_SELECTION:
       let selection;
       if (action.metaKey){
-        selection = includes(state.selection, action.id)? _.filter(state.selection, s => s!==action.id): [...state.selection, action.id];
+        selection = includes(state.selection, action.id)? filter(state.selection, s => s!==action.id): [...state.selection, action.id];
       } else if (state.selection.length>1) {
         selection = [action.id];
       } else {
@@ -75,10 +75,10 @@ const canvasReducer:CanvasReducer = (state = initialState, action) => {
         ...state,
         selection: [],
       };
+
     default:
-      (action: empty);
       return state;
   }
 };
 
-export default canvasReducer;
+export default svgReducer;
