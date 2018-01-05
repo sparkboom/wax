@@ -1,4 +1,4 @@
-import {TEXT_CHANGE, SET_SELECTION, COMPLETE_PREDICTION, REMOVE_TOKENS} from './action-types';
+import {CHANGE_TEXT, SET_SELECTION, COMPLETE_PREDICTION, REMOVE_TOKENS} from './action-types';
 import {insert} from 'underscore.string';
 import {CommandAction} from './actions';
 import type {CommandState} from './types';
@@ -17,7 +17,7 @@ const confine : (number, number, number) => number = (val:number, min:number, ma
 
 export default (state:CommandState = initialState, action:CommandAction) : CommandState => {
   switch (action.type) {
-    case TEXT_CHANGE:
+    case CHANGE_TEXT:
       return {
         ...state,
         text: action.text,

@@ -13,23 +13,23 @@ export type CommandState = {
   +tokens: Array<mixed>,
 };
 
-export type TextChangeActionType = 'COMMAND:TEXT_CHANGE';
+export type ChangeTextActionType = 'COMMAND:CHANGE_TEXT';
 export type SetSelectionActionType = 'COMMAND:SET_SELECTION';
 export type CompletePredictionActionType = 'COMMAND:COMPLETE_PREDICTION';
 export type RemoveTokensActionType = 'COMMAND:REMOVE_TOKENS';
 export type CommandActionType =
-  | TextChangeActionType
+  | ChangeTextActionType
   | SetSelectionActionType
   | CompletePredictionActionType
   | RemoveTokensActionType;
 
-export type TextChangeAction = {type:TextChangeActionType, text:string };
+export type ChangeTextAction = {type:ChangeTextActionType, text:string };
 export type SetSelectionAction = {type:SetSelectionActionType, start:number, length:number };
 export type CompletePredictionAction = {type:CompletePredictionActionType, prediction:string };
 export type RemoveTokensAction = {type:RemoveTokensActionType};
 export type CommandAction =
   | AppAction
-  | TextChangeAction
+  | ChangeTextAction
   | SetSelectionAction
   | CompletePredictionAction
   | RemoveTokensAction;
