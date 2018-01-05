@@ -1,12 +1,10 @@
 // @flow
 
 // External
-type ExecuteCommandAction = {type:'APP:EXECUTE_COMMAND', command:Command };
-
-// Fundamentals - are these being used?
 export type Command = {
   shape:string
 };
+type ExecuteCommandAction = {type:'APP:EXECUTE_COMMAND', command:Command };
 
 // Action Types
 export type ToggleSelectionActionType = 'SVG:TOGGLE_SELECTION';
