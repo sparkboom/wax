@@ -11,14 +11,17 @@ export type Command = {
 // Action Types
 export type ToggleSelectionActionType = 'SVG:TOGGLE_SELECTION';
 export type RemoveSelectionActionType = 'SVG:REMOVE_SELECTION';
+export type AddShapeActionType = 'SVG:ADD_SHAPE';
 
 // Actions
 export type ToggleSelectionAction = {type:ToggleSelectionActionType, id:number, metaKey: boolean};
 export type RemoveSelectionAction = {type:RemoveSelectionActionType};
+export type AddShapeAction = {type:AddShapeAction, shape:string, x:number, y:number, width:number, height:number};
 export type SVGAction =
   | ExecuteCommandAction
   | ToggleSelectionAction
-  | RemoveSelectionAction;
+  | RemoveSelectionAction
+  | AddShapeAction;
 
 // State
 export type SVGState = {
