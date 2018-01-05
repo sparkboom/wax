@@ -11,5 +11,6 @@ flow-typed/keycode/keycode_v2.x.x.js
 [lints]
 
 [options]
+esproposal.export_star_as=enable
 
 [strict]
