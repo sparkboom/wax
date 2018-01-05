@@ -27,7 +27,7 @@ if (config.optimise) {
 module.exports = {
   entry: {
     common: ['react'],
-    client: path.resolve(__dirname, 'app/index.js')
+    client: ['babel-polyfill', path.resolve(__dirname, 'app/index.js')],
   },
   output: {
     path: path.resolve(__dirname, config.dirs.dist.bundles),
