@@ -1,14 +1,16 @@
 // @flow
-import type {CommandState} from '../../types';
+
+// External
+import type {CommandState, Token} from '../../types';
 
 // Props
 type RichInputProps = {
   onTextChange: string=>void,
   onSelectionChange: (number, number)=>void,
   onCreateToken: {}=>void,
-  onExecuteActions: Array<mixed>=>void,
+  onRemoveToken: number[]=>void,
+  onExecuteActions: Array<Token>=>void,
   theme: any,
-  tokens: Array<mixed>,
 };
 
 export type Props = CommandState & RichInputProps;

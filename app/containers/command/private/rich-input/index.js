@@ -36,13 +36,21 @@ class RichInput extends React.Component<Props, State> {
     let {onSelectionChange} = this.props;
     this.inputRef && setCaretIndex(this.inputRef, selectionStart)
     onSelectionChange && onSelectionChange(selectionStart, 0);
-  }
+  };
+
+  onInputKeyDown = (event:KeyboardEvent) => {
+
+      let {onRemoveToken, tokens, selection} = this.props;
+      let code:string = keycode(event);
+      if (code === 'backspace' && tokens.length>0 && selection.start === 0 && selection.length === 0){
+        onRemoveToken([tokens.length-1]);
+      }
+  };
 
   onInputKeyPress = (event:KeyboardEvent, suggestion) => {
 
     let {onCreateToken, onExecuteActions, text, tokens} = this.props;
     let code:string = keycode(event);
-
     if (code === 'enter' && suggestion.matched){
       onCreateToken(suggestion);
     } else if (code === 'enter' && text.length === 0 && tokens.length > 0 ){
@@ -91,6 +99,7 @@ class RichInput extends React.Component<Props, State> {
           onBlur={() => this.setState({isFocussed:false})}
           onChange={(event:any) => onTextChange(event.target.value)}
           onKeyPress={(event:any) => this.onInputKeyPress(event, suggestion)}
+          onKeyDown={this.onInputKeyDown}
           value={text}  />
       </div>
     );

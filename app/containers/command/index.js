@@ -18,7 +18,7 @@ class CommandLine extends React.Component<Props> {
   };
 
   render() {
-    let {text, selection, changeText, tokens, changeSelection, createToken} = this.props;
+    let {text, selection, changeText, tokens, changeSelection, createToken, removeTokens} = this.props;
     return (
     <div>
       <RichInputContainer>
@@ -29,6 +29,7 @@ class CommandLine extends React.Component<Props> {
           onTextChange={changeText}
           onSelectionChange={changeSelection}
           onCreateToken={createToken}
+          onRemoveToken={removeTokens}
           onExecuteActions={this.onExecuteActions} />
       </RichInputContainer>
     </div>);
@@ -44,7 +45,7 @@ const connectDispatch:CommandConnectDispatch = dispatch => ({
   changeSelection: (start, length) => dispatch(actions.selectionChange(start, length)),
   createToken: suggestion => dispatch(actions.createToken(suggestion)),
   executeCommand: commands => dispatch(appActions.executeCommand(commands)),
-  removeTokens: () => dispatch(actions.removeTokens()),
+  removeTokens: indexes => dispatch(actions.removeTokens(indexes)),
 });
 
 export default connect(connectProps, connectDispatch)(CommandLine);

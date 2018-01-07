@@ -13,7 +13,7 @@ const initialState : CommandState = {
   text : '',
   selection : {
     start: 0,
-    end: 0,
+    length: 0,
   },
   tokens: [],
 };
