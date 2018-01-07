@@ -1,9 +1,11 @@
 // @flow
 
-// External
+// Fundamentals
 export type Command = {
   shape:string
 };
+
+// External
 type ExecuteCommandAction = {type:'APP:EXECUTE_COMMAND', command:Command };
 
 // Action Types

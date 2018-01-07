@@ -5,17 +5,9 @@ import {connect} from 'react-redux';
 import {RichInput, RichInputContainer} from './private';
 import * as actions from './actions';
 import * as appActions from '../app/actions';
-import type {CommandState, CommandDispatch, CommandAction, State} from './types';
+import type {CommandConnectDispatch, CommandConnectProps, CommandProps, CommandDispatch} from './types';
 
-type PropsDispatch = {
-  changeText : string=>void,
-  changeSelection : (number, number)=>void,
-  completePrediction : string=>void,
-  executeCommand : mixed=>void,
-  removeTokens : void=>void
-};
-type PropsValues = CommandState;
-type Props = PropsValues & PropsDispatch;
+type Props = CommandProps & CommandDispatch;
 
 class CommandLine extends React.Component<Props> {
 
@@ -31,14 +23,13 @@ class CommandLine extends React.Component<Props> {
   };
 
   render() {
-    let {text, selection, changeText, knownCommands, tokens, changeSelection, completePrediction} = this.props;
+    let {text, selection, changeText, tokens, changeSelection, completePrediction} = this.props;
     return (
     <div>
       <RichInputContainer>
         <RichInput
           text={text}
           selection={selection}
-          knownCommands={knownCommands}
           tokens={tokens}
           onTextChange={changeText}
           onSelectionChange={changeSelection}
@@ -49,12 +40,11 @@ class CommandLine extends React.Component<Props> {
   }
 }
 
-
-const connectProps:(State => PropsValues) = state => ({
+const connectProps:CommandConnectProps = state => ({
   ...state.command
 });
 
-const connectDispatch:(CommandDispatch => PropsDispatch) = dispatch => ({
+const connectDispatch:CommandConnectDispatch = dispatch => ({
   changeText: newText => dispatch(actions.textChange(newText)),
   changeSelection: (start, length) => dispatch(actions.selectionChange(start, length)),
   completePrediction: prediction => dispatch(actions.completePrediction(prediction)),
