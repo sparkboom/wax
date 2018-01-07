@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import {ToastContainer} from 'react-toastify';
 import CommandLine from '../command';
 import Canvas from '../canvas';
 import styled from 'styled-components';
@@ -16,6 +17,7 @@ class App extends React.Component<{}> {
     <Container>
       <Canvas />
       <CommandLine />
+      <ToastContainer />
     </Container>)
   }
 }

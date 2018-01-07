@@ -1,6 +1,7 @@
 // @flow
 
 export type ExecuteCommandActionType = 'APP:EXECUTE_COMMAND';
+export type GlobalErrorActionType = 'APP:GLOBAL_ERROR';
 
 export type Action = {
   type:string,

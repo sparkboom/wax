@@ -26,7 +26,6 @@ export class InlineTextBlock extends React.Component<TextBlockProps> {
 
   onMouseDown = (event: MouseEvent) => {
     let selectionInfo = getNodeCharIndex(event);
-    console.log('selectionInfo', selectionInfo);
     if (!selectionInfo) {
       return;
     }

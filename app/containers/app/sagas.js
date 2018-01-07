@@ -5,6 +5,7 @@ import {delay} from 'redux-saga';
 import {EXECUTE_COMMAND} from './action-types';
 import {removeTokens} from '../command/actions';
 import type {ExecuteCommandAction} from './types';
+import { toast } from 'react-toastify';
 
 function* executeCommand(action:ExecuteCommandAction) : Generator<mixed, void, void>{
   let executingCommands = [...action.commands];
@@ -16,6 +17,12 @@ function* executeCommand(action:ExecuteCommandAction) : Generator<mixed, void, v
   }
 }
 
+function* globalError(action){
+  console.log('ERROR', action);
+  toast.error(action.message);
+}
+
 export default function* appSaga() : Generator<void, void, void>{
   yield takeEvery(EXECUTE_COMMAND, executeCommand);
+  yield takeEvery('GLOBAL:ERROR', globalError);
 }
