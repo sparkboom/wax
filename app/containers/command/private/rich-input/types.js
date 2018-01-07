@@ -1,11 +1,14 @@
 // @flow
 import type {CommandState} from '../../types';
 
-export type Props = CommandState & {
+// Props
+type RichInputProps = {
   onTextChange: string=>void,
   onSelectionChange: (number, number)=>void,
-  onCompletePrediction: string=>void,
+  onCompletePrediction: {}=>void,
   onExecuteActions: Array<mixed>=>void,
   theme: any,
   tokens: Array<mixed>,
 };
+
+export type Props = CommandState & RichInputProps;

@@ -5,9 +5,9 @@ import {connect} from 'react-redux';
 import {RichInput, RichInputContainer} from './private';
 import * as actions from './actions';
 import * as appActions from '../app/actions';
-import type {CommandConnectDispatch, CommandConnectReduxProps, CommandProps, CommandReduxProps, CommandDispatch} from './types';
+import type {CommandConnectDispatch, CommandConnectReduxProps, CommandReduxProps, CommandDispatch} from './types';
 
-type Props = CommandProps & CommandConnectReduxProps & CommandDispatch;
+type Props = CommandConnectReduxProps & CommandDispatch;
 
 class CommandLine extends React.Component<Props> {
 
@@ -23,7 +23,7 @@ class CommandLine extends React.Component<Props> {
   };
 
   render() {
-    let {text, selection, interpreter, changeText, tokens, changeSelection, completePrediction} = this.props;
+    let {text, selection, changeText, tokens, changeSelection, completePrediction} = this.props;
     return (
     <div>
       <RichInputContainer>
@@ -31,7 +31,6 @@ class CommandLine extends React.Component<Props> {
           text={text}
           selection={selection}
           tokens={tokens}
-          interpreter={interpreter}
           onTextChange={changeText}
           onSelectionChange={changeSelection}
           onCompletePrediction={completePrediction}

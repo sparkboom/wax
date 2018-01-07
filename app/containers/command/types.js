@@ -2,13 +2,6 @@
 
 // External
 import type {AppAction} from '../app/types';
-type Interpretation = {
-  command:string,
-  prediction:string,
-  action:{
-    type:string,
-  }
-}
 
 // Fundamentals
 export type Selection = {
@@ -51,9 +44,6 @@ export type CommandStore = {
 };
 
 // Props
-export type CommandProps = {
-  interpreter:string=>Interpretation,
-};
 export type CommandReduxProps = CommandState;
 export type CommandConnectReduxProps = CommandStore => CommandReduxProps;
 

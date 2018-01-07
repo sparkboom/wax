@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {withTheme} from 'styled-components';
 import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput, PredictionInlineTextBlock, TokenInlineTextBlock} from './private';
-import {getPreText, getSelectedText, getPostText, getPredictionText} from './selectors';
+import {getPreText, getSelectedText, getPostText, interpret} from './selectors';
 import classNames from 'classnames';
 import keycode from 'keycode';
 import {setCaretIndex} from '../../../../lib/selection';
@@ -38,13 +38,13 @@ class RichInput extends React.Component<Props, State> {
     onSelectionChange && onSelectionChange(selectionStart, 0);
   }
 
-  onInputKeyPress = (event:KeyboardEvent) => {
+  onInputKeyPress = (event:KeyboardEvent, suggestion) => {
 
     let {onCompletePrediction, onExecuteActions, text, tokens} = this.props;
     let code:string = keycode(event);
-    let prediction:string = getPredictionText(this.props);
-    if (code === 'enter' && prediction.length>0){
-      onCompletePrediction(text+prediction);
+
+    if (code === 'enter' && suggestion.matched){
+      onCompletePrediction(suggestion.prediction);
     } else if (code === 'enter' && text.length === 0 && tokens.length > 0 ){
       onExecuteActions(tokens);
     }
@@ -68,6 +68,8 @@ class RichInput extends React.Component<Props, State> {
   render() {
     const {text, selection, tokens, onTextChange, onSelectionChange} = this.props;
 
+    const suggestion = interpret(this.props);
+
     const innerRichInputClassName : string = classNames({
       focussed: this.state.isFocussed
     });
@@ -80,7 +82,7 @@ class RichInput extends React.Component<Props, State> {
           { this.state.isFocussed && selection.length===0 && <Caret /> }
           <SelectedInlineTextBlock onTextSelect={(index : number) => this.setSelection(index + selection.start)}>{getSelectedText(this.props)}</SelectedInlineTextBlock>
           <InlineTextBlock onTextSelect={(index : number) => this.setSelection(index + selection.start + selection.length)}>{getPostText(this.props)}</InlineTextBlock>
-          <PredictionInlineTextBlock>{getPredictionText(this.props)}</PredictionInlineTextBlock>
+          <PredictionInlineTextBlock>{suggestion.prediction}</PredictionInlineTextBlock>
         </InnerRichInput>
 
         <HiddenInput
@@ -88,7 +90,7 @@ class RichInput extends React.Component<Props, State> {
           onFocus={() => this.setState({isFocussed:true})}
           onBlur={() => this.setState({isFocussed:false})}
           onChange={(event:any) => onTextChange(event.target.value)}
-          onKeyPress={this.onInputKeyPress}
+          onKeyPress={(event:any) => this.onInputKeyPress(event, suggestion)}
           value={text}  />
       </div>
     );
