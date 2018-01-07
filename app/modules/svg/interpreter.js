@@ -7,13 +7,17 @@ export type WaxFunction = {
     type:string
   }
 }
-export type Suggestion = ?WaxFunction & {
+export type Suggestion = {
+  command?:string,
+  action?:{
+    type:string
+  },
   prediction:?string,
   matched:boolean,
 };
 type Interpreter = string=>Suggestion
 
-// 
+//
 const waxFunctions = [{
   command:'addcircle',
   action:{
@@ -32,6 +36,9 @@ const waxFunctions = [{
 }];
 
 export const predict:Interpreter = text => {
+  if(text.length===0){
+    return {prediction: null, matched:false};
+  }
   const waxfunc = waxFunctions.find(f => f.command.startsWith(text)) || null;
   const prediction = waxfunc && waxfunc.command.substr(text.length);
   return {...waxfunc, prediction, matched:!!waxfunc};

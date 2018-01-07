@@ -1,3 +1,1 @@
-import {* as svgInterpreter} from './svg/interpreter';
-
-export svgInterpreter;
+export * from './svg/interpreter';

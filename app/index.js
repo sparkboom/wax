@@ -11,7 +11,7 @@ import { history } from './history';
 import rootSaga from './sagas';
 import store, {sagaMiddleware} from './store';
 
-sagaMiddleware.run(rootSaga)
+sagaMiddleware.run(rootSaga);
 
 window.goTo = path => store.dispatch(push(path));
 

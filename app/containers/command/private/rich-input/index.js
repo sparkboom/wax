@@ -44,7 +44,7 @@ class RichInput extends React.Component<Props, State> {
     let code:string = keycode(event);
 
     if (code === 'enter' && suggestion.matched){
-      onCompletePrediction(suggestion.prediction);
+      onCompletePrediction(suggestion.command);
     } else if (code === 'enter' && text.length === 0 && tokens.length > 0 ){
       onExecuteActions(tokens);
     }

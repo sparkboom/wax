@@ -1,4 +1,4 @@
 // @flow
 
 export {Shape, Square, Triangle, Circle} from './shape';
-export RegularPolygon from './regular-polygon';
+export * as RegularPolygon from './regular-polygon';
