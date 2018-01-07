@@ -5,7 +5,7 @@ import type {CommandState} from '../../types';
 type RichInputProps = {
   onTextChange: string=>void,
   onSelectionChange: (number, number)=>void,
-  onCompletePrediction: {}=>void,
+  onCreateToken: {}=>void,
   onExecuteActions: Array<mixed>=>void,
   theme: any,
   tokens: Array<mixed>,

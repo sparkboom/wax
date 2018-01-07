@@ -13,17 +13,12 @@ class CommandLine extends React.Component<Props> {
 
   onExecuteActions = (actions=[]) => {
 
-    let {executeCommand, removeTokens} = this.props;
-
-    actions.forEach(action => {
-      let cmd = {shape: action.args.shape};
-      executeCommand(cmd);
-    });
-    removeTokens();
+    const {executeCommand, tokens} = this.props;
+    executeCommand(tokens);
   };
 
   render() {
-    let {text, selection, changeText, tokens, changeSelection, completePrediction} = this.props;
+    let {text, selection, changeText, tokens, changeSelection, createToken} = this.props;
     return (
     <div>
       <RichInputContainer>
@@ -33,7 +28,7 @@ class CommandLine extends React.Component<Props> {
           tokens={tokens}
           onTextChange={changeText}
           onSelectionChange={changeSelection}
-          onCompletePrediction={completePrediction}
+          onCreateToken={createToken}
           onExecuteActions={this.onExecuteActions} />
       </RichInputContainer>
     </div>);
@@ -47,8 +42,8 @@ const connectProps:CommandConnectReduxProps = state => ({
 const connectDispatch:CommandConnectDispatch = dispatch => ({
   changeText: newText => dispatch(actions.textChange(newText)),
   changeSelection: (start, length) => dispatch(actions.selectionChange(start, length)),
-  completePrediction: prediction => dispatch(actions.completePrediction(prediction)),
-  executeCommand: command => dispatch(appActions.executeCommand(command)),
+  createToken: suggestion => dispatch(actions.createToken(suggestion)),
+  executeCommand: commands => dispatch(appActions.executeCommand(commands)),
   removeTokens: () => dispatch(actions.removeTokens()),
 });
 

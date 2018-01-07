@@ -1,16 +1,15 @@
 // @flow
+import {addAction} from './container/actions';
 
 // Types
 export type WaxFunction = {
   command:string,
   action:{
-    type:string
   }
 }
 export type Suggestion = {
   command?:string,
   action?:{
-    type:string
   },
   prediction:?string,
   matched:boolean,
@@ -20,19 +19,13 @@ type Interpreter = string=>Suggestion
 //
 const waxFunctions = [{
   command:'addcircle',
-  action:{
-    type:'ADD_SHAPE',
-    shape:'circle'}
+  action: addAction('circle'),
 },{
   command:'addsquare',
-  action:{
-    type:'ADD_SHAPE',
-    shape:'square'}
+  action: addAction('square'),
 },{
   command:'addtriangle',
-  action:{
-    type:'ADD_SHAPE',
-    shape:'triangle'}
+  action: addAction('triangle'),
 }];
 
 export const predict:Interpreter = text => {

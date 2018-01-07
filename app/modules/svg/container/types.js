@@ -16,9 +16,8 @@ export type AddShapeActionType = 'SVG:ADD_SHAPE';
 // Actions
 export type ToggleSelectionAction = {type:ToggleSelectionActionType, id:number, metaKey: boolean};
 export type RemoveSelectionAction = {type:RemoveSelectionActionType};
-export type AddShapeAction = {type:AddShapeAction, shape:string, x:number, y:number, width:number, height:number};
+export type AddShapeAction = {type:AddShapeActionType, shape:string};
 export type SVGAction =
-  | ExecuteCommandAction
   | ToggleSelectionAction
   | RemoveSelectionAction
   | AddShapeAction;

@@ -40,11 +40,11 @@ class RichInput extends React.Component<Props, State> {
 
   onInputKeyPress = (event:KeyboardEvent, suggestion) => {
 
-    let {onCompletePrediction, onExecuteActions, text, tokens} = this.props;
+    let {onCreateToken, onExecuteActions, text, tokens} = this.props;
     let code:string = keycode(event);
 
     if (code === 'enter' && suggestion.matched){
-      onCompletePrediction(suggestion.command);
+      onCreateToken(suggestion);
     } else if (code === 'enter' && text.length === 0 && tokens.length > 0 ){
       onExecuteActions(tokens);
     }
@@ -77,7 +77,7 @@ class RichInput extends React.Component<Props, State> {
     return (
       <div style={{width: '100%'}} onClick={this.setFocus} >
         <InnerRichInput className={innerRichInputClassName}>
-          { tokens.map( (t,i) => <TokenInlineTextBlock key={i}>{t.args.shape}</TokenInlineTextBlock> ) }
+          { tokens.map( (t,i) => <TokenInlineTextBlock key={i}>{t.command}</TokenInlineTextBlock> ) }
           <InlineTextBlock onTextSelect={(index : number) => this.setSelection(index)}>{getPreText(this.props)}</InlineTextBlock>
           { this.state.isFocussed && selection.length===0 && <Caret /> }
           <SelectedInlineTextBlock onTextSelect={(index : number) => this.setSelection(index + selection.start)}>{getSelectedText(this.props)}</SelectedInlineTextBlock>
