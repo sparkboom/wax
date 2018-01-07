@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 import App from './containers';
 import { injectGlobal } from 'styled-components';
@@ -8,7 +8,10 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter, push } from 'react-router-redux';
 import { history } from './history';
 
-import store from './store';
+import rootSaga from './sagas';
+import store, {sagaMiddleware} from './store';
+
+sagaMiddleware.run(rootSaga)
 
 window.goTo = path => store.dispatch(push(path));
 

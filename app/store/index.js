@@ -7,26 +7,15 @@ import createSagaMiddleware from 'redux-saga'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 // Configure Middleware
-const sagaMiddleware = createSagaMiddleware();
-const middleware = [
-  routerMiddleware(history),
-  thunk,
-  sagaMiddleware,
-];
+export const sagaMiddleware = createSagaMiddleware();
 
 // Create Store
 const store = createStore(
   combineReducers(reducers),
   composeWithDevTools(
-    applyMiddleware(...middleware.filter(Boolean))
+    applyMiddleware(routerMiddleware(history), sagaMiddleware, thunk)
   )
 );
-
-// Startup
-function* startupSaga(){
-  console.debug('Sagas have started.');
-}
-sagaMiddleware.run(startupSaga)
 
 // Export
 export default store;
