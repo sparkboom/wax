@@ -1,0 +1,16 @@
+[ignore]
+.*/node_modules/styled-components/.*
+.*/node_modules/babel-plugin-transform-react-remove-prop-types/.*
+.*/dist/.*
+
+[include]
+
+[libs]
+flow-typed/keycode/keycode_v2.x.x.js
+
+[lints]
+
+[options]
+esproposal.export_star_as=enable
+
+[strict]

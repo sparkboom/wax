@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/static/bundles/index.css">
+  <title>Page not available!</title>
+
+  <style>
+    body {
+      background-color: #ffffff;
+      color: rgb(84, 105, 141);
+    }
+
+    .error-container {
+      width: 100%;
+      max-width: 760px;
+      text-align: center;
+      margin: 4rem auto;
+    }
+
+    .error-image {
+      padding: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="error-container">
+  <div class="error-image">
+    <img src="/static/images/illustration_missing_page.png" alt="Something went wrong!" width="550" height="350"/>
+  </div>
+
+  <div class="slds-text-heading_large slds-m-bottom_medium">Page not available</div>
+  <div>Maybe the page was deleted, the URL is incorrect, or something else wen wrong. If you know the page exists but
+    you still can't access it, please visit our support page and provide the following reference number:
+  </div>
+  <div class="slds-m-top_small"><%- requestId %></div>
+</div>
+
+</body>
+</html>
