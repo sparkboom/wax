@@ -8,7 +8,6 @@ export type Token = {
   isSelected:boolean,
 }
 
-const UNICODE_NARROW_NOBREAK_SPACE = '\u202F';
 const UNICODE_OBJECT_REPLACEMENT_CHARACTER = '©'; // '\uFFFC';
 
 /**
@@ -29,7 +28,6 @@ function* scanner(text, selectStart, selectEnd):Generator<Token,void,void>{
 
     if (i<text.length){
       let ch = text[i];
-      ch = !(ch.match(/\s/))? ch:UNICODE_NARROW_NOBREAK_SPACE;
       yield {
         text:ch,
         type:ch===UNICODE_OBJECT_REPLACEMENT_CHARACTER? 'COMMAND':'TEXT',

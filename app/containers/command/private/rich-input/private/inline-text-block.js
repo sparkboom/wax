@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { getNodeCharIndex } from '../../../../../lib/text-width';
+import { getNodeCharIndex } from '../lib/text-width';
 import type {Props} from './types';
 
 type TextBlockProps = Props & {

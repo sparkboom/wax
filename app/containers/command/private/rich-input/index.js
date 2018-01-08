@@ -5,23 +5,25 @@ import {withTheme} from 'styled-components';
 import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput, PredictionInlineTextBlock, TokenInlineTextBlock} from './private';
 import classNames from 'classnames';
 //import keycode from 'keycode';
-//import {setCaretIndex} from '../../../../lib/selection';
-import type {SelectableInputElement} from '../../../../lib/selection';
+import * as Selection from './lib/selection';
 import type {Props} from './types';
 import {tokenize, tokenizeWithSuggestion} from './lib/tokenizer';
+import range from 'lodash/range';
 
 type State = {
   isFocussed : boolean
 };
 
 class RichInput extends React.Component<Props, State> {
-  inputRef : ?SelectableInputElement = null;
+  inputRef : ?Selection.SelectableInputElement = null;
   constructor(props : Props){
     super(props);
     this.state = {
       isFocussed : false
     };
   }
+
+  setTokens = (text, tokens, selectionStart, selectionEnd) => this.props.onSetTokens([...tokenize(text, tokens, selectionStart, selectionEnd)]);
 
   setFocus = (event : Event) => {
     if (document.activeElement === this.inputRef){
@@ -32,11 +34,28 @@ class RichInput extends React.Component<Props, State> {
     event.preventDefault();
   };
 
-  // setSelection(selectionStart) {
-  //   let {onSelectionChange} = this.props;
-  //   this.inputRef && setCaretIndex(this.inputRef, selectionStart)
-  //   onSelectionChange && onSelectionChange(selectionStart, 0);
-  // };
+  onInputChange = () => {
+    const {tokens} = this.props;
+    const {value, selectionStart, selectionEnd} = this.inputRef;
+    this.setTokens(value, tokens, selectionStart, selectionEnd);
+  };
+
+  setSelection(tokenIndex, charIndex) {
+    if (!this.inputRef){
+      return;
+    }
+
+    const {tokens} = this.props;
+    let index = range(0,tokenIndex)
+        .map(i => tokens[i].text.length)
+        .reduce((a,v) => a+v,0) + charIndex;
+
+    Selection.setCaretIndex(this.inputRef, index)
+    this.setTokens(this.inputRef.value, tokens, index, index);
+  };
+
+
+
 
   //onInputKeyDown = (event:KeyboardEvent) => {
 
@@ -74,14 +93,6 @@ class RichInput extends React.Component<Props, State> {
   }
 
 
-  onInputChange = () => {
-    const {tokens, onSetTokens} = this.props;
-    const {value, selectionStart, selectionEnd} = this.inputRef;
-
-    console.log('tokenize...', value, selectionStart, selectionEnd);
-    let newTokens = [...tokenize(value, tokens, selectionStart, selectionEnd)];
-    onSetTokens(newTokens);
-  };
 
   render() {
     const {tokens} = this.props;
@@ -97,10 +108,14 @@ class RichInput extends React.Component<Props, State> {
         'COMMAND': (<TokenInlineTextBlock key={i}>{t.command}</TokenInlineTextBlock>),
         'CARET': (<Caret key={i} />),
         'SUGGESTION': (<PredictionInlineTextBlock key={i}>{ t.prediction }</PredictionInlineTextBlock>),
-        'TEXT': (<InlineTextBlock key={i} type={t.isSelected? 'SELECTION':'NORMAL'}>{t.text}</InlineTextBlock>),
+        'TEXT': (<InlineTextBlock
+                        key={i}
+                        type={t.isSelected? 'SELECTION':'NORMAL'}
+                        onTextSelect={(charIndex:number) => this.setSelection(i, charIndex)}>
+                        {t.text}
+                </InlineTextBlock>),
       }[t.type] || null;
     });
-
 
     const inputValue:string = tokens.reduce((a,v)=> a+v.text, '');
 
@@ -121,20 +136,9 @@ class RichInput extends React.Component<Props, State> {
     );
   }
 }
-//inputValue
 export default withTheme(RichInput);
 
-
 /*
-
 onKeyPress={(event:any) => this.onInputKeyPress(event, suggestion)}
 onKeyDown={this.onInputKeyDown}
-
-
-{ tokenViews }
-<InlineTextBlock onTextSelect={(index : number) => this.setSelection(index)}>{getPreText(this.props)}</InlineTextBlock>
-{ this.state.isFocussed && selection.length===0 && <Caret /> }
-<SelectedInlineTextBlock onTextSelect={(index : number) => this.setSelection(index + selection.start)}>{getSelectedText(this.props)}</SelectedInlineTextBlock>
-<InlineTextBlock onTextSelect={(index : number) => this.setSelection(index + selection.start + selection.length)}>{getPostText(this.props)}</InlineTextBlock>
-<PredictionInlineTextBlock>{suggestion.prediction}</PredictionInlineTextBlock>
 */
