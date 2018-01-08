@@ -5,16 +5,36 @@ import type {AppAction} from '../app/types';
 import type {Suggestion} from '../../modules';
 
 // Fundamentals
-export type Selection = {
-  +start : number,
-  +length : number,
+export type TokenType =
+  | 'STRING'
+  | 'COMMAND'
+  | 'PREDICTION'
+  | 'CARET';
+  
+export type StringToken = {
+  type:'STRING',
+  text:string,
+  isSelected:boolean,
 };
-export type Token = {
+export type CommandToken = {
+  type:'COMMAND',
+  text:string,
   command:string,
   action:{
     type:string
-  }
+  },
+  isSelected:boolean,
 };
+export type CaretToken = {
+  type:'CARET',
+  text:'',
+  isSelected:true,
+};
+export type Token =
+  | StringToken
+  | CommandToken
+  | CaretToken;
+
 export type Commands = Token[];
 
 // Action Types
@@ -22,28 +42,30 @@ export type ChangeTextActionType = 'COMMAND:CHANGE_TEXT';
 export type SetSelectionActionType = 'COMMAND:SET_SELECTION';
 export type CreateTokenActionType = 'COMMAND:CREATE_TOKEN';
 export type RemoveTokensActionType = 'COMMAND:REMOVE_TOKENS';
+export type SetTokensActionType = 'COMMAND:SET_TOKENS';
 export type CommandActionType =
   | ChangeTextActionType
   | SetSelectionActionType
   | CreateTokenActionType
-  | RemoveTokensActionType;
+  | RemoveTokensActionType
+  | SetTokensActionType;
 
 // Actions
 export type ChangeTextAction = {type:ChangeTextActionType, text:string };
 export type SetSelectionAction = {type:SetSelectionActionType, start:number, length:number };
 export type CreateTokenAction = {type:CreateTokenActionType, command:string, action:{type:string} };
 export type RemoveTokensAction = {type:RemoveTokensActionType, tokenIndexes:?number[]};
+export type SetTokensAction = {type:SetTokensActionType, tokens:{}[]};
 export type CommandAction =
   | AppAction
   | ChangeTextAction
   | SetSelectionAction
   | CreateTokenAction
-  | RemoveTokensAction;
+  | RemoveTokensAction
+  | SetTokensAction;
 
 // State
 export type CommandState = {
-  +text : string,
-  +selection : Selection,
   +tokens: Array<Token>,
 };
 export type CommandStore = {

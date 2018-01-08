@@ -18,19 +18,15 @@ class CommandLine extends React.Component<Props> {
   };
 
   render() {
-    let {text, selection, changeText, tokens, changeSelection, createToken, removeTokens} = this.props;
+    let {tokens, setTokens} = this.props;
     return (
     <div>
       <RichInputContainer>
         <RichInput
-          text={text}
-          selection={selection}
           tokens={tokens}
-          onTextChange={changeText}
-          onSelectionChange={changeSelection}
-          onCreateToken={createToken}
-          onRemoveToken={removeTokens}
-          onExecuteActions={this.onExecuteActions} />
+          onSetTokens={setTokens}
+          onExecuteActions={this.onExecuteActions}
+         />
       </RichInputContainer>
     </div>);
   }
@@ -41,11 +37,8 @@ const connectProps:CommandConnectReduxProps = state => ({
 });
 
 const connectDispatch:CommandConnectDispatch = dispatch => ({
-  changeText: newText => dispatch(actions.textChange(newText)),
-  changeSelection: (start, length) => dispatch(actions.selectionChange(start, length)),
-  createToken: suggestion => dispatch(actions.createToken(suggestion)),
   executeCommand: commands => dispatch(appActions.executeCommand(commands)),
-  removeTokens: indexes => dispatch(actions.removeTokens(indexes)),
+  setTokens: tokens => dispatch(actions.setTokens(tokens)),
 });
 
 export default connect(connectProps, connectDispatch)(CommandLine);

@@ -5,11 +5,12 @@ import type {CommandState, Token} from '../../types';
 
 // Props
 type RichInputProps = {
-  onTextChange: string=>void,
-  onSelectionChange: (number, number)=>void,
-  onCreateToken: {}=>void,
-  onRemoveToken: number[]=>void,
-  onExecuteActions: Array<Token>=>void,
+  onSetTokens: Array<Token>=>void,
+  // onTextChange: string=>void,
+  // onSelectionChange: (number, number)=>void,
+  // onCreateToken: {}=>void,
+  // onRemoveToken: number[]=>void,
+  // onExecuteActions: Array<Token>=>void,
   theme: any,
 };
 

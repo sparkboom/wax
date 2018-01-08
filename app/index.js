@@ -14,12 +14,12 @@ import store, {sagaMiddleware} from './store';
 sagaMiddleware.run(rootSaga);
 
 window.goTo = path => store.dispatch(push(path));
-// window.onerror = (msg, url, line, col, error) => {
-//   store.dispatch({type:'GLOBAL:ERROR', msg, url, line, col, error});
-// };
+window.onerror = function(error, url, line) {
+  //store.dispatch({type:'GLOBAL:ERROR', message: error.message ,error});
+};
 window.addEventListener('error', event => {
-  store.dispatch({type:'GLOBAL:ERROR', message: event.message ,error: event.error});
-  event.preventDefault();
+  //store.dispatch({type:'GLOBAL:ERROR', message: event.message ,error: event.error});
+  //event.preventDefault();
 })
 
 injectGlobal`
