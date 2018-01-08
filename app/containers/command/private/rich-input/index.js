@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {withTheme} from 'styled-components';
-import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput, PredictionInlineTextBlock, TokenInlineTextBlock} from './private';
+import {Caret, InnerRichInput, InlineTextBlock, HiddenInput, PredictionInlineTextBlock, TokenInlineTextBlock} from './private';
 import classNames from 'classnames';
 import keycode from 'keycode';
 import * as Selection from './lib/selection';
@@ -107,12 +107,12 @@ class RichInput extends React.Component<Props, State> {
     const inlineElements = tokensWithSuggestion.map((t,i) => {
       return {
         'FIN': null,
-        'COMMAND': (<TokenInlineTextBlock key={i}>{t.command}</TokenInlineTextBlock>),
+        'COMMAND': (<TokenInlineTextBlock key={i} isSelected={t.isSelected}>{t.command}</TokenInlineTextBlock>),
         'CARET': (<Caret key={i} />),
-        'SUGGESTION': (<PredictionInlineTextBlock key={i}>{ t.prediction }</PredictionInlineTextBlock>),
+        'SUGGESTION': (<PredictionInlineTextBlock key={i} isSelected={t.isSelected}>{ t.prediction }</PredictionInlineTextBlock>),
         'TEXT': (<InlineTextBlock
                         key={i}
-                        type={t.isSelected? 'SELECTION':'NORMAL'}
+                        isSelected={t.isSelected}
                         onTextSelect={(charIndex:number) => this.setSelection(i, charIndex)}>
                         {t.text}
                 </InlineTextBlock>),

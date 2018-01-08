@@ -1,25 +1,30 @@
 // @flow
 
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import { getNodeCharIndex } from '../lib/text-width';
 import type {Props} from './types';
 
 type TextBlockProps = Props & {
   onTextSelect?: (number => void),
-  type?: 'NORMAL' | 'SELECTION',
+  isSelected?: boolean,
 };
 type MouseEvent = SyntheticMouseEvent<HTMLSpanElement>;
 
+const SelectedStyle = css`
+  color: black;
+  background-color: ${props => props.theme.selectedTextColor};
+  border-radius: 10px;
+`;
+const NormalStyle = css`
+  color: ${props => props.theme.textColor};
+  background-color: transparent;
+`;
 const InnerInlineTextBlock = styled.span`
+  font-size: 30px;
   display: inline;
   cursor: text;
-  color: ${(p:TextBlockProps) => {
-    return {
-      'NORMAL' : p.theme.textColor,
-      'SELECTION' : p.theme.selectedTextColor,
-    }[p.type || 'NORMAL'];
-  }}
+  ${ props => props.isSelected? SelectedStyle : NormalStyle }
 `;
 
 export class InlineTextBlock extends React.Component<TextBlockProps> {
@@ -34,30 +39,29 @@ export class InlineTextBlock extends React.Component<TextBlockProps> {
   };
 
   render() {
-    let {children, type} = this.props;
+    let {children, isSelected} = this.props;
     return (
-      <InnerInlineTextBlock type={type} onMouseDown={(e:MouseEvent) => this.onMouseDown(e)} >
+      <InnerInlineTextBlock isSelected={isSelected} onMouseDown={(e:MouseEvent) => this.onMouseDown(e)} >
         {children}
       </InnerInlineTextBlock>
     );
   }
 }
 
-export const SelectedInlineTextBlock = (props:Props) => <InlineTextBlock {...props} type="SELECTION" />
-
 export const PredictionInlineTextBlock = styled.span`
   display: inline;
   cursor: text;
   color: #777777;
+  font-size: 30px;
 `;
 
 export const TokenInlineTextBlock = styled.span`
   display: inline-block;
-  color: #aaaaaa;
-  border: solid thin #777777;
   font-size: 24px;
-  border-radius: 6px;
+  border-radius: 10px;
   margin-left: 5px;
   margin-right: 5px;
   padding: 1px 7px;
+  border: solid thin ${ props => props.isSelected?  props.theme.selectedTextColor : props.theme.textColor };
+  ${ props => props.isSelected? SelectedStyle : NormalStyle }
 `;
