@@ -10,7 +10,7 @@ export type TokenType =
   | 'COMMAND'
   | 'PREDICTION'
   | 'CARET';
-  
+
 export type StringToken = {
   type:'STRING',
   text:string,
@@ -38,31 +38,19 @@ export type Token =
 export type Commands = Token[];
 
 // Action Types
-export type ChangeTextActionType = 'COMMAND:CHANGE_TEXT';
-export type SetSelectionActionType = 'COMMAND:SET_SELECTION';
-export type CreateTokenActionType = 'COMMAND:CREATE_TOKEN';
-export type RemoveTokensActionType = 'COMMAND:REMOVE_TOKENS';
 export type SetTokensActionType = 'COMMAND:SET_TOKENS';
+export type FilterTokensActionType = 'COMMAND:FILTER_TOKENS';
 export type CommandActionType =
-  | ChangeTextActionType
-  | SetSelectionActionType
-  | CreateTokenActionType
-  | RemoveTokensActionType
-  | SetTokensActionType;
+  | SetTokensActionType
+  | FilterTokensActionType;
 
 // Actions
-export type ChangeTextAction = {type:ChangeTextActionType, text:string };
-export type SetSelectionAction = {type:SetSelectionActionType, start:number, length:number };
-export type CreateTokenAction = {type:CreateTokenActionType, command:string, action:{type:string} };
-export type RemoveTokensAction = {type:RemoveTokensActionType, tokenIndexes:?number[]};
 export type SetTokensAction = {type:SetTokensActionType, tokens:{}[]};
+export type FilterTokensAction = {type:FilterTokensActionType, match:{}};
 export type CommandAction =
   | AppAction
-  | ChangeTextAction
-  | SetSelectionAction
-  | CreateTokenAction
-  | RemoveTokensAction
-  | SetTokensAction;
+  | SetTokensAction
+  | FilterTokensAction;
 
 // State
 export type CommandState = {
@@ -78,10 +66,7 @@ export type CommandConnectReduxProps = CommandStore => CommandReduxProps;
 
 // Dispatch
 export type CommandDispatch = {
-  changeText : string=>void,
-  changeSelection : (number, number)=>void,
-  createToken : Token=>void,
   executeCommand : Commands=>void,
-  removeTokens : void=>void,
+  setTokens : Token[]=>void,
 };
 export type CommandConnectDispatch = (CommandAction => void) => CommandDispatch;

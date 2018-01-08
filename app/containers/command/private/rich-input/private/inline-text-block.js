@@ -57,6 +57,7 @@ export const TokenInlineTextBlock = styled.span`
   border: solid thin #777777;
   font-size: 24px;
   border-radius: 6px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
   padding: 1px 7px;
 `;

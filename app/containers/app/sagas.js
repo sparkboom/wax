@@ -3,7 +3,7 @@
 import {takeEvery, put} from 'redux-saga/effects';
 import {delay} from 'redux-saga';
 import {EXECUTE_COMMAND} from './action-types';
-import {removeTokens} from '../command/actions';
+import {filterTokens} from '../command/actions';
 import type {ExecuteCommandAction} from './types';
 import { toast } from 'react-toastify';
 
@@ -12,7 +12,7 @@ function* executeCommand(action:ExecuteCommandAction) : Generator<mixed, void, v
 
   for(let cmd of executingCommands){
     yield put({...cmd.action});
-    yield put({...removeTokens([0])});
+    yield put({...filterTokens({key:cmd.key})});
     yield delay(200);
   }
 }

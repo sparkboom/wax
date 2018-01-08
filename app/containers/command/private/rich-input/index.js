@@ -4,11 +4,12 @@ import * as React from 'react';
 import {withTheme} from 'styled-components';
 import {Caret, InnerRichInput, InlineTextBlock, SelectedInlineTextBlock, HiddenInput, PredictionInlineTextBlock, TokenInlineTextBlock} from './private';
 import classNames from 'classnames';
-//import keycode from 'keycode';
+import keycode from 'keycode';
 import * as Selection from './lib/selection';
 import type {Props} from './types';
 import {tokenize, tokenizeWithSuggestion} from './lib/tokenizer';
 import range from 'lodash/range';
+import shortid from 'shortid';
 
 type State = {
   isFocussed : boolean
@@ -54,33 +55,36 @@ class RichInput extends React.Component<Props, State> {
     this.setTokens(this.inputRef.value, tokens, index, index);
   };
 
+  onInputKeyPress = (event:KeyboardEvent, suggestion) => {
 
+    let code:string = keycode(event);
+    let {tokens, onSetTokens, onExecuteActions} = this.props;
+    let caretTokenIndex = tokens.findIndex(t => t.type==='CARET');
 
-
-  //onInputKeyDown = (event:KeyboardEvent) => {
-
-      // let {onRemoveToken, tokens, selection} = this.props;
-      // let code:string = keycode(event);
-      // if (code === 'backspace' && tokens.length>0 && selection.start === 0 && selection.length === 0){
-      //   onRemoveToken([tokens.length-1]);
-      // }
-  //};
-
-  //onInputKeyPress = (event:KeyboardEvent, suggestion) => {
-
-    // let {onCreateToken, onExecuteActions, text, tokens} = this.props;
-    // let code:string = keycode(event);
-    // if (code === 'enter' && suggestion.matched){
-    //   onCreateToken(suggestion);
-    // } else if (code === 'enter' && text.length === 0 && tokens.length > 0 ){
-    //   onExecuteActions(tokens);
-    // }
-  //};
-
-  // onSelectionChange = event => {
-  //   let input = this.inputRef;
-  //   input && this.props.onSelectionChange(input.selectionStart, input.selectionEnd - input.selectionStart);
-  // };
+    if (code === 'enter' && suggestion){
+      tokens = [...tokens];
+      tokens[caretTokenIndex-1] = {
+        type: 'COMMAND',
+        text: '©',
+        command: suggestion.command,
+        action: suggestion.action,
+        key: shortid.generate(),
+      };
+      onSetTokens(tokens);
+    }
+    else if (code === 'enter' && caretTokenIndex>0){
+      let i = caretTokenIndex;
+      while(i>0 && tokens[i-1].type === 'COMMAND'){
+        i--;
+      }
+      let commands = tokens.slice(i, caretTokenIndex);
+      if (commands.length>0){
+        commands.forEach(cmd => cmd.isExecuting = true)
+        onSetTokens(tokens);
+        onExecuteActions(commands);
+      }
+    }
+  };
 
   componentDidMount() {
 
@@ -92,8 +96,6 @@ class RichInput extends React.Component<Props, State> {
     document.removeEventListener('selectionchange', this.onInputChange );
   }
 
-
-
   render() {
     const {tokens} = this.props;
     const innerRichInputClassName : string = classNames({
@@ -101,10 +103,10 @@ class RichInput extends React.Component<Props, State> {
     });
 
     const tokensWithSuggestion = [...tokenizeWithSuggestion(tokens)];
-    console.log('tokens', tokens);
-    console.log('tokensWithSuggestion', tokensWithSuggestion);
+    const suggestion = tokensWithSuggestion.find(t => t.type === 'SUGGESTION');
     const inlineElements = tokensWithSuggestion.map((t,i) => {
       return {
+        'FIN': null,
         'COMMAND': (<TokenInlineTextBlock key={i}>{t.command}</TokenInlineTextBlock>),
         'CARET': (<Caret key={i} />),
         'SUGGESTION': (<PredictionInlineTextBlock key={i}>{ t.prediction }</PredictionInlineTextBlock>),
@@ -129,7 +131,7 @@ class RichInput extends React.Component<Props, State> {
           innerRef={ref => this.inputRef = ref}
           onFocus={() => this.setState({isFocussed:true})}
           onBlur={() => this.setState({isFocussed:false})}
-
+          onKeyPress={(event:any) => this.onInputKeyPress(event, suggestion)}
           onChange={() => this.onInputChange()}
           value={inputValue}  />
       </div>
@@ -137,8 +139,3 @@ class RichInput extends React.Component<Props, State> {
   }
 }
 export default withTheme(RichInput);
-
-/*
-onKeyPress={(event:any) => this.onInputKeyPress(event, suggestion)}
-onKeyDown={this.onInputKeyDown}
-*/

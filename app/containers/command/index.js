@@ -11,21 +11,15 @@ type Props = CommandConnectReduxProps & CommandDispatch;
 
 class CommandLine extends React.Component<Props> {
 
-  onExecuteActions = (actions=[]) => {
-
-    const {executeCommand, tokens} = this.props;
-    executeCommand(tokens);
-  };
-
   render() {
-    let {tokens, setTokens} = this.props;
+    let {tokens, setTokens, executeCommand} = this.props;
     return (
     <div>
       <RichInputContainer>
         <RichInput
           tokens={tokens}
           onSetTokens={setTokens}
-          onExecuteActions={this.onExecuteActions}
+          onExecuteActions={executeCommand}
          />
       </RichInputContainer>
     </div>);

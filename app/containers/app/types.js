@@ -9,7 +9,8 @@ export type Action = {
 };
 export type Command = {
   action:Action,
-  command:string
+  command:string,
+  key:string,
 }
 export type ExecuteCommandAction = {type:ExecuteCommandActionType, commands:Command[] };
 

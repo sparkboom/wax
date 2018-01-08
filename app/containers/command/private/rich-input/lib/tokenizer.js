@@ -34,6 +34,10 @@ function* scanner(text, selectStart, selectEnd):Generator<Token,void,void>{
         isSelected:i>=selectStart && i<selectEnd};
     }
   }
+  yield {
+    type: 'FIN',
+    text: '',
+  };
 }
 
 /**
@@ -81,27 +85,22 @@ export function* tokenizeWithSuggestion(tokens){
 
   let prevTokens = [null, null];
   for(let token of tokens){
-    if (tokens && token.type==='TEXT'
+    if (tokens && (token.type==='TEXT' || token.type==='FIN')
           && prevTokens[1] && prevTokens[1].type==='CARET'
           && prevTokens[0] && prevTokens[0].type==='TEXT'){
 
       // if last 2 tokens was caret and text, and current is text,
       // we may be able to replace some forthcoming text with prediction
+      yield {
+        type: 'SUGGESTION',
+        text: '',
+        isSelected:false,
+        ...Interpreter.predict(prevTokens[0].text),
+      };
     }
 
     yield token;
     prevTokens.shift();
     prevTokens.push(token);
-  }
-  // if last 2 tokens was caret and text, then we're at the end of the
-  if (prevTokens[1] && prevTokens[1].type==='CARET'
-      && prevTokens[0] && prevTokens[0].type==='TEXT'){
-
-    yield {
-      type: 'SUGGESTION',
-      text: '',
-      isSelected:false,
-      ...Interpreter.predict(prevTokens[0].text),
-    };
   }
 }
