@@ -1,5 +1,5 @@
 // @flow
-import {addAction} from './container/actions';
+import * as svg from '../../../modules/svg/container/lib/exec';
 
 // Types
 export type WaxFunction = {
@@ -17,16 +17,18 @@ export type Suggestion = {
 type Interpreter = string=>Suggestion
 
 //
-const waxFunctions = [{
-  command:'addcircle',
-  action: addAction('circle'),
+const waxAppFunctions = [{
+  command:'throwerror',
+  action: {type:'GLOBAL:THROW_ERROR'},
 },{
-  command:'addsquare',
-  action: addAction('square'),
-},{
-  command:'addtriangle',
-  action: addAction('triangle'),
+  command:'fail',
+  action: {type:'EXECUTE_FAIL', error: new Error('This is a fail action.')},
 }];
+
+const waxFunctions = [
+  ...waxAppFunctions,
+  ...svg.waxFunctions,
+];
 
 export const predict:Interpreter = text => {
   if(text.length===0){

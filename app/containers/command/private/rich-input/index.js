@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import keycode from 'keycode';
 import * as Selection from './lib/selection';
 import type {Props} from './types';
-import {tokenize, tokenizeWithSuggestion} from './lib/tokenizer';
+import {tokenize, tokenizeWithSuggestion, mergeTextTokens} from './lib/tokenizer';
 import range from 'lodash/range';
 import shortid from 'shortid';
 
@@ -55,7 +55,7 @@ class RichInput extends React.Component<Props, State> {
     this.setTokens(this.inputRef.value, tokens, index, index);
   };
 
-  onInputKeyPress = (event:KeyboardEvent, suggestion) => {
+  onInputKeyDown = (event:KeyboardEvent, suggestion) => {
 
     let code:string = keycode(event);
     let {tokens, onSetTokens, onExecuteActions} = this.props;
@@ -65,7 +65,7 @@ class RichInput extends React.Component<Props, State> {
       tokens = [...tokens];
       tokens[caretTokenIndex-1] = {
         type: 'COMMAND',
-        text: '©',
+        text: '\uFFFC',
         command: suggestion.command,
         action: suggestion.action,
         key: shortid.generate(),
@@ -83,6 +83,21 @@ class RichInput extends React.Component<Props, State> {
         onSetTokens(tokens);
         onExecuteActions(commands);
       }
+    }else if(code === 'esc'){
+      let newTokens = tokens.map(t => {
+        if (t.type === 'COMMAND' && t.isSelected === true){
+          return {
+            type: 'TEXT',
+            text: t.command,
+            isSelected: true,
+          }
+        }else {
+          return t;
+        }
+      })
+      console.log('newTokens', newTokens);
+      newTokens = [...mergeTextTokens(newTokens)];
+      onSetTokens(newTokens);
     }
   };
 
@@ -131,7 +146,7 @@ class RichInput extends React.Component<Props, State> {
           innerRef={ref => this.inputRef = ref}
           onFocus={() => this.setState({isFocussed:true})}
           onBlur={() => this.setState({isFocussed:false})}
-          onKeyPress={(event:any) => this.onInputKeyPress(event, suggestion)}
+          onKeyDown={(event:any) => this.onInputKeyDown(event, suggestion)}
           onChange={() => this.onInputChange()}
           value={inputValue}  />
       </div>

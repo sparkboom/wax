@@ -1,4 +1,4 @@
-import * as Interpreter from '../../../../../modules';
+import * as Interpreter from '../../../../app/lib/exec';
 
 type TokenType = 'TEXT' | 'COMMAND' | 'CARET' | 'SUGGESTION';
 
@@ -8,7 +8,7 @@ export type Token = {
   isSelected:boolean,
 }
 
-const UNICODE_OBJECT_REPLACEMENT_CHARACTER = '©'; // '\uFFFC';
+const UNICODE_OBJECT_REPLACEMENT_CHARACTER = '\uFFFC';
 
 /**
 * Scans in character, by character through a string, yielding each one in turn.
@@ -102,5 +102,32 @@ export function* tokenizeWithSuggestion(tokens){
     yield token;
     prevTokens.shift();
     prevTokens.push(token);
+  }
+}
+
+/**
+*
+*/
+export function* mergeTextTokens(tokens){
+
+  let textToken = null
+  for(let token of tokens){
+    if (token.type === 'TEXT'){
+      if (!textToken){
+        textToken = token;
+      } else {
+        textToken.text += token.text;
+      }
+    } else {
+      if (textToken){
+        yield textToken;
+        textToken = null;
+      }
+      yield token;
+    }
+  }
+
+  if (textToken) {
+    yield textToken;
   }
 }
