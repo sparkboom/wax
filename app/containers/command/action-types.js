@@ -1,5 +1,8 @@
 // @flow
-import type {SetTokensActionType, FilterTokensActionType} from './types';
 
-export const SET_TOKENS:SetTokensActionType = 'COMMAND:SET_TOKENS';
-export const FILTER_TOKENS:FilterTokensActionType = 'COMMAND:FILTER_TOKENS';
+export const SetTokens:'COMMAND:SET_TOKENS' = 'COMMAND:SET_TOKENS';
+export const FilterTokens:'COMMAND:FILTER_TOKENS' = 'COMMAND:FILTER_TOKENS';
+
+export type Union =
+  | typeof SetTokens
+  | typeof FilterTokens;

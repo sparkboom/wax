@@ -1,7 +1,9 @@
 // @flow
 
-import type {ToggleSelectionActionType,RemoveSelectionActionType, AddShapeActionType} from './types';
+// export const TOGGLE_SELECTION:'SVG:TOGGLE_SELECTION' = 'SVG:TOGGLE_SELECTION';
+// export const REMOVE_SELECTION:'SVG:REMOVE_SELECTION' = 'SVG:REMOVE_SELECTION';
 
-export const TOGGLE_SELECTION:ToggleSelectionActionType = 'SVG:TOGGLE_SELECTION';
-export const REMOVE_SELECTION:RemoveSelectionActionType = 'SVG:REMOVE_SELECTION';
-export const ADD_SHAPE:AddShapeActionType = 'SVG:ADD_SHAPE';
+export const AddShape:'SVG:ADD_SHAPE' = 'SVG:ADD_SHAPE';
+
+export type Union =
+  | typeof AddShape;

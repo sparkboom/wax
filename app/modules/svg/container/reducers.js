@@ -1,19 +1,19 @@
 // @flow
 
-import {ADD_SHAPE} from './action-types';
-import type {SVGState, Command, SVGAction} from './types';
+import * as ActionTypes from './action-types';
+import type {SVGState, Command} from './types';
 
 const initialState:SVGState = {
   items: [],
   selection: [],
 }
 
-type SVGReducer = (SVGState, SVGAction) => SVGState;
-const svgReducer:SVGReducer = (state = initialState, action:SVGAction) => {
+type SVGReducer = (SVGState, any) => SVGState;
+const svgReducer:SVGReducer = (state = initialState, action:any) => {
 
   switch (action.type) {
 
-    case ADD_SHAPE:
+    case ActionTypes.AddShape:
       return {
         ...state,
         items: [...state.items, {shape:action.shape}],

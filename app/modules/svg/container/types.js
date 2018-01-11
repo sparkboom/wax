@@ -6,21 +6,10 @@ export type Command = {
 };
 
 // External
-type ExecuteCommandAction = {type:'APP:EXECUTE_COMMAND', command:Command };
-
-// Action Types
-export type ToggleSelectionActionType = 'SVG:TOGGLE_SELECTION';
-export type RemoveSelectionActionType = 'SVG:REMOVE_SELECTION';
-export type AddShapeActionType = 'SVG:ADD_SHAPE';
+//type ExecuteCommandAction = {type:'APP:EXECUTE_COMMAND', command:Command };
 
 // Actions
-export type ToggleSelectionAction = {type:ToggleSelectionActionType, id:number, metaKey: boolean};
-export type RemoveSelectionAction = {type:RemoveSelectionActionType};
-export type AddShapeAction = {type:AddShapeActionType, shape:string};
-export type SVGAction =
-  | ToggleSelectionAction
-  | RemoveSelectionAction
-  | AddShapeAction;
+
 
 // State
 export type SVGState = {

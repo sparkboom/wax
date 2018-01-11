@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import {Width, Height} from '../constants';
+import {Width, Height} from './constants';
 
 type Props = {
   vertexCount: number,

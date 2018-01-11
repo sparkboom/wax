@@ -2,6 +2,8 @@
 
 import styled from 'styled-components';
 
+// Code
+
 export default styled.div`
   display: flex;
   text-align: center;

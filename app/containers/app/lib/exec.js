@@ -1,10 +1,12 @@
 // @flow
+
 import * as svg from '../../../modules/svg/container/lib/exec';
 
 // Types
 export type WaxFunction = {
   command:string,
   action:{
+    type:string,
   }
 }
 export type Suggestion = {
@@ -20,9 +22,6 @@ type Interpreter = string=>Suggestion
 const waxAppFunctions = [{
   command:'throwerror',
   action: {type:'GLOBAL:THROW_ERROR'},
-},{
-  command:'fail',
-  action: {type:'EXECUTE_FAIL', error: new Error('This is a fail action.')},
 }];
 
 const waxFunctions = [

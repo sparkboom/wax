@@ -1,14 +1,18 @@
 // @flow
 
+// Types
+
+export type SelectableInputElement = HTMLInputElement & SelectionAPI & TextAPI;
+
+// Code
 export interface TextAPI {
   createTextRange() : any;
 }
 export interface SelectionAPI {
   setSelectionRange(number, number) : void;
 }
-export type SelectableInputElement = HTMLInputElement & SelectionAPI & TextAPI;
 
-export function setCaretIndex(el : SelectableInputElement, caretIndex : number){
+export function setCaretIndex(el:SelectableInputElement, caretIndex:number){
   if(!el) {
     return;
   }

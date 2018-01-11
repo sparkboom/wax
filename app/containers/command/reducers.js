@@ -1,20 +1,23 @@
-import {SET_TOKENS, FILTER_TOKENS} from './action-types';
-import type {CommandState, CommandAction} from './types';
+// @flow
+
+import * as ActionTypes from './action-types';
+import * as Actions from './actions';
+import * as Types from './types';
 import remove from 'lodash/remove';
+import * as State from './state';
 
-const initialState : CommandState = {
-  tokens: [{type:'TEXT',text:'',isSelected:false}],
-};
+// Types
+type CommandReducer = (typeof State, Actions.Union) => typeof State;
 
-const confine:ConfineType= (val, min, max) => Math.max(Math.min(val, max), min);
+// Code
 
-export default (state:CommandState = initialState, action:CommandAction) : CommandState => {
+const commandReducer:CommandReducer = (state = State.default, action) => {
   switch (action.type) {
-    case SET_TOKENS:
+    case ActionTypes.SetTokens:
       return {
         tokens: action.tokens
       };
-    case FILTER_TOKENS:
+    case ActionTypes.FilterTokens:
       let tokens = [...state.tokens];
       remove(tokens, action.match);
       return {
@@ -25,3 +28,4 @@ export default (state:CommandState = initialState, action:CommandAction) : Comma
       return state;
   }
 };
+export default commandReducer;

@@ -1,9 +1,12 @@
 // @flow
+
 import * as React from 'react';
 import {ToastContainer} from 'react-toastify';
 import CommandLine from '../command';
 import Canvas from '../canvas';
 import styled from 'styled-components';
+
+// Code
 
 const Container = styled.div`
   height: 100%;

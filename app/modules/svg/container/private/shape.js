@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Width, Height, Radius} from '../constants';
+import {Width, Height, Radius} from './constants';
 import RegularPolygon from './regular-polygon';
 import styled from 'styled-components';
 

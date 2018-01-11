@@ -6,14 +6,25 @@ import {Caret, InnerRichInput, InlineTextBlock, HiddenInput, PredictionInlineTex
 import classNames from 'classnames';
 import keycode from 'keycode';
 import * as Selection from './lib/selection';
-import type {Props} from './types';
+import type {Token} from '../../types';
 import {tokenize, tokenizeWithSuggestion, mergeTextTokens} from './lib/tokenizer';
 import range from 'lodash/range';
 import shortid from 'shortid';
 
+// Types
+
+export type Props = {
+  tokens:Array<Token>,
+  onSetTokens: Array<Token>=>void,
+  onExecuteActions: Array<Token>=>void,
+  theme: any,
+};
+
 type State = {
   isFocussed : boolean
 };
+
+// Code
 
 class RichInput extends React.Component<Props, State> {
   inputRef : ?Selection.SelectableInputElement = null;
@@ -26,7 +37,7 @@ class RichInput extends React.Component<Props, State> {
 
   setTokens = (text, tokens, selectionStart, selectionEnd) => this.props.onSetTokens([...tokenize(text, tokens, selectionStart, selectionEnd)]);
 
-  setFocus = (event : Event) => {
+  setFocus = (event:Event) => {
     if (document.activeElement === this.inputRef){
       return;
     }
@@ -36,6 +47,9 @@ class RichInput extends React.Component<Props, State> {
   };
 
   onInputChange = () => {
+    if (!this.inputRef){
+      return;
+    }
     const {tokens} = this.props;
     const {value, selectionStart, selectionEnd} = this.inputRef;
     this.setTokens(value, tokens, selectionStart, selectionEnd);
@@ -51,11 +65,11 @@ class RichInput extends React.Component<Props, State> {
         .map(i => tokens[i].text.length)
         .reduce((a,v) => a+v,0) + charIndex;
 
-    Selection.setCaretIndex(this.inputRef, index)
-    this.setTokens(this.inputRef.value, tokens, index, index);
+    this.inputRef && Selection.setCaretIndex(this.inputRef, index);
+    this.inputRef && this.setTokens(this.inputRef.value, tokens, index, index);
   };
 
-  onInputKeyDown = (event:KeyboardEvent, suggestion) => {
+  onInputKeyDown = (event:KeyboardEvent, suggestion:any) => {
 
     let code:string = keycode(event);
     let {tokens, onSetTokens, onExecuteActions} = this.props;
@@ -79,7 +93,6 @@ class RichInput extends React.Component<Props, State> {
       }
       let commands = tokens.slice(i, caretTokenIndex);
       if (commands.length>0){
-        commands.forEach(cmd => cmd.isExecuting = true)
         onSetTokens(tokens);
         onExecuteActions(commands);
       }
@@ -112,12 +125,13 @@ class RichInput extends React.Component<Props, State> {
   }
 
   render() {
-    const {tokens} = this.props;
+    let {tokens} = this.props;
+    tokens = tokens || [];
     const innerRichInputClassName : string = classNames({
       focussed: this.state.isFocussed
     });
 
-    const tokensWithSuggestion = [...tokenizeWithSuggestion(tokens)];
+    const tokensWithSuggestion = [...tokenizeWithSuggestion(tokens)] || [];
     const suggestion = tokensWithSuggestion.find(t => t.type === 'SUGGESTION');
     const inlineElements = tokensWithSuggestion.map((t,i) => {
       return {

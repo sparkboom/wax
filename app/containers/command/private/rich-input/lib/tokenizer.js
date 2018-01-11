@@ -1,12 +1,13 @@
+// @flow
+
 import * as Interpreter from '../../../../app/lib/exec';
+import * as Types from '../../../types';
 
-type TokenType = 'TEXT' | 'COMMAND' | 'CARET' | 'SUGGESTION';
+// Types
 
-export type Token = {
-  text:string,
-  type:TokenType,
-  isSelected:boolean,
-}
+export type Tokenizer = Generator<Types.Token,void,void>;
+
+// Code
 
 const UNICODE_OBJECT_REPLACEMENT_CHARACTER = '\uFFFC';
 
@@ -16,7 +17,8 @@ const UNICODE_OBJECT_REPLACEMENT_CHARACTER = '\uFFFC';
 *
 * A caret object is returned as well to help position it when the selection length is 0
 */
-function* scanner(text, selectStart, selectEnd):Generator<Token,void,void>{
+// @ $FlowFixMe
+function* scanner(text:string, selectStart:number, selectEnd:number):Tokenizer{
   for(let i=0; i<=text.length; i++){
 
     if (selectStart===selectEnd && i===selectStart){
@@ -30,8 +32,9 @@ function* scanner(text, selectStart, selectEnd):Generator<Token,void,void>{
       let ch = text[i];
       yield {
         text:ch,
-        type:ch===UNICODE_OBJECT_REPLACEMENT_CHARACTER? 'COMMAND':'TEXT',
-        isSelected:i>=selectStart && i<selectEnd};
+        type:(ch===UNICODE_OBJECT_REPLACEMENT_CHARACTER? 'COMMAND':'TEXT'),
+        isSelected:i>=selectStart && i<selectEnd
+      };
     }
   }
   yield {
@@ -44,7 +47,8 @@ function* scanner(text, selectStart, selectEnd):Generator<Token,void,void>{
 * tokenizes styled items in the input field.
 *
 */
-export function* tokenize(text, tokens, selectStart, selectEnd){
+// $FlowFixMe
+export function* tokenize(text:string, tokens:Array<Types.Token>, selectStart:number, selectEnd:number):Tokenizer{
   const currentCommandTokens = tokens.filter(t => t.type==='COMMAND');
   let token = null;
   for(let newScan of scanner(text, selectStart, selectEnd)){
@@ -75,13 +79,14 @@ export function* tokenize(text, tokens, selectStart, selectEnd){
       continue;
     }
 
-    throw new Error(`Could not parse text '${text}' at ${i}, char ${ch}`);
+    throw new Error(`Could not parse text`);
   }
   yield token;
-  return null;
 }
 
-export function* tokenizeWithSuggestion(tokens){
+//export function* tokenizeWithSuggestion(tokens:Array<Types.Token>):Tokenizer{
+// $FlowFixMe
+export function* tokenizeWithSuggestion(tokens = []){
 
   let prevTokens = [null, null];
   for(let token of tokens){
@@ -91,14 +96,17 @@ export function* tokenizeWithSuggestion(tokens){
 
       // if last 2 tokens was caret and text, and current is text,
       // we may be able to replace some forthcoming text with prediction
-      yield {
+      let suggestion = {
         type: 'SUGGESTION',
         text: '',
         isSelected:false,
         ...Interpreter.predict(prevTokens[0].text),
       };
+      console.log('suggestion',suggestion);
+      yield suggestion;
     }
 
+    console.log('token',token);
     yield token;
     prevTokens.shift();
     prevTokens.push(token);
@@ -108,7 +116,7 @@ export function* tokenizeWithSuggestion(tokens){
 /**
 *
 */
-export function* mergeTextTokens(tokens){
+export function* mergeTextTokens(tokens:Array<Types.Token>):Tokenizer{
 
   let textToken = null
   for(let token of tokens){

@@ -9,7 +9,11 @@ import classNames from 'classnames';
 import includes from 'lodash/includes';
 import type {SVGProps, SVGDispatch, SVGConnectProps, SVGConnectDispatch} from './types';
 
+// Types
+
 type Props = SVGProps & SVGDispatch;
+
+// Code
 
 class Canvas extends React.Component<Props> {
 
@@ -43,9 +47,9 @@ const connectProps:SVGConnectProps = state => ({
   items: state.svg.items,
   selection: state.svg.selection,
 });
-const connectDispatch:SVGConnectDispatch = dispatch => ({
-  toggleSelection: (id, metaKey) => dispatch(actions.toggleSelection(id, metaKey)),
-  removeSelection: () => dispatch(actions.removeSelection())
-});
+//const connectDispatch:SVGConnectDispatch = dispatch => ({
+//  toggleSelection: (id, metaKey) => dispatch(actions.toggleSelection(id, metaKey)),
+//  removeSelection: () => dispatch(actions.removeSelection())
+//});
 
-export default connect(connectProps, connectDispatch)(Canvas);
+export default connect(connectProps, /*connectDispatch*/)(Canvas);

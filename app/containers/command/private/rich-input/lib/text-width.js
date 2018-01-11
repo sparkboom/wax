@@ -1,5 +1,7 @@
 // @flow
 
+// Types
+
 type CaretPosition = {
   +offsetNode : HTMLElement,
   +offset : number,
@@ -15,6 +17,16 @@ type Range = {
   +startOffset : number,
 };
 
+type ClientCoordinates = {
+  clientX:number,
+  clientY:number
+};
+type CharIndex = {
+  textNode:HTMLElement,
+  offset:number,
+  range:mixed,
+};
+
 interface IFirefoxExperimentalDocument {
   caretPositionFromPoint(x : number, y : number) : ?CaretPosition
 };
@@ -24,6 +36,8 @@ interface INonStandardDocument {
 };
 
 declare var document : Document & IFirefoxExperimentalDocument & INonStandardDocument;
+
+// Code
 
 let _canvas : ?HTMLCanvasElement = null;
 let _ctx : ?CanvasRenderingContext2D  = null;
@@ -76,17 +90,7 @@ export function getCharIndexFromX(txt : string, fontname : string, fontsize : st
 * Warning - methods caretPositionFromPoint and caretRangeFromPoint are not fully supported on browsers, and alternative
 * implementations may need to be considered if we are to use the browser as a platform.
 */
-type ClientCoordinates = {
-  clientX:number,
-  clientY :number
-};
-type CharIndex = {
-  textNode : HTMLElement,
-  offset : number,
-  range : mixed,
-};
-
-export function getNodeCharIndex({clientX, clientY} : ClientCoordinates) : ?CharIndex{
+export function getNodeCharIndex({clientX, clientY}:ClientCoordinates):?CharIndex{
   let range: mixed;
   if (!!document.caretPositionFromPoint) {
     if (range = document.caretPositionFromPoint(clientX, clientY)){

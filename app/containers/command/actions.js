@@ -1,7 +1,16 @@
 // @flow
 
-import {SET_TOKENS, FILTER_TOKENS} from './action-types';
-import type {SetTokensAction, FilterTokensAction} from './types';
+import * as ActionTypes from './action-types';
+import * as Types from './types';
 
-export const setTokens:({}[] => SetTokensAction) = tokens => Object.freeze({type:SET_TOKENS, tokens});
-export const filterTokens:({}[] => FilterTokensAction) = match => Object.freeze({type:FILTER_TOKENS, match});
+type Tokens = Array<Types.Token>;
+export type SetTokens = {type:typeof ActionTypes.SetTokens , tokens:Tokens};
+export const setTokens:Tokens=>SetTokens = tokens => Object.freeze({type:ActionTypes.SetTokens, tokens});
+
+type Match = {};
+export type FilterTokens = {type:typeof ActionTypes.FilterTokens, match:Match};
+export const filterTokens:Match=>FilterTokens = match => Object.freeze({type:ActionTypes.FilterTokens, match});
+
+export type Union =
+  | SetTokens
+  | FilterTokens;
