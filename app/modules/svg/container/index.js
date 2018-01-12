@@ -38,6 +38,7 @@ class Canvas extends React.Component<Props> {
       { keys.map( key => <Shape
               key={key}
               shape={items[key].shape}
+              name={nodes[key]? nodes[key].name : '...'}
               layout={this.layout}
               className={getShapeClassName(key)}
               onClick={event => this.onClickItem(event, key)} />) }

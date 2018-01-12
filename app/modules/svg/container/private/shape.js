@@ -49,6 +49,6 @@ const NameText = styled('text')`
 
 export const Shape = ({layout, ...props}) => (
 <svg {...layout.getNextCoords()} width={Width} height={Height+22} >
-  <NameText x="50%" y={Height+10}>{props.shape}</NameText>
+  <NameText x="50%" y={Height+10}>{props.name}</NameText>
   <StyledShape {...props} />
 </svg>);
