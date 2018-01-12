@@ -15,7 +15,7 @@ const canvasReducer:CanvasReducer = (state = State.default, action) => {
   switch (action.type) {
     case ActionTypes.CreateNode:
       return {
-        nodes: [...state.nodes, {...action.node}]
+        nodes: {...state.nodes, [action.node.key]:{...action.node}}
       };
     default:
       (action: empty);

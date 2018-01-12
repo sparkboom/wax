@@ -25,21 +25,22 @@ class Canvas extends React.Component<Props> {
 
   layout = new Layout();
 
-  onClickItem = (event:MouseEvent, id:number) => {};
+  onClickItem = (event:MouseEvent, key:number) => {};
 
   render() {
     let {items, nodes} = this.props;
+    let keys = Object.keys(items);
     this.layout.reset();
     let getShapeClassName = id => classNames({selected : false });
 
     return (
     <svg width="100%" height="100%" >
-      { items.map( ({shape}, i) => <Shape
-              key={i}
-              shape={shape}
+      { keys.map( key => <Shape
+              key={key}
+              shape={items[key].shape}
               layout={this.layout}
-              className={getShapeClassName(i)}
-              onClick={event => this.onClickItem(event, i)} />) }
+              className={getShapeClassName(key)}
+              onClick={event => this.onClickItem(event, key)} />) }
     </svg>
     );
   }

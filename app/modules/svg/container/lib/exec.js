@@ -14,11 +14,11 @@ export type WaxFunction = {
 
 export const waxFunctions = [{
   command:'addcircle',
-  action: addShape('circle'),
+  action: addShape('circle', null),
 },{
   command:'addsquare',
-  action: addShape('square'),
+  action: addShape('square', null),
 },{
   command:'addtriangle',
-  action: addShape('triangle'),
+  action: addShape('triangle', null),
 }];

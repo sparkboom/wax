@@ -3,13 +3,17 @@ import * as Types from './types';
 // Types
 
 export type CanvasState = {
-  nodes:Array<Types.Node>
+  nodes:{
+    [string]:Types.Node,
+  }
 }
 
 // Code
 
 const initialState:CanvasState = {
-  nodes: [],
+  nodes: {
+
+  },
 };
 
 export default initialState;
