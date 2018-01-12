@@ -7,7 +7,7 @@ import * as Types from './types';
 
 // Types
 
-type CanvasReducer = (typeof State, Actions.Union) => typeof State;
+type CanvasReducer = (State.CanvasState, Actions.Union) => State.CanvasState;
 
 // Code
 

@@ -1,15 +1,15 @@
 // @flow
 
 import * as ActionTypes from './action-types';
-import type {SVGState, Command} from './types';
+import * as Actions from './actions';
+import * as State from './state';
 
-const initialState:SVGState = {
-  items: [],
-  selection: [],
-}
+// Types
+type SVGReducer = (State.SVGState, Actions.Union) => State.SVGState;
 
-type SVGReducer = (SVGState, any) => SVGState;
-const svgReducer:SVGReducer = (state = initialState, action:any) => {
+// Code
+
+const svgReducer:SVGReducer = (state = State.default, action) => {
 
   switch (action.type) {
 

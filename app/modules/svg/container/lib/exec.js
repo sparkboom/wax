@@ -1,5 +1,5 @@
 // @flow
-import {addAction} from '../actions';
+import {addShape} from '../actions';
 
 // Types
 
@@ -14,11 +14,11 @@ export type WaxFunction = {
 
 export const waxFunctions = [{
   command:'addcircle',
-  action: addAction('circle'),
+  action: addShape('circle'),
 },{
   command:'addsquare',
-  action: addAction('square'),
+  action: addShape('square'),
 },{
   command:'addtriangle',
-  action: addAction('triangle'),
+  action: addShape('triangle'),
 }];

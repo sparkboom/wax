@@ -7,11 +7,17 @@ import Layout from './lib/layout';
 import * as actions from './actions';
 import classNames from 'classnames';
 import includes from 'lodash/includes';
-import type {SVGProps, SVGDispatch, SVGConnectProps, SVGConnectDispatch} from './types';
+import * as State from './state';
+import * as CanvasState from '../../../containers/canvas/state';
 
 // Types
 
-type Props = SVGProps & SVGDispatch;
+type Store = {
+  canvas: CanvasState.CanvasState,
+  svg: State.SVGState,
+};
+type Props = State.SVGState & CanvasState.CanvasState;
+type SVGConnectProps = Store => Props;
 
 // Code
 
@@ -19,20 +25,15 @@ class Canvas extends React.Component<Props> {
 
   layout = new Layout();
 
-  onClickItem = (event:MouseEvent, id:number) => {
-
-    const {toggleSelection} = this.props;
-    toggleSelection(id, !!event.metaKey);
-  };
+  onClickItem = (event:MouseEvent, id:number) => {};
 
   render() {
-    let {items, nodes, toggleSelection, removeSelection} = this.props;
-    let selection = [];
+    let {items, nodes} = this.props;
     this.layout.reset();
-    let getShapeClassName = id => classNames({selected : includes(selection, id) });
+    let getShapeClassName = id => classNames({selected : false });
 
     return (
-    <svg width="100%" height="100%" onClick={removeSelection}>
+    <svg width="100%" height="100%" >
       { items.map( ({shape}, i) => <Shape
               key={i}
               shape={shape}
@@ -44,14 +45,9 @@ class Canvas extends React.Component<Props> {
   }
 }
 
-// $FlowFixMe
 const connectProps:SVGConnectProps = state => ({
   items: state.svg.items,
-  nodes: state.app.nodes,
+  nodes: state.canvas.nodes,
 });
-//const connectDispatch:SVGConnectDispatch = dispatch => ({
-//  toggleSelection: (id, metaKey) => dispatch(actions.toggleSelection(id, metaKey)),
-//  removeSelection: () => dispatch(actions.removeSelection())
-//});
 
-export default connect(connectProps, /*connectDispatch*/)(Canvas);
+export default connect(connectProps)(Canvas);

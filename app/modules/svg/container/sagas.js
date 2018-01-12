@@ -1,5 +1,6 @@
 import {takeEvery, put} from 'redux-saga/effects';
 import * as CanvasActions from '../../../containers/canvas/actions';
+import * as ActionTypes from './action-types';
 
 const nameTally = {};
 
@@ -15,11 +16,10 @@ function* addShape(action){
     key: action.key,
     name: `${action.shape}${nameTally[action.shape]}`,
   });
-  console.log('createNodeAction', createNodeAction);
 
   yield put({...createNodeAction});
 }
 
 export default function* svgSaga():Generator<void, void, void>{
-  yield takeEvery('SVG:ADD_SHAPE', addShape);
+  yield takeEvery(ActionTypes.AddShape, addShape);
 }

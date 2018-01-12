@@ -2,13 +2,13 @@ import * as Types from './types';
 
 // Types
 
-export type AppState = {
+export type CanvasState = {
   nodes:Array<Types.Node>
 }
 
 // Code
 
-const initialState:AppState = {
+const initialState:CanvasState = {
   nodes: [],
 };
 
