@@ -7,8 +7,3 @@ export type Command = {
   command:string,
   key:string,
 }
-
-export type Node = {
-  id:string,
-  name:string,
-};

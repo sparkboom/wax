@@ -12,10 +12,6 @@ type AppReducer = (typeof State, Actions.Union) => typeof State;
 
 const appReducer:AppReducer = (state = State.default, action) => {
   switch (action.type) {
-    case ActionTypes.CreateNode:
-      return {
-        nodes: [...state.nodes, {key:action.key, name:action.name}]
-      };
     case ActionTypes.ExecuteCommand:
     case ActionTypes.GlobalError:
     case ActionTypes.ThrowError:
