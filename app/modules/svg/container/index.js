@@ -26,7 +26,8 @@ class Canvas extends React.Component<Props> {
   };
 
   render() {
-    let {items, toggleSelection, selection, removeSelection} = this.props;
+    let {items, nodes, toggleSelection, removeSelection} = this.props;
+    let selection = [];
     this.layout.reset();
     let getShapeClassName = id => classNames({selected : includes(selection, id) });
 
@@ -43,9 +44,10 @@ class Canvas extends React.Component<Props> {
   }
 }
 
+// $FlowFixMe
 const connectProps:SVGConnectProps = state => ({
   items: state.svg.items,
-  selection: state.svg.selection,
+  nodes: state.app.nodes,
 });
 //const connectDispatch:SVGConnectDispatch = dispatch => ({
 //  toggleSelection: (id, metaKey) => dispatch(actions.toggleSelection(id, metaKey)),

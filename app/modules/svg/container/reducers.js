@@ -16,7 +16,7 @@ const svgReducer:SVGReducer = (state = initialState, action:any) => {
     case ActionTypes.AddShape:
       return {
         ...state,
-        items: [...state.items, {shape:action.shape}],
+        items: [...state.items, {key:action.key, shape:action.shape}],
       };
 
     default:
