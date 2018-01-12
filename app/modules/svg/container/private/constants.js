@@ -1,5 +1,5 @@
 // @flow
 
-export const Width = 30;
-export const Height = 30;
+export const Width = 50;
+export const Height = 50;
 export const Radius = (Width + Height)/2/2;

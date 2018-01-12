@@ -7,7 +7,7 @@ export type Coords = {
 
 export default class Layout {
 
-  static step:number = 50;
+  static step:number = 55;
   static maxX:number = 800;
   coords:Coords = {x:0, y:50};
 

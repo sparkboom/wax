@@ -10,7 +10,7 @@ type Props = {
   width: number,
   height: number,
 }
-export default ({vertexCount, x, y, width=Width, height=Height, ...props}:Props) => {
+export default ({vertexCount, x=0, y=0, width=Width, height=Height, ...props}:Props) => {
 
   let cx:number = x + (width/2.0)
   let cy:number = y + (height/2.0)
