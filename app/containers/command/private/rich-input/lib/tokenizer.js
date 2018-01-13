@@ -96,17 +96,16 @@ export function* tokenizeWithSuggestion(tokens = []){
 
       // if last 2 tokens was caret and text, and current is text,
       // we may be able to replace some forthcoming text with prediction
-      let suggestion = {
+      let suggestions = Interpreter.predict(prevTokens[0].text);
+      let suggestionToken = {
         type: 'SUGGESTION',
         text: '',
         isSelected:false,
-        ...Interpreter.predict(prevTokens[0].text),
+        ...(suggestions.length>0? suggestions[0]:[])
       };
-      console.log('suggestion',suggestion);
-      yield suggestion;
+      yield suggestionToken;
     }
 
-    console.log('token',token);
     yield token;
     prevTokens.shift();
     prevTokens.push(token);

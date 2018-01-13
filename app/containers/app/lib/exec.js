@@ -1,14 +1,7 @@
 // @flow
 
-import * as svg from '../../../modules/svg/container/lib/exec';
-
 // Types
-export type WaxFunction = {
-  command:string,
-  action:{
-    type:string,
-  }
-}
+
 export type Suggestion = {
   command?:string,
   action?:{
@@ -16,24 +9,62 @@ export type Suggestion = {
   prediction:?string,
   matched:boolean,
 };
-type Interpreter = string=>Suggestion
+type TraverseState = {
+  text:string,
+  predictions:Array<mixed>,
+};
 
-//
-const waxAppFunctions = [{
-  command:'throwerror',
-  action: {type:'GLOBAL:THROW_ERROR'},
-}];
+// Code
 
-const waxFunctions = [
-  ...waxAppFunctions,
-  ...svg.waxFunctions,
-];
+const CommandTree = {};
+const NoMatch = {prediction:null,matched:false};
+const ExecMarker = 'EXEC_MARKER';
 
-export const predict:Interpreter = text => {
-  if(text.length===0){
-    return {prediction: null, matched:false};
+export const registerCommand:(string,any)=>void = (command, action) => {
+  let ptr:any = CommandTree;
+  for(let ch of command){
+    if (!ptr[ch]){
+      ptr[ch] = {};
+    }
+    ptr=ptr[ch];
   }
-  const waxfunc = waxFunctions.find(f => f.command.startsWith(text)) || null;
-  const prediction = waxfunc && waxfunc.command.substr(text.length);
-  return {...waxfunc, prediction, matched:!!waxfunc};
+  ptr[ExecMarker] || (ptr[ExecMarker] = []);
+  ptr[ExecMarker].push(action);
+};
+
+// $FlowFixMe
+function traverseCommandTree(ptr:any, prediction:string, state:TraverseState){
+  for(let ch in ptr){
+    if (ch === ExecMarker){
+      for(let action of ptr[ExecMarker]){
+        state.predictions.push({command:state.text+prediction, prediction, action, matched:true});
+      }
+    } else {
+      traverseCommandTree(ptr[ch], prediction+ch, state);
+    }
+  }
+}
+
+// $FlowFixMe
+export const predict:(string=>Array<Suggestion>) = text => {
+
+  let ptr:any = CommandTree;
+  let ch;
+
+  // Crawl through the 'linked list over the text'
+  for(ch of text){
+    if (!ptr[ch]){
+      return NoMatch;
+    }
+    ptr=ptr[ch];
+  }
+
+  // Now search for possible predictions
+  let state:TraverseState = {
+    text,
+    predictions:[],
+  };
+  traverseCommandTree(ptr, '', state);
+
+  return state.predictions;
 }

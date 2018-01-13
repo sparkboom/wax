@@ -5,6 +5,7 @@ import {ToastContainer} from 'react-toastify';
 import CommandLine from '../command';
 import Canvas from '../canvas';
 import styled from 'styled-components';
+import './lib/commands';
 
 // Code
 

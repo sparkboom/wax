@@ -108,7 +108,6 @@ class RichInput extends React.Component<Props, State> {
           return t;
         }
       })
-      console.log('newTokens', newTokens);
       newTokens = [...mergeTextTokens(newTokens)];
       onSetTokens(newTokens);
     }
