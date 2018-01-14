@@ -9,7 +9,6 @@ import * as ActionTypes from './action-types';
 import * as CanvasActionTypes from '../canvas/action-types';
 import * as Actions from './actions';
 import * as CommandActions from '../command/actions';
-import * as svgInit from '../../modules/svg/init';
 
 import * as appInit from './init';
 
@@ -20,9 +19,6 @@ type VoidGenerator = Generator<void, void, void>;
 // Code
 
 function* init(initAction){
-  // Register app methods
-  let registerAppMethodsAction = CommandActions.registerMethods(appInit.className, appInit.methods);
-  yield put(registerAppMethodsAction);
 
   // Register methods for SVG
   let registerSvgMethodsAction = CommandActions.registerMethods(svgInit.className, svgInit.methods);

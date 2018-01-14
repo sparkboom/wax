@@ -6,18 +6,19 @@ import {Caret, InnerRichInput, InlineTextBlock, HiddenInput, PredictionInlineTex
 import classNames from 'classnames';
 import keycode from 'keycode';
 import * as Selection from './lib/selection';
-import type {Token} from '../../types';
+import * as Types from '../../types';
 import {tokenize, tokenizeWithSuggestion, mergeTextTokens} from './lib/tokenizer';
 import range from 'lodash/range';
 import shortid from 'shortid';
+import get from 'lodash/get';
 
 // Types
 
 export type Props = {
   context:Array<string>,
-  tokens:Array<Token>,
-  onSetTokens: Array<Token>=>void,
-  onExecuteActions: Array<Token>=>void,
+  tokens:Array<Types.Token>,
+  onSetTokens: Array<Types.Token>=>void,
+  onExecuteActions: Array<Types.Token>=>void,
   theme: any,
 };
 
@@ -70,7 +71,7 @@ class RichInput extends React.Component<Props, State> {
     this.inputRef && this.setTokens(this.inputRef.value, tokens, index, index);
   };
 
-  onInputKeyDown = (event:KeyboardEvent, suggestion:any) => {
+  onInputKeyDown = (event:KeyboardEvent, suggestion:?Types.Suggestion) => {
 
     let code:string = keycode(event);
     let {tokens, onSetTokens, onExecuteActions} = this.props;
@@ -132,13 +133,14 @@ class RichInput extends React.Component<Props, State> {
     });
 
     const tokensWithSuggestion = [...tokenizeWithSuggestion(context, tokens)] || [];
-    const suggestion = tokensWithSuggestion.find(t => t.type === 'SUGGESTION');
+    const suggestionToken:?Types.SuggestionToken = tokensWithSuggestion.find(t => t.type === 'SUGGESTION');
+    const suggestion:?Types.Suggestion = get(suggestionToken, 'suggestions[0]') || null;
     const inlineElements = tokensWithSuggestion.map((t,i) => {
       return {
         'FIN': null,
         'COMMAND': (<TokenInlineTextBlock key={i} isSelected={t.isSelected}>{t.command}</TokenInlineTextBlock>),
         'CARET': (<Caret key={i} />),
-        'SUGGESTION': (<PredictionInlineTextBlock key={i} isSelected={t.isSelected}>{ t.prediction }</PredictionInlineTextBlock>),
+        'SUGGESTION': (<PredictionInlineTextBlock key={i} isSelected={t.isSelected}>{ suggestion && suggestion.prediction }</PredictionInlineTextBlock>),
         'TEXT': (<InlineTextBlock
                         key={i}
                         isSelected={t.isSelected}
@@ -163,7 +165,9 @@ class RichInput extends React.Component<Props, State> {
           onKeyDown={(event:any) => this.onInputKeyDown(event, suggestion)}
           onChange={() => this.onInputChange()}
           value={inputValue}  />
-        Context: { `${context}` } 
+
+        Context: { `${context.toString()}` }
+
       </div>
     );
   }

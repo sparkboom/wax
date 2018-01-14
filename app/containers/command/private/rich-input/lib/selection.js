@@ -4,13 +4,14 @@
 
 export type SelectableInputElement = HTMLInputElement & SelectionAPI & TextAPI;
 
-// Code
 export interface TextAPI {
   createTextRange() : any;
 }
 export interface SelectionAPI {
   setSelectionRange(number, number) : void;
 }
+
+// Code
 
 export function setCaretIndex(el:SelectableInputElement, caretIndex:number){
   if(!el) {

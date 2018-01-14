@@ -15,9 +15,15 @@ type VoidGenerator = Generator<void, void, void>;
 
 // Code
 
-function* indexMethods(action:Actions.RegisterMethods):Generator<mixed, void, void>{
+function* indexApi(action:Actions.LoadApi):Generator<mixed, void, void>{
 
-  action.methods.forEach(m => registerCommand(action.className, m.methodName, m.action));
+  action.api.api.interfaceKeys.forEach( iKey => {
+    const iface = action.api.interfaces.find( i => i.interfaceKey === iKey);
+    iface && iface.methodKeys.forEach( mKey => {
+      const method = action.api.methods.find( i => i.interfaceKey === iKey);
+      method && registerCommand(iface, method.methodName, method.action);
+    })
+  });
 }
 
 function* createNodeSelector({node, args}){
@@ -36,6 +42,6 @@ function* createNodeSelector({node, args}){
 }
 
 export default function* commandSaga():VoidGenerator{
-  yield takeEvery(ActionTypes.RegisterMethods, indexMethods);
+  yield takeEvery(ActionTypes.LoadApi, indexApi);
   yield takeEvery(CanvasActionTypes.CreateNode, createNodeSelector)
 }

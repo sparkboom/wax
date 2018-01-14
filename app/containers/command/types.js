@@ -1,14 +1,20 @@
 // @flow
 
-import type {Suggestion} from '../app/lib/exec';
-
 // Fundamentals
+export type Suggestion = {
+  command?:string,
+  action?:{
+  },
+  prediction:?string,
+  interfaceKey?:string,
+  matched:boolean,
+};
+
 export type BaseToken = {
   key?:string,
   text:string,
   isSelected:boolean,
 };
-
 export type FinToken = {
   type:'FIN',
   text: '',
@@ -28,10 +34,11 @@ export type CaretToken = {
   text:'',
   isSelected:true,
 };
-export type SuggestionToken = BaseToken & Suggestion & {
+export type SuggestionToken = BaseToken & {
   type:'SUGGESTION',
   text:'',
   isSelected:false,
+  suggestions:Array<Suggestion>,
 };
 export type Token =
   | TextToken
@@ -40,11 +47,37 @@ export type Token =
   | FinToken
   | SuggestionToken;
 
+
+
+
+export type BaseInterface = {
+  interfaceKey:string,
+  apiKey:string,
+  interfaceName:string,
+  methodKeys:Array<string>,
+};
+export type ClassInterface = BaseInterface & {
+  interfaceType:'CLASS',
+};
+export type InstanceInterface = BaseInterface & {
+  interfaceType:'INSTANCE',
+  nodeKey:string,
+};
+export type Interface = ClassInterface | InstanceInterface;
+export type Api = {
+  api:{
+    apiKey:string,
+    apiName:string,
+    interfaceKeys:Array<string>
+  },
+  interfaces:Array<Interface>,
+  methods:Array<Method>,
+};
 export type Method = {
+  methodKey:string,
+  methodName:string,
+  interfaceKey:string,
   action:{
     type:string,
-  },
-  methodName:string,
-  className:string,
-  key:string,
-}
+  }
+};

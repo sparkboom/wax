@@ -11,16 +11,14 @@ type Match = {};
 export type FilterTokens = {type:typeof ActionTypes.FilterTokens, match:Match};
 export const filterTokens:Match=>FilterTokens = match => ({type:ActionTypes.FilterTokens, match});
 
-export type RegisterMethods = {type:typeof ActionTypes.RegisterMethods, className:string, methods:Array<Types.Method>};
-export type RegisterMethodsCreator = (string, Array<Types.Method>)=>RegisterMethods;
-export const registerMethods:RegisterMethodsCreator = (className, methods) => ({type:ActionTypes.RegisterMethods, className, methods});
+export type LoadApi = {type:typeof ActionTypes.LoadApi, api:Types.Api};
+export const loadApi:Types.Api=>LoadApi = api => ({type:ActionTypes.LoadApi, api});
 
-export type DeregisterMethods = {type:typeof ActionTypes.DeregisterMethods, methodKeys:Array<string>};
-export type DeregisterMethodsCreator = Array<string>=>DeregisterMethods;
-export const deregisterMethods:DeregisterMethodsCreator = methodKeys => ({type:ActionTypes.DeregisterMethods, methodKeys});
+export type UnloadApi = {type:typeof ActionTypes.UnloadApi, apiKey:string};
+export const unloadApi:string=>UnloadApi = apiKey => ({type:ActionTypes.UnloadApi, apiKey});
 
 export type Union =
   | SetTokens
   | FilterTokens
-  | RegisterMethods
-  | DeregisterMethods;
+  | LoadApi
+  | UnloadApi;
