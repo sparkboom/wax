@@ -21,8 +21,7 @@ export type CommandToken = BaseToken & {
   command:string,
   action:{
     type:string
-  },
-  isExecuting?:boolean
+  }
 };
 export type CaretToken = {
   type:'CARET',
@@ -40,3 +39,12 @@ export type Token =
   | CaretToken
   | FinToken
   | SuggestionToken;
+
+export type Method = {
+  action:{
+    type:string,
+  },
+  methodName:string,
+  className:string,
+  key:string,
+}

@@ -11,6 +11,16 @@ type Match = {};
 export type FilterTokens = {type:typeof ActionTypes.FilterTokens, match:Match};
 export const filterTokens:Match=>FilterTokens = match => Object.freeze({type:ActionTypes.FilterTokens, match});
 
+export type RegisterMethods = {type:typeof ActionTypes.RegisterMethods, className:string, methods:Array<Types.Method>};
+export type RegisterMethodsCreator = (string, Array<Types.Method>)=>RegisterMethods;
+export const registerMethods:RegisterMethodsCreator = (className, methods) => Object.freeze({type:ActionTypes.RegisterMethods, className, methods});
+
+export type DeregisterMethods = {type:typeof ActionTypes.DeregisterMethods, methodKeys:Array<string>};
+export type DeregisterMethodsCreator = Array<string>=>DeregisterMethods;
+export const deregisterMethods:DeregisterMethodsCreator = methodKeys => Object.freeze({type:ActionTypes.DeregisterMethods, methodKeys});
+
 export type Union =
   | SetTokens
-  | FilterTokens;
+  | FilterTokens
+  | RegisterMethods
+  | DeregisterMethods;

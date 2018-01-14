@@ -130,7 +130,8 @@ class RichInput extends React.Component<Props, State> {
       focussed: this.state.isFocussed
     });
 
-    const tokensWithSuggestion = [...tokenizeWithSuggestion(tokens)] || [];
+    const contextClass = 'SVG';
+    const tokensWithSuggestion = [...tokenizeWithSuggestion(contextClass, tokens)] || [];
     const suggestion = tokensWithSuggestion.find(t => t.type === 'SUGGESTION');
     const inlineElements = tokensWithSuggestion.map((t,i) => {
       return {

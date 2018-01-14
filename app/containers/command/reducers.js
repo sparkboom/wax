@@ -7,22 +7,47 @@ import remove from 'lodash/remove';
 import * as State from './state';
 
 // Types
+
 type CommandReducer = (typeof State, Actions.Union) => typeof State;
 
 // Code
 
 const commandReducer:CommandReducer = (state = State.default, action) => {
   switch (action.type) {
+
     case ActionTypes.SetTokens:
       return {
-        tokens: action.tokens
+        ...state,
+        tokens: action.tokens,
       };
+
     case ActionTypes.FilterTokens:
       let tokens = [...state.tokens];
       remove(tokens, action.match);
       return {
-        tokens
+        ...state,
+        tokens,
       };
+    case ActionTypes.RegisterMethods:
+
+      let newMethods = action.methods.reduce((acc, cur) => { acc[cur.key]=cur; return acc; }, {});
+
+      return {
+        ...state,
+        classes: {
+          ...state.classes,
+          [action.className]:{
+            methodKeys: action.methods.map(m => m.key)
+        }},
+        methods: {
+          ...state.methods,
+          ...newMethods,
+        }
+      }
+
+    case ActionTypes.DeregisterMethods:
+      return state;
+
     default:
       (action: empty);
       return state;

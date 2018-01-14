@@ -16,20 +16,26 @@ type TraverseState = {
 
 // Code
 
-const CommandTree = {};
+const MethodTreeByClassName = {};
 const NoMatch = {prediction:null,matched:false};
 const ExecMarker = 'EXEC_MARKER';
 
-export const registerCommand:(string,any)=>void = (command, action) => {
-  let ptr:any = CommandTree;
-  for(let ch of command){
+export const registerCommand:(string,string,any)=>void = (className, methodName, action) => {
+  let ptr:any = MethodTreeByClassName;
+  if(!ptr[className]){
+    ptr[className] = {};
+  }
+  ptr = ptr[className];
+
+  for(let ch of methodName){
     if (!ptr[ch]){
       ptr[ch] = {};
     }
-    ptr=ptr[ch];
+    ptr = ptr[ch];
   }
-  ptr[ExecMarker] || (ptr[ExecMarker] = []);
+  ptr[ExecMarker] || (ptr[ExecMarker] = []); 
   ptr[ExecMarker].push(action);
+  console.log('MethodTreeByClassName', MethodTreeByClassName);
 };
 
 // $FlowFixMe
@@ -46,9 +52,11 @@ function traverseCommandTree(ptr:any, prediction:string, state:TraverseState){
 }
 
 // $FlowFixMe
-export const predict:(string=>Array<Suggestion>) = text => {
+type Predictor = (string,string)=>Array<Suggestion>;
+export const predict:Predictor = (className, text) => {
+  console.log('predict', className, text);
 
-  let ptr:any = CommandTree;
+  let ptr:any = MethodTreeByClassName[className];
   let ch;
 
   // Crawl through the 'linked list over the text'

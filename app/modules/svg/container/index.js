@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import includes from 'lodash/includes';
 import * as State from './state';
 import * as CanvasState from '../../../containers/canvas/state';
-import './lib/commands';
 
 // Types
 

@@ -8,11 +8,24 @@ import shortid from 'shortid';
 import * as ActionTypes from './action-types';
 import * as Actions from './actions';
 
-// types
+import * as svgInit from '../../modules/svg/container/init';
+import * as appInit from './init';
+
+// Types
 
 type VoidGenerator = Generator<void, void, void>;
 
 // Code
+
+function* init(initAction){
+  // Register app methods
+  let registerAppMethodsAction = CommandActions.registerMethods(appInit.className, appInit.methods);
+  yield put({...registerAppMethodsAction});
+
+  // Register methods for SVG
+  let registerSvgMethodsAction = CommandActions.registerMethods(svgInit.className, svgInit.methods);
+  yield put({...registerSvgMethodsAction});
+}
 
 function* executeCommands(action:Actions.ExecuteCommand):Generator<mixed, void, void>{
   let executingCommands = [...action.commands];
@@ -40,6 +53,7 @@ function* throwError(action):VoidGenerator{
 
 export default function* appSaga():VoidGenerator{
   yield takeEvery(ActionTypes.ExecuteCommand, executeCommands);
+  yield takeEvery(ActionTypes.Init, init);
   yield takeEvery(ActionTypes.GlobalError, globalError);
   yield takeEvery(ActionTypes.ThrowError, throwError);
 }
