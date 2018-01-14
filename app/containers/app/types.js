@@ -1,6 +1,6 @@
 // @flow
 
-export type Command = {
+export type Instruction = {
   action:{
     type:string,
   },

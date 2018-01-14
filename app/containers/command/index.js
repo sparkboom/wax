@@ -12,7 +12,7 @@ import type {CommandState} from './state';
 // Types
 type CommandReduxProps = CommandState;
 type CommandDispatch = {
-  executeCommand : Array<AppTypes.Command>=>void,
+  executeInstructions : Array<AppTypes.Instruction>=>void,
   setTokens : Array<Types.Token>=>void,
 };
 type Props = CommandConnectReduxProps & CommandDispatch;
@@ -24,14 +24,14 @@ type CommandConnectDispatch = ((Actions.Union|AppActions.Union)=>void)=>CommandD
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {tokens, setTokens, executeCommand} = this.props;
+    let {tokens, setTokens, executeInstructions} = this.props;
     return (
     <div>
       <RichInputContainer>
         <RichInput
           tokens={tokens}
           onSetTokens={setTokens}
-          onExecuteActions={executeCommand}
+          onExecuteActions={executeInstructions}
          />
       </RichInputContainer>
     </div>);
@@ -43,7 +43,7 @@ const connectProps:CommandConnectReduxProps = state => ({
 });
 
 const connectDispatch:CommandConnectDispatch = dispatch => ({
-  executeCommand: commands => dispatch(AppActions.executeCommand(commands)),
+  executeInstructions: instructions => dispatch(AppActions.executeInstructions(instructions)),
   setTokens: tokens => dispatch(Actions.setTokens(tokens)),
 });
 

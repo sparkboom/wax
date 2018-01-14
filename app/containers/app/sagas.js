@@ -27,8 +27,8 @@ function* init(initAction){
   yield put({...registerSvgMethodsAction});
 }
 
-function* executeCommands(action:Actions.ExecuteCommand):Generator<mixed, void, void>{
-  let executingCommands = [...action.commands];
+function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixed, void, void>{
+  let executingCommands = [...action.instructions];
 
   for(let cmd of executingCommands){
     yield put({...cmd.action, key: shortid.generate() });
@@ -52,7 +52,7 @@ function* throwError(action):VoidGenerator{
 }
 
 export default function* appSaga():VoidGenerator{
-  yield takeEvery(ActionTypes.ExecuteCommand, executeCommands);
+  yield takeEvery(ActionTypes.ExecuteInstructions, executeInstructions);
   yield takeEvery(ActionTypes.Init, init);
   yield takeEvery(ActionTypes.GlobalError, globalError);
   yield takeEvery(ActionTypes.ThrowError, throwError);
