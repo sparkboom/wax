@@ -52,8 +52,8 @@ function* createClassNode({node, args}){
     className: 'SVG',
     methodName: `.${node.name}`,
     action : {
-      type: 'CANVAS:SELECT_NODE',
-      nodeKey: node.key,
+      type: CanvasActionTypes.SetSelection,
+      nodeKeys: [node.key],
     },
     key: shortid.generate(),
   }]);

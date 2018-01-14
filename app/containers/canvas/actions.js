@@ -7,11 +7,13 @@ import shortid from 'shortid';
 // Types
 
 export type CreateNode = {+type:typeof ActionTypes.CreateNode, +node:Node, +args:mixed};
-//export type CreateNodeCreator = (Node, mixed)=>CreateNode;
+export type CreateNodeCreator = any=>CreateNode;
+export type SetSelection = {+type:typeof ActionTypes.SetSelection, +nodeKeys:Array<string>};
 export type Union =
   | CreateNode
+  | SetSelection;
 
-// Code
+// Code - Helpers
 
 const nameTally = {};
 
@@ -24,7 +26,9 @@ const getNameFromFamily = (family:string) => {
   return `${family}${nameTally[family]}`;
 };
 
-export const createNode:any = ({nodeClass, name, family, args}) => ({
+// Code - Actions
+
+export const createNode:CreateNodeCreator = ({nodeClass, name, family, args}) => ({
   type:ActionTypes.CreateNode,
   node: {
     key:shortid.generate(),
@@ -32,4 +36,9 @@ export const createNode:any = ({nodeClass, name, family, args}) => ({
     nodeClass,
   },
   args
+});
+
+export const setSelection:Array<string>=>SetSelection = nodeKeys => ({
+  type: ActionTypes.SetSelection,
+  nodeKeys,
 });

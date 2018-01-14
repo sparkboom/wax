@@ -5,15 +5,15 @@ import * as Types from './types';
 export type CanvasState = {
   nodes:{
     [string]:Types.Node,
-  }
+  },
+  selection: [],
 }
 
 // Code
 
 const initialState:CanvasState = {
-  nodes: {
-
-  },
+  nodes: {},
+  selection: [],
 };
 
 export default initialState;

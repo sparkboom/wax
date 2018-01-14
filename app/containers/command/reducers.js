@@ -31,13 +31,16 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
     case ActionTypes.RegisterMethods:
 
       let newMethods = action.methods.reduce((acc, cur) => { acc[cur.key]=cur; return acc; }, {});
+      let currentClass = state.classes[action.className] || {};
 
       return {
         ...state,
         classes: {
           ...state.classes,
           [action.className]:{
-            methodKeys: action.methods.map(m => m.key)
+            methodKeys: [
+              ...(currentClass.methodKeys || []), 
+              action.methods.map(m => m.key)],
         }},
         methods: {
           ...state.methods,
