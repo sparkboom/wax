@@ -4,7 +4,8 @@ import * as Types from './types';
 
 export type CommandState = {
   +tokens: Array<Types.Token>,
-  +classes: {},
+  +apis: {},
+  +interfaces: {},
   +methods: {},
 };
 
@@ -12,7 +13,8 @@ export type CommandState = {
 
 const initialState:CommandState = {
   tokens: [{type:'TEXT',text:'',isSelected:false}],
-  classes: {},
+  apis: {},
+  interfaces: {},
   methods: {},
 };
 

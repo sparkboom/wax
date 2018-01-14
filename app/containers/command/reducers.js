@@ -28,27 +28,29 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
         ...state,
         tokens,
       };
-    case ActionTypes.RegisterMethods:
+    case ActionTypes.LoadApi:
 
-      let newMethods = action.methods.reduce((acc, cur) => { acc[cur.key]=cur; return acc; }, {});
-      let currentClass = state.classes[action.className] || {};
+      let newApi = action.api.api;
+      let newInterfacesByKey = action.api.interfaces.reduce((acc, cur) => { acc[cur.interfaceKey]=cur; return acc; }, {});
+      let newMethodsByKey = action.api.methods.reduce((acc, cur) => { acc[cur.methodKey]=cur; return acc; }, {});
 
       return {
         ...state,
-        classes: {
-          ...state.classes,
-          [action.className]:{
-            methodKeys: [
-              ...(currentClass.methodKeys || []), 
-              action.methods.map(m => m.key)],
-        }},
+        apis: {
+          ...state.apis,
+          [newApi.apiKey]:newApi,
+        },
+        interfaces: {
+          ...state.interfaces,
+          ...newInterfacesByKey,
+        },
         methods: {
           ...state.methods,
-          ...newMethods,
+          ...newMethodsByKey,
         }
       }
 
-    case ActionTypes.DeregisterMethods:
+    case ActionTypes.UnloadApi:
       return state;
 
     default:
