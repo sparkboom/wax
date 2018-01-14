@@ -5,6 +5,7 @@ import * as Actions from './actions';
 import * as State from './state';
 
 // Types
+
 type SVGReducer = (State.SVGState, Actions.Union) => State.SVGState;
 
 // Code

@@ -8,32 +8,25 @@ export const Triangle = ({layout, ...props}) => (<RegularPolygon vertexCount="3"
 export const Circle = ({layout, ...props}) => {
   return (<circle cx={Radius} cy={Radius} r={Radius-1} {...props} />)
 };
-const _Shape =({shape, ...props}) => {
+const _Shape =({shape, isSelected, ...props}) => {
   const map = {
     'square' : Square,
     'triangle' : Triangle,
     'circle' : Circle,
   };
+  console.log('shape', shape, 'props', props);
   return map[shape](props) || null;
 };
 
 
 const StyledShape = styled(_Shape)`
-  stroke: #996677;
+  stroke: ${props => props.isSelected? '#EECCDD':'#996677'};
   fill: transparent;
   stroke-width: 1;
   cursor: pointer;
 
   &:hover {
-    stroke: #DDAABB;
-  }
-
-  &.selected {
-    stroke: #EECCDD;
-  }
-
-  &.selected:hover {
-    stroke: #EECCDD;
+    stroke: ${props => props.isSelected? '#EECCDD':'#DDAABB'};
   }
 `;
 

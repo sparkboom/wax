@@ -28,7 +28,7 @@ class Canvas extends React.Component<Props> {
   onClickItem = (event:MouseEvent, key:number) => {};
 
   render() {
-    let {items, nodes} = this.props;
+    let {items, nodes, selection} = this.props;
     let keys = Object.keys(items);
     this.layout.reset();
     let getShapeClassName = id => classNames({selected : false });
@@ -39,6 +39,7 @@ class Canvas extends React.Component<Props> {
               key={key}
               shape={items[key].shape}
               name={nodes[key]? nodes[key].name : '...'}
+              isSelected={selection.includes(key)}
               layout={this.layout}
               className={getShapeClassName(key)}
               onClick={event => this.onClickItem(event, key)} />) }
@@ -50,6 +51,7 @@ class Canvas extends React.Component<Props> {
 const connectProps:SVGConnectProps = state => ({
   items: state.svg.items,
   nodes: state.canvas.nodes,
+  selection: state.canvas.selection,
 });
 
 export default connect(connectProps)(Canvas);
