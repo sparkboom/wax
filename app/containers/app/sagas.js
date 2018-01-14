@@ -40,12 +40,24 @@ function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixe
 }
 
 function* createClassNode({node, args}){
+
   let [moduleName, className] = node.nodeClass.split(':');
   yield put({
     ...args,
     type: `${moduleName}:CREATE_${className}`,
     key: node.key,
   });
+
+  let registerNodeSelector = CommandActions.registerMethods('SVG', [{
+    className: 'SVG',
+    methodName: `.${node.name}`,
+    action : {
+      type: 'CANVAS:SELECT_NODE',
+      nodeKey: node.key,
+    },
+    key: shortid.generate(),
+  }]);
+  yield put(registerNodeSelector);
 }
 
 function* globalError(action):VoidGenerator{
