@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import SVG from '../../modules/svg/container/';
+import SVG from '../../modules/svg/';
 
 const CanvasContainer = styled.div`
   height: 100%;

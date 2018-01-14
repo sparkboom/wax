@@ -8,7 +8,7 @@ import shortid from 'shortid';
 import * as ActionTypes from './action-types';
 import * as Actions from './actions';
 
-import * as svgInit from '../../modules/svg/container/init';
+import * as svgInit from '../../modules/svg/init';
 import * as appInit from './init';
 
 // Types

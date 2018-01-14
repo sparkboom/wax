@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import routingReducer from './routing';
 import commandReducer from '../containers/command/reducers';
-import svgReducer from '../modules/svg/container/reducers';
+import svgReducer from '../modules/svg/reducers';
 import appReducer from '../containers/app/reducers';
 import canvasReducer from '../containers/canvas/reducers';
 
