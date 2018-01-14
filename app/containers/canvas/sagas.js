@@ -8,6 +8,8 @@ import shortid from 'shortid';
 import * as ActionTypes from './action-types';
 import * as AppActionTypes from '../app/action-types';
 import * as Actions from './actions';
+import * as CommandActions from '../command/actions';
+import api from './lib/api';
 
 // Types
 
@@ -17,14 +19,20 @@ type VoidGenerator = Generator<void, void, void>;
 
 function* init(initAction){
 
+  const canvasApi = api();
+
+  // Register methods for SVG
+  let registerCanvasApiAction = CommandActions.loadApi(canvasApi);
+  yield put(registerCanvasApiAction);
+
   // Create the SVG node
-  let createSvgAction = Actions.createNode({
-    nodeClass: 'SVG:SVG',
-    name: 'svg',
-    parentKey: 'root',
-    args: {},
-  });
-  yield put(createSvgAction);
+  // let createSvgAction = Actions.createNode({
+  //   nodeClass: 'SVG:SVG',
+  //   name: 'svg',
+  //   parentKey: 'root',
+  //   args: {},
+  // });
+  // yield put(createSvgAction);
 }
 
 export default function* appSaga():VoidGenerator{

@@ -18,7 +18,7 @@ function* init(initAction){
   const svgApi = api(CanvasActions.createNode);
 
   // Register methods for SVG
-  let registerSvgApiAction = CommandActions.registerApi(svgApi);
+  let registerSvgApiAction = CommandActions.loadApi(svgApi);
   yield put(registerSvgApiAction);
 }
 

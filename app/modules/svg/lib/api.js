@@ -5,7 +5,7 @@ import shortid from 'shortid';
 
 // Code
 
-export default function api(createNode:Function){
+export default function api(){
 
   const apiSvgKey = shortid.generate();
   const interfaceSvgKey = shortid.generate();
@@ -52,7 +52,7 @@ export default function api(createNode:Function){
 
   return {
     api:{
-      apiKey: shortid.generate(),
+      apiKey: apiSvgKey,
       apiName: 'SVG',
       interfaceKeys: [interfaceSvgKey, interfaceSvgShapeKey],
     },

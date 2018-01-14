@@ -4,8 +4,9 @@ import {takeEvery, put, take, fork, cancel} from 'redux-saga/effects';
 import {delay} from 'redux-saga';
 import shortid from 'shortid';
 
-import {registerCommand} from './private/rich-input/lib/exec';
+import * as AutoComplete from './private/rich-input/lib/auto-complete';
 import * as ActionTypes from './action-types';
+import * as AppActionTypes from '../app/action-types';
 import * as CanvasActionTypes from '../canvas/action-types';
 import * as Actions from './actions';
 
@@ -15,33 +16,22 @@ type VoidGenerator = Generator<void, void, void>;
 
 // Code
 
-function* indexApi(action:Actions.LoadApi):Generator<mixed, void, void>{
+function* init(action):Generator<mixed, void, void>{
 
-  action.api.api.interfaceKeys.forEach( iKey => {
-    const iface = action.api.interfaces.find( i => i.interfaceKey === iKey);
-    iface && iface.methodKeys.forEach( mKey => {
-      const method = action.api.methods.find( i => i.interfaceKey === iKey);
-      method && registerCommand(iface, method.methodName, method.action);
-    })
-  });
+}
+
+function* loadApi(action:Actions.LoadApi):Generator<mixed, void, void>{
+
+  AutoComplete.loadApi(action.api);
 }
 
 function* createNodeSelector({node, args}){
 
-  let registerNodeSelector = Actions.registerMethods('SVG', [{
-    className: 'SVG',
-    methodName: `.${node.name}`,
-    action : {
-      type: CanvasActionTypes.SetSelection,
-      nodeKeys: [node.key],
-    },
-    key: shortid.generate(),
-  }]);
-
-  yield put(registerNodeSelector);
+  // Create and load api for the node
 }
 
 export default function* commandSaga():VoidGenerator{
-  yield takeEvery(ActionTypes.LoadApi, indexApi);
+  yield takeEvery(AppActionTypes.Init, init);
+  yield takeEvery(ActionTypes.LoadApi, loadApi);
   yield takeEvery(CanvasActionTypes.CreateNode, createNodeSelector)
 }
