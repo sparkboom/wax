@@ -12,7 +12,13 @@ export type CanvasState = {
 // Code
 
 const initialState:CanvasState = {
-  nodes: {},
+  nodes: {
+    'root':{
+      key:'root',
+      nodeClass: 'CANVAS',
+      name:'canvas',
+    }
+  },
   selection: [],
 };
 

@@ -3,6 +3,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {RichInput, RichInputContainer} from './private';
+import {getUniqueClasses} from './selectors';
 import * as Actions from './actions';
 import * as AppActions from '../app/actions';
 import * as Types from './types';
@@ -24,12 +25,13 @@ type CommandConnectDispatch = ((Actions.Union|AppActions.Union)=>void)=>CommandD
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {tokens, setTokens, executeInstructions} = this.props;
+    let {tokens, setTokens, executeInstructions, selectedClasses} = this.props;
     return (
     <div>
       <RichInputContainer>
         <RichInput
           tokens={tokens}
+          context={selectedClasses}
           onSetTokens={setTokens}
           onExecuteActions={executeInstructions}
          />
@@ -39,7 +41,8 @@ class CommandLine extends React.Component<Props> {
 }
 
 const connectProps:CommandConnectReduxProps = state => ({
-  ...state.command
+  ...state.command,
+  selectedClasses: getUniqueClasses(state),
 });
 
 const connectDispatch:CommandConnectDispatch = dispatch => ({

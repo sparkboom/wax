@@ -86,7 +86,7 @@ export function* tokenize(text:string, tokens:Array<Types.Token>, selectStart:nu
 
 //export function* tokenizeWithSuggestion(tokens:Array<Types.Token>):Tokenizer{
 // $FlowFixMe
-export function* tokenizeWithSuggestion(contextClass, tokens = []){
+export function* tokenizeWithSuggestion(contextClasses, tokens = []){
 
   let prevTokens = [null, null];
   for(let token of tokens){
@@ -96,13 +96,14 @@ export function* tokenizeWithSuggestion(contextClass, tokens = []){
 
       // if last 2 tokens was caret and text, and current is text,
       // we may be able to replace some forthcoming text with prediction
-      let suggestions = Interpreter.predict(contextClass, prevTokens[0].text);
+      let suggestions = [...contextClasses.map(c => Interpreter.predict(c, prevTokens[0].text))]
+      console.log('suggestions', suggestions);
       suggestions = suggestions.length>0? suggestions[0]:[];
       let suggestionToken = {
         type: 'SUGGESTION',
         text: '',
         isSelected:false,
-        ...suggestions
+        ...suggestions,
       };
       yield suggestionToken;
     }

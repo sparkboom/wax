@@ -34,7 +34,7 @@ function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixe
 
   for(let cmd of executingCommands){
     yield put({...cmd.action, key: shortid.generate() });
-    yield put({ ...CommandActions.filterTokens({key:cmd.key}) });
+    yield put({...CommandActions.filterTokens({key:cmd.key}) });
     yield delay(200);
   }
 }
@@ -47,17 +47,6 @@ function* createClassNode({node, args}){
     type: `${moduleName}:CREATE_${className}`,
     key: node.key,
   });
-
-  let registerNodeSelector = CommandActions.registerMethods('SVG', [{
-    className: 'SVG',
-    methodName: `.${node.name}`,
-    action : {
-      type: CanvasActionTypes.SetSelection,
-      nodeKeys: [node.key],
-    },
-    key: shortid.generate(),
-  }]);
-  yield put(registerNodeSelector);
 }
 
 function* globalError(action):VoidGenerator{
@@ -70,7 +59,6 @@ function* globalError(action):VoidGenerator{
 }
 
 function* throwError(action):VoidGenerator{
-  console.log('throw error');
   throw new Error('This is a deliberately thrown error!');
 }
 

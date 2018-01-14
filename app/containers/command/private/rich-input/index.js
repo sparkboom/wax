@@ -14,6 +14,7 @@ import shortid from 'shortid';
 // Types
 
 export type Props = {
+  context:Array<string>,
   tokens:Array<Token>,
   onSetTokens: Array<Token>=>void,
   onExecuteActions: Array<Token>=>void,
@@ -124,14 +125,13 @@ class RichInput extends React.Component<Props, State> {
   }
 
   render() {
-    let {tokens} = this.props;
+    let {tokens, context} = this.props;
     tokens = tokens || [];
     const innerRichInputClassName : string = classNames({
       focussed: this.state.isFocussed
     });
 
-    const contextClass = 'SVG';
-    const tokensWithSuggestion = [...tokenizeWithSuggestion(contextClass, tokens)] || [];
+    const tokensWithSuggestion = [...tokenizeWithSuggestion(context, tokens)] || [];
     const suggestion = tokensWithSuggestion.find(t => t.type === 'SUGGESTION');
     const inlineElements = tokensWithSuggestion.map((t,i) => {
       return {
@@ -163,6 +163,7 @@ class RichInput extends React.Component<Props, State> {
           onKeyDown={(event:any) => this.onInputKeyDown(event, suggestion)}
           onChange={() => this.onInputChange()}
           value={inputValue}  />
+        Context: { `${context}` } 
       </div>
     );
   }
