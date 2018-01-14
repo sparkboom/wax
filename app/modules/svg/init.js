@@ -1,6 +1,6 @@
 // @flow
 
-import {addShape} from './actions';
+import {createNode} from '../../containers/canvas/actions';
 import shortid from 'shortid';
 
 // Code
@@ -8,16 +8,16 @@ export const className = 'SVG';
 export const methods = [{
   className: 'SVG',
   methodName: 'addcircle',
-  action: addShape('circle', null),
+  action: createNode({nodeClass: 'SVG:SHAPE', family: 'circle', args: {shape:'circle'}}),
   key: shortid.generate(),
 },{
   className: 'SVG',
   methodName: 'addsquare',
-  action: addShape('square', null),
+  action: createNode({nodeClass: 'SVG:SHAPE', family: 'square', args: {shape:'square'}}),
   key: shortid.generate()
 },{
   className: 'SVG',
   methodName: 'addtriangle',
-  action: addShape('triangle', null),
+  action: createNode({nodeClass: 'SVG:SHAPE', family: 'triangle', args: {shape:'triangle'}}),
   key: shortid.generate()
 }];

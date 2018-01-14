@@ -13,7 +13,7 @@ const svgReducer:SVGReducer = (state = State.default, action) => {
 
   switch (action.type) {
 
-    case ActionTypes.AddShape:
+    case ActionTypes.CreateShape:
       if (!action.key){
         console.warn('Action has no key');
         return {...state};

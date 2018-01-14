@@ -2,13 +2,15 @@
 
 import {takeEvery, put, take, fork, cancel} from 'redux-saga/effects';
 import {delay} from 'redux-saga';
-import * as CommandActions from '../command/actions';
+
 import {toast} from 'react-toastify';
 import shortid from 'shortid';
 import * as ActionTypes from './action-types';
+import * as CanvasActionTypes from '../canvas/action-types';
 import * as Actions from './actions';
-
+import * as CommandActions from '../command/actions';
 import * as svgInit from '../../modules/svg/init';
+
 import * as appInit from './init';
 
 // Types
@@ -37,6 +39,15 @@ function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixe
   }
 }
 
+function* createClassNode({node, args}){
+  let [moduleName, className] = node.nodeClass.split(':');
+  yield put({
+    ...args,
+    type: `${moduleName}:CREATE_${className}`,
+    key: node.key,
+  });
+}
+
 function* globalError(action):VoidGenerator{
   try{
     toast.error(action.message);
@@ -52,6 +63,7 @@ function* throwError(action):VoidGenerator{
 }
 
 export default function* appSaga():VoidGenerator{
+  yield takeEvery(CanvasActionTypes.CreateNode, createClassNode)
   yield takeEvery(ActionTypes.ExecuteInstructions, executeInstructions);
   yield takeEvery(ActionTypes.Init, init);
   yield takeEvery(ActionTypes.GlobalError, globalError);

@@ -4,10 +4,10 @@ import * as ActionTypes from './action-types';
 import * as Types from './types';
 
 // Types
-export type AddShapeAction = {type:typeof ActionTypes.AddShape, shape:string, key:?string};
+export type CreateShapeAction = {type:typeof ActionTypes.CreateShape, shape:string, key:?string};
 export type Union =
-  | AddShapeAction;
+  | CreateShapeAction;
 
 // Code
-export type AddShapeActionCreator = (string, ?string)=>AddShapeAction;
-export const addShape:AddShapeActionCreator = (shape, key) => Object.freeze({type:ActionTypes.AddShape, shape, key});
+export type CreateShapeActionCreator = (string, ?string)=>CreateShapeAction;
+export const createShape:CreateShapeActionCreator = (shape, key) => Object.freeze({type:ActionTypes.CreateShape, shape, key});

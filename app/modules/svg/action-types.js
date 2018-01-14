@@ -1,6 +1,6 @@
 // @flow
 
-export const AddShape:'SVG:ADD_SHAPE' = 'SVG:ADD_SHAPE';
+export const CreateShape:'SVG:CREATE_SHAPE' = 'SVG:CREATE_SHAPE';
 
 export type Union =
-  | typeof AddShape;
+  | typeof CreateShape;
