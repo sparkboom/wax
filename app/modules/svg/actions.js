@@ -10,4 +10,4 @@ export type Union =
 
 // Code
 export type CreateShapeActionCreator = (string, ?string)=>CreateShapeAction;
-export const createShape:CreateShapeActionCreator = (shape, key) => Object.freeze({type:ActionTypes.CreateShape, shape, key});
+export const createShape:CreateShapeActionCreator = (shape, key) => ({type:ActionTypes.CreateShape, shape, key});

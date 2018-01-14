@@ -22,11 +22,11 @@ type VoidGenerator = Generator<void, void, void>;
 function* init(initAction){
   // Register app methods
   let registerAppMethodsAction = CommandActions.registerMethods(appInit.className, appInit.methods);
-  yield put({...registerAppMethodsAction});
+  yield put(registerAppMethodsAction);
 
   // Register methods for SVG
   let registerSvgMethodsAction = CommandActions.registerMethods(svgInit.className, svgInit.methods);
-  yield put({...registerSvgMethodsAction});
+  yield put(registerSvgMethodsAction);
 }
 
 function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixed, void, void>{

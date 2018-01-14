@@ -19,7 +19,7 @@ export type Union =
 
 // Code
 
-export const executeInstructions:Instructions=>ExecuteInstructions = instructions => Object.freeze({type:ActionTypes.ExecuteInstructions, instructions});
-export const init:()=>Init = () => Object.freeze({type:ActionTypes.Init});
-export const globalError:(()=>GlobalError) = () => Object.freeze({type:ActionTypes.GlobalError});
-export const throwError:Error=>ThrowError = error => Object.freeze({type:ActionTypes.ThrowError, error});
+export const executeInstructions:Instructions=>ExecuteInstructions = instructions => ({type:ActionTypes.ExecuteInstructions, instructions});
+export const init:()=>Init = () => ({type:ActionTypes.Init});
+export const globalError:(()=>GlobalError) = () => ({type:ActionTypes.GlobalError});
+export const throwError:Error=>ThrowError = error => ({type:ActionTypes.ThrowError, error});
