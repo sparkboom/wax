@@ -72,7 +72,7 @@ export type Method = {
   methodName:string,
   interfaceKey:string,
   action:{
-    type:string,
+    +type:string,
   }
 };
 export type Object = {

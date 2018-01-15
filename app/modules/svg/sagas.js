@@ -15,11 +15,10 @@ type VoidGenerator = Generator<void, void, void>;
 
 function* init(initAction){
 
-  const svgApi = api(CanvasActions.createNode);
-
   // Register methods for SVG
-  let registerSvgApiAction = CommandActions.loadApi(svgApi);
-  yield put(registerSvgApiAction);
+  const svgApi = api();
+  let loadSvgApiAction = CommandActions.loadApi(svgApi);
+  yield put(loadSvgApiAction);
 }
 
 export default function* svgSaga():Generator<void, void, void>{

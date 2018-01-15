@@ -1,35 +1,73 @@
 // @flow
 
-import {createNode} from '../../../containers/canvas/actions';
+import {createItem} from '../../../containers/app/actions';
 import shortid from 'shortid';
+import * as CommandTypes from '../../../containers/command/types';
 
 // Code
 
 export default function api(){
 
+  const parentNodeKey = 'svg';
   const apiSvgKey = shortid.generate();
   const interfaceSvgKey = shortid.generate();
   const interfaceSvgShapeKey = shortid.generate();
 
-  const addCircleMethod = {
+  const addCircleMethodAction = createItem({
+    category: 'cir',
+    parentNodeKey: parentNodeKey,
+  },{
+    classInterfaceKeys:[interfaceSvgShapeKey],
+  },{
+    classKey:'Shape',
+    moduleKey:'Svg',
+    properties:{
+      shape: 'circle'
+    }
+  });
+  const addCircleMethod:CommandTypes.Method = {
     methodKey: shortid.generate(),
     methodName: 'addcircle',
     interfaceKey: interfaceSvgKey,
-    action: createNode({nodeClass: 'SVG:SHAPE', interfaces: [interfaceSvgShapeKey],  family: 'cir', args: {shape:'circle'}}),
+    action: addCircleMethodAction,
   };
 
+  const addTriangleMethodAction = createItem({
+    category: 'tri',
+    parentNodeKey: parentNodeKey,
+  },{
+    classInterfaceKeys:[interfaceSvgShapeKey],
+  },{
+    classKey:'Shape',
+    moduleKey:'Svg',
+    properties:{
+      shape: 'triangle'
+    }
+  });
   const addTriangleMethod = {
     methodKey: shortid.generate(),
     methodName: 'addtriangle',
     interfaceKey: interfaceSvgKey,
-    action: createNode({nodeClass: 'SVG:SHAPE', interfaces: [interfaceSvgShapeKey],  family: 'tri', args: {shape:'triangle'}}),
+    action: addTriangleMethodAction
   };
 
+  const addSquareMethodAction = createItem({
+    category: 'sqr',
+    parentNodeKey: parentNodeKey,
+  },{
+    classInterfaceKeys:[interfaceSvgShapeKey],
+  },{
+    classKey:'Shape',
+    moduleKey:'Svg',
+    properties:{
+      shape: 'square'
+    }
+  });
   const addSquareMethod = {
     methodKey: shortid.generate(),
     methodName: 'addsquare',
     interfaceKey: interfaceSvgKey,
-    action: createNode({nodeClass: 'SVG:SHAPE', interfaces: [interfaceSvgShapeKey],  family: 'sq', args: {shape:'square'}}),
+    action: addSquareMethodAction
   };
 
   const interfaceSvg = {
@@ -43,7 +81,7 @@ export default function api(){
 
   const interfaceSvgShape = {
     interfaceKey: interfaceSvgShapeKey,
-    interfaceName: 'Svg:Shape',
+    interfaceName: 'Shape',
     apiKey: apiSvgKey,
     interfaceType: 'CLASS',
     //nodeKey: n/a for class interfaces,
