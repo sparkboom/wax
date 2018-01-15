@@ -10,7 +10,7 @@ import * as CanvasActionTypes from '../canvas/action-types';
 import * as Actions from './actions';
 import * as CommandActions from '../command/actions';
 
-import * as appInit from './init';
+import api from './lib/api';
 
 // Types
 
@@ -20,9 +20,10 @@ type VoidGenerator = Generator<void, void, void>;
 
 function* init(initAction){
 
-  // Register methods for SVG
-  // let registerSvgMethodsAction = CommandActions.registerMethods(svgInit.className, svgInit.methods);
-  // yield put(registerSvgMethodsAction);
+  // Register App methods
+  const appApi = api();
+  const loadAppApiAction = CommandActions.loadApi(appApi);
+  yield put(loadAppApiAction);
 }
 
 function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixed, void, void>{
