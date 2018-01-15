@@ -75,7 +75,6 @@ export default function api(){
     apiKey: apiSvgKey,
     interfaceName : 'svg',
     interfaceType: 'CLASS',
-    //nodeKey: n/a for class interfaces,
     methodKeys: [addCircleMethod.methodKey, addSquareMethod.methodKey, addSquareMethod.methodKey]
   };
 
@@ -84,7 +83,6 @@ export default function api(){
     interfaceName: 'shape',
     apiKey: apiSvgKey,
     interfaceType: 'CLASS',
-    //nodeKey: n/a for class interfaces,
     methodKeys: []
   };
 

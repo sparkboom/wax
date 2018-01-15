@@ -1,7 +1,7 @@
 // @flow
 
 export type Node = {
-  nodeKey:string,
+  nodeItemKey:string,
   name:string,
   parentNodeKey:?string,
   childNodeKeys:Array<string>,
