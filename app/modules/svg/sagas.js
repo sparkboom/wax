@@ -1,10 +1,12 @@
 // @flow
 
 import {takeEvery, put} from 'redux-saga/effects';
-import * as CommandActions from '../../containers/command/actions';
-import * as CanvasActions from '../../containers/canvas/actions';
-import * as ActionTypes from './action-types';
+
 import * as AppActionTypes from '../../containers/app/action-types';
+
+import * as Actions from './actions';
+import * as CommandActions from '../../containers/command/actions';
+import * as AppActions from '../../containers/app/actions';
 import api from './lib/api';
 
 // Types
@@ -21,6 +23,19 @@ function* init(initAction){
   yield put(loadSvgApiAction);
 }
 
+function* createSvgItem(createItemAction:AppActions.CreateItem){
+
+  if (createItemAction.item.moduleKey !== 'svg'){
+    return;
+  }
+
+  if(createItemAction.item.classKey === 'shape'){
+    const createShapeAction = Actions.createShape(createItemAction.itemKey, createItemAction.item.properties.shape);
+    yield put(createShapeAction);
+  }
+}
+
 export default function* svgSaga():Generator<void, void, void>{
   yield takeEvery(AppActionTypes.Init, init);
+  yield takeEvery(AppActionTypes.CreateItem, createSvgItem);
 }

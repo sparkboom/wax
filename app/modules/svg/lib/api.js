@@ -19,8 +19,8 @@ export default function api(){
   },{
     classInterfaceKeys:[interfaceSvgShapeKey],
   },{
-    classKey:'Shape',
-    moduleKey:'Svg',
+    classKey:'shape',
+    moduleKey:'svg',
     properties:{
       shape: 'circle'
     }
@@ -38,8 +38,8 @@ export default function api(){
   },{
     classInterfaceKeys:[interfaceSvgShapeKey],
   },{
-    classKey:'Shape',
-    moduleKey:'Svg',
+    classKey:'shape',
+    moduleKey:'svg',
     properties:{
       shape: 'triangle'
     }
@@ -57,8 +57,8 @@ export default function api(){
   },{
     classInterfaceKeys:[interfaceSvgShapeKey],
   },{
-    classKey:'Shape',
-    moduleKey:'Svg',
+    classKey:'shape',
+    moduleKey:'svg',
     properties:{
       shape: 'square'
     }
@@ -73,7 +73,7 @@ export default function api(){
   const interfaceSvg = {
     interfaceKey: interfaceSvgKey,
     apiKey: apiSvgKey,
-    interfaceName : 'Svg',
+    interfaceName : 'svg',
     interfaceType: 'CLASS',
     //nodeKey: n/a for class interfaces,
     methodKeys: [addCircleMethod.methodKey, addSquareMethod.methodKey, addSquareMethod.methodKey]
@@ -81,7 +81,7 @@ export default function api(){
 
   const interfaceSvgShape = {
     interfaceKey: interfaceSvgShapeKey,
-    interfaceName: 'Shape',
+    interfaceName: 'shape',
     apiKey: apiSvgKey,
     interfaceType: 'CLASS',
     //nodeKey: n/a for class interfaces,
@@ -91,7 +91,7 @@ export default function api(){
   return {
     api:{
       apiKey: apiSvgKey,
-      apiName: 'SVG',
+      apiName: 'svg',
       interfaceKeys: [interfaceSvgKey, interfaceSvgShapeKey],
     },
     interfaces: [

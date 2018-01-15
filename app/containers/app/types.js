@@ -22,5 +22,5 @@ export type ObjectItem = {
 export type Item = {
   moduleKey:string,
   classKey:string,
-  properties:{}
+  properties:any,
 }
