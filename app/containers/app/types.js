@@ -16,7 +16,7 @@ export type NodeItem = {
 };
 
 export type ObjectItem = {
-  interfaceKeys:Array<string>
+  classInterfaceKeys:Array<string>
 };
 
 export type Item = {

@@ -50,25 +50,19 @@ export type Token =
 
 
 
-export type BaseInterface = {
+export type Interface = {
   interfaceKey:string,
   apiKey:string,
   interfaceName:string,
   methodKeys:Array<string>,
+  interfaceType: 'CLASS' | 'INSTANCE',
 };
-export type ClassInterface = BaseInterface & {
-  interfaceType:'CLASS',
-};
-export type InstanceInterface = BaseInterface & {
-  interfaceType:'INSTANCE',
-  nodeKey:string,
-};
-export type Interface = ClassInterface | InstanceInterface;
 export type Api = {
   api:{
     apiKey:string,
     apiName:string,
-    interfaceKeys:Array<string>
+    objectItemKey?:string,
+    interfaceKeys:Array<string>,
   },
   interfaces:Array<Interface>,
   methods:Array<Method>,
@@ -82,6 +76,7 @@ export type Method = {
   }
 };
 export type Object = {
-  objectKey:string,
-  interfaceKeys:Array<string>,
+  objectItemKey:string,
+  instanceApiKey:string,
+  classInterfaceKeys:Array<string>,
 };
