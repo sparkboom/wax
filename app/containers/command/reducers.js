@@ -28,18 +28,18 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
         ...state,
         tokens,
       };
-      
+
     case ActionTypes.LoadApi:
 
-      let newApi = action.api.api;
-      let newInterfacesByKey = action.api.interfaces.reduce((acc, cur) => { acc[cur.interfaceKey]=cur; return acc; }, {});
-      let newMethodsByKey = action.api.methods.reduce((acc, cur) => { acc[cur.methodKey]=cur; return acc; }, {});
+      const {api, interfaces, methods} = action.api;
+      const newInterfacesByKey = interfaces.reduce((acc, cur) => { acc[cur.interfaceKey]=cur; return acc; }, {});
+      const newMethodsByKey = methods.reduce((acc, cur) => { acc[cur.methodKey]=cur; return acc; }, {});
 
       return {
         ...state,
         apis: {
           ...state.apis,
-          [newApi.apiKey]:newApi,
+          [api.apiKey]:api,
         },
         interfaces: {
           ...state.interfaces,
@@ -53,6 +53,17 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
 
     case ActionTypes.UnloadApi:
       return state;
+
+    case ActionTypes.CreateObject:
+      const {type, ...newObject} = action;
+
+      return {
+        ...state,
+        objects: {
+          ...state.objects,
+          [action.objectItemKey]:newObject,
+        }
+      };
 
     default:
       (action: empty);
