@@ -5,8 +5,8 @@ export type RootNode = {
 };
 
 export type Node = RootNode | {
-  key:string,
+  nodeKey:string,
   name:string,
-  nodeClass:string,
-  parentKey:string,
+  childNodes:Array<Node>,
+  parentNode:?Node,
 };

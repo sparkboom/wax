@@ -21,8 +21,8 @@ type VoidGenerator = Generator<void, void, void>;
 function* init(initAction){
 
   // Register methods for SVG
-  let registerSvgMethodsAction = CommandActions.registerMethods(svgInit.className, svgInit.methods);
-  yield put(registerSvgMethodsAction);
+  // let registerSvgMethodsAction = CommandActions.registerMethods(svgInit.className, svgInit.methods);
+  // yield put(registerSvgMethodsAction);
 }
 
 function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixed, void, void>{

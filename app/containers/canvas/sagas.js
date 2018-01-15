@@ -26,6 +26,13 @@ function* init(initAction){
   yield put(registerCanvasApiAction);
 
   // Create the SVG node
+  // const createRootNodeAction = Actions.createNode({
+  //   nodeClass: 'SVG:SVG',
+  //   name: 'svg',
+  //   parentKey: 'root',
+  //   args: {},
+  // });
+  //
   // let createSvgAction = Actions.createNode({
   //   nodeClass: 'SVG:SVG',
   //   name: 'svg',

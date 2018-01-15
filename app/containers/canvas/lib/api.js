@@ -1,6 +1,5 @@
 // @flow
 
-import {createNode} from '../../../containers/canvas/actions';
 import shortid from 'shortid';
 
 // Code
@@ -88,11 +87,11 @@ export default function api(){
     interfaceType: 'CLASS',
     methodKeys: [methodSelectAll.methodKey],
   };
-  
+
   return {
     api:{
       apiKey: apiCanvasKey,
-      apiName: 'SVG',
+      apiName: 'Canvas',
       interfaceKeys: [interfaceCanvasKey, interfaceNodeKey, interfaceParentNodeKey, interfaceChildNodeKey, interfaceGlobalKey],
     },
     interfaces: [
