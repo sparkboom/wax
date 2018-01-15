@@ -28,6 +28,7 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
         ...state,
         tokens,
       };
+      
     case ActionTypes.LoadApi:
 
       let newApi = action.api.api;

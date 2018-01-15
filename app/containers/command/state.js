@@ -7,6 +7,7 @@ export type CommandState = {
   +apis: {},
   +interfaces: {},
   +methods: {},
+  +objects: {},
 };
 
 // Code
@@ -16,6 +17,7 @@ const initialState:CommandState = {
   apis: {},
   interfaces: {},
   methods: {},
+  objects: {},
 };
 
 export default initialState;

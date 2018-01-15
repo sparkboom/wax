@@ -1,12 +1,8 @@
 // @flow
 
-export type RootNode = {
-  key:'root'
-};
-
-export type Node = RootNode | {
+export type Node = {
   nodeKey:string,
   name:string,
-  childNodes:Array<Node>,
-  parentNode:?Node,
+  parentNodeKey:?string,
+  childNodeKeys:Array<string>,
 };

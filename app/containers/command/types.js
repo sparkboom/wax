@@ -81,3 +81,7 @@ export type Method = {
     type:string,
   }
 };
+export type Object = {
+  objectKey:string,
+  interfaceKeys:Array<string>,
+};

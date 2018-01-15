@@ -1,14 +1,17 @@
 // @flow
 
-import {takeEvery, put, take, fork, cancel} from 'redux-saga/effects';
-import {delay} from 'redux-saga';
+import {takeEvery, put} from 'redux-saga/effects';
 
-import {toast} from 'react-toastify';
 import shortid from 'shortid';
+
 import * as ActionTypes from './action-types';
 import * as AppActionTypes from '../app/action-types';
+
 import * as Actions from './actions';
+import * as AppActions from '../app/actions';
 import * as CommandActions from '../command/actions';
+
+import {getName} from './lib/name-generator';
 import api from './lib/api';
 
 // Types
@@ -19,29 +22,27 @@ type VoidGenerator = Generator<void, void, void>;
 
 function* init(initAction){
 
-  const canvasApi = api();
-
   // Register methods for SVG
-  let registerCanvasApiAction = CommandActions.loadApi(canvasApi);
+  const canvasApi = api();
+  const registerCanvasApiAction = CommandActions.loadApi(canvasApi);
   yield put(registerCanvasApiAction);
+}
 
-  // Create the SVG node
-  // const createRootNodeAction = Actions.createNode({
-  //   nodeClass: 'SVG:SVG',
-  //   name: 'svg',
-  //   parentKey: 'root',
-  //   args: {},
-  // });
-  //
-  // let createSvgAction = Actions.createNode({
-  //   nodeClass: 'SVG:SVG',
-  //   name: 'svg',
-  //   parentKey: 'root',
-  //   args: {},
-  // });
-  // yield put(createSvgAction);
+function* createNodeItem(createItemAction:AppActions.CreateItem){
+
+  // For every 'CREATE_ITEM', ensure we have a node object so that it can be selected and placed in a hierarchy
+  const {itemKey, node} = createItemAction;
+  const createNodeAction = Actions.createNode({
+    name: node.name || getName(node.category) || '...',
+    nodeKey: itemKey,
+    parentNodeKey: node.parentNodeKey,
+    childNodeKeys: node.childNodeKeys || [],
+  });
+  put(createNodeAction);
+
 }
 
 export default function* appSaga():VoidGenerator{
   yield takeEvery(AppActionTypes.Init, init);
+  yield takeEvery(AppActionTypes.CreateItem, createNodeItem);
 }

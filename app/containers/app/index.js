@@ -34,7 +34,7 @@ class App extends React.Component<Props> {
       <Canvas />
       <CommandLine />
       <ToastContainer />
-    </Container>)
+    </Container>);
   }
 }
 
