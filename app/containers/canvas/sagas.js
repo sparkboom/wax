@@ -34,7 +34,7 @@ function* createNodeItem(createItemAction:AppActions.CreateItem){
   const {itemKey, node} = createItemAction;
   const createNodeAction = Actions.createNode({
     name: node.name || getName(node.category) || '...',
-    nodeKey: itemKey,
+    nodeItemKey: itemKey,
     parentNodeKey: node.parentNodeKey,
     childNodeKeys: node.childNodeKeys || [],
   });

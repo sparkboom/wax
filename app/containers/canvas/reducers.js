@@ -27,7 +27,7 @@ const canvasReducer:CanvasReducer = (state = State.default, action) => {
           [node.nodeItemKey]:node
         }
       };
-    case ActionTypes.SetSelection:
+    case ActionTypes.SelectNode:
       return {
         ...state,
         selection: [...action.nodeItemKeys],
