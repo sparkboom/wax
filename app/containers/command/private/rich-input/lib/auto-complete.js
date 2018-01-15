@@ -15,7 +15,7 @@ const NoMatch = {prediction:null,matched:false};
 const ExecMarker = 'EXEC_MARKER';
 const InterfaceNameMarker = 'IFACE_NAME_MARKER';
 
-export const loadApi = (api:Types.Api) => {
+export const loadApi = (api:Types.Package) => {
   api.api.interfaceKeys.forEach( iKey => {
     const iface = api.interfaces.find( i => i.interfaceKey === iKey);
     iface && iface.methodKeys.forEach( mKey => {

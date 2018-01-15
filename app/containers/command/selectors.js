@@ -18,15 +18,15 @@ const getSelection = props => props.canvas.selection;
 const getNodeInterfaces = node => ([
   interfaceNodeKey,
   interfaceGlobalKey,
-  (node.childNodeKeys.length>0? interfaceChildNodeKey : null),
-  (!!node.parentNodeKey? interfaceParentNodeKey : null)
+  (node.childNodeKeys.length>0? interfaceParentNodeKey : null),
+  (!!node.parentNodeKey? interfaceChildNodeKey : null)
 ].filter(e => e!==null));
 const getSelectedNodeInterfacesByItemKey = createSelector(
       getNodes,
       getSelection,
       (nodes, selection=[]) => {
         const selectedNodeInterfacesByKey = selection.reduce((acc,itemKey) => {
-          acc[itemKey]=getNodeInterfaces(nodes[itemKey]);
+          acc[itemKey] = getNodeInterfaces(nodes[itemKey]);
           return acc;
         }, {});
         return selectedNodeInterfacesByKey;
@@ -38,7 +38,7 @@ const getClassInterfacesForSelectedObjectsByItemKey = createSelector(
       getObjects,
       getSelection,
       (objects, selection=[]) => selection.reduce((acc,itemKey) => {
-        acc[itemKey]=objects[itemKey].classInterfaceKeys;
+        acc[itemKey] = objects[itemKey].classInterfaceKeys;
         return acc;
       }, {}));
 
@@ -53,7 +53,7 @@ const getInstanceInterfacesForSelectedObjectByItemKey = createSelector(
       getObjects,
       getSelection,
       (objects, apis, selection=[]) => selection.reduce((acc,itemKey) => {
-        acc[itemKey]=getInstanceInterfaceKeyByItemKey(itemKey, objects, apis);
+        acc[itemKey] = getInstanceInterfaceKeyByItemKey(itemKey, objects, apis);
         return acc;
       }, {}));
 
@@ -73,10 +73,5 @@ export const currentContext = createSelector(
 export const contextInterfaces = createSelector(
       currentContext,
       getInterfaces,
-      (interfaceKeys, interfaces) => {
-        console.log( 'interfaceKeys, interfaces', interfaceKeys, interfaces );
-        const interfaceNames = interfaceKeys && interfaceKeys.map( k => interfaces[k] && interfaces[k]);
-        console.log('interfaceNames', interfaceNames);
-        return interfaceNames || [];
-      }
+      (interfaceKeys, interfaces) => interfaceKeys && interfaceKeys.map( k => interfaces[k])
 );
