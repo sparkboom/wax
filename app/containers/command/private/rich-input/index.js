@@ -166,7 +166,7 @@ class RichInput extends React.Component<Props, State> {
           onChange={() => this.onInputChange()}
           value={inputValue}  />
 
-        Context: { `${context.toString()}` }
+        Context: { `${context && context.toString()}` }
 
       </div>
     );

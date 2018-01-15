@@ -42,7 +42,7 @@ class CommandLine extends React.Component<Props> {
 
 const connectProps:CommandConnectReduxProps = state => ({
   ...state.command,
-  selectedClasses: getUniqueClasses(state),
+  selectedClasses: null, //getUniqueClasses(state),
 });
 
 const connectDispatch:CommandConnectDispatch = dispatch => ({

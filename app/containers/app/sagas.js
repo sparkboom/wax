@@ -36,16 +36,6 @@ function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixe
   }
 }
 
-function* createClassNode({node, args}){
-
-  let [moduleName, className] = node.nodeClass.split(':');
-  yield put({
-    ...args,
-    type: `${moduleName}:CREATE_${className}`,
-    key: node.key,
-  });
-}
-
 function* globalError(action):VoidGenerator{
   try{
     toast.error(action.message);
@@ -60,9 +50,8 @@ function* throwError(action):VoidGenerator{
 }
 
 export default function* appSaga():VoidGenerator{
-  yield takeEvery(CanvasActionTypes.CreateNode, createClassNode)
   yield takeEvery(ActionTypes.ExecuteInstructions, executeInstructions);
-  yield takeEvery(ActionTypes.Init, init);
+  yield takeEvery(ActionTypes.Init, init); 
   yield takeEvery(ActionTypes.GlobalError, globalError);
   yield takeEvery(ActionTypes.ThrowError, throwError);
 }

@@ -49,7 +49,6 @@ export type Token =
 
 
 
-
 export type Interface = {
   interfaceKey:string,
   apiKey:string,

@@ -18,13 +18,13 @@ export default function api(){
     action: Actions.throwError(new Error('This is a test error')),
   };
 
-  const interfaceSvg = {
+  const interfaceApp = {
     interfaceKey: interfaceAppKey,
     apiKey: apiAppKey,
     interfaceName : 'app',
     interfaceType: 'CLASS',
     //nodeKey: n/a for class interfaces,
-    methodKeys: [throwErrorMethod]
+    methodKeys: [throwErrorMethod.methodKey],
   };
 
   return {
@@ -34,7 +34,7 @@ export default function api(){
       interfaceKeys: [interfaceAppKey],
     },
     interfaces: [
-      interfaceAppKey
+      interfaceApp
     ],
     methods:[
       throwErrorMethod

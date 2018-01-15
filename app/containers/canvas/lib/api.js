@@ -51,7 +51,7 @@ export default function api(){
   const interfaceCanvas = {
     interfaceKey: interfaceCanvasKey,
     apiKey: apiCanvasKey,
-    interfaceName : 'Canvas',
+    interfaceName : 'canvas',
     interfaceType: 'CLASS',
     methodKeys: [],
   };
@@ -59,7 +59,7 @@ export default function api(){
   const interfaceNode = {
     interfaceKey: interfaceNodeKey,
     apiKey: apiCanvasKey,
-    interfaceName: 'Node',
+    interfaceName: 'node',
     interfaceType: 'CLASS',
     methodKeys: []
   };
@@ -67,7 +67,7 @@ export default function api(){
   const interfaceParentNode = {
     interfaceKey: interfaceParentNodeKey,
     apiKey: apiCanvasKey,
-    interfaceName: 'ParentNode',
+    interfaceName: 'parentnode',
     interfaceType: 'CLASS',
     methodKeys: [methodSelectChildren.methodKey, methodSelectDescendents.methodKey]
   };
@@ -75,7 +75,7 @@ export default function api(){
   const interfaceChildNode = {
     interfaceKey: interfaceChildNodeKey,
     apiKey: apiCanvasKey,
-    interfaceName: 'ChildNode',
+    interfaceName: 'childnode',
     interfaceType: 'CLASS',
     methodKeys: [methodSelectParent.methodKey],
   };
@@ -83,7 +83,7 @@ export default function api(){
   const interfaceGlobal = {
     interfaceKey: interfaceGlobalKey,
     apiKey: apiCanvasKey,
-    interfaceName: 'Global',
+    interfaceName: 'global',
     interfaceType: 'CLASS',
     methodKeys: [methodSelectAll.methodKey],
   };
@@ -91,7 +91,7 @@ export default function api(){
   return {
     api:{
       apiKey: apiCanvasKey,
-      apiName: 'Canvas',
+      apiName: 'canvas',
       interfaceKeys: [interfaceCanvasKey, interfaceNodeKey, interfaceParentNodeKey, interfaceChildNodeKey, interfaceGlobalKey],
     },
     interfaces: [

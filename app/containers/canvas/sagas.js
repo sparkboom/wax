@@ -38,8 +38,7 @@ function* createNodeItem(createItemAction:AppActions.CreateItem){
     parentNodeKey: node.parentNodeKey,
     childNodeKeys: node.childNodeKeys || [],
   });
-  put(createNodeAction);
-
+  yield put(createNodeAction);
 }
 
 export default function* appSaga():VoidGenerator{
