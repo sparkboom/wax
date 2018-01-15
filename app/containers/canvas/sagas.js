@@ -12,7 +12,7 @@ import * as AppActions from '../app/actions';
 import * as CommandActions from '../command/actions';
 
 import {getName} from './lib/name-generator';
-import api from './lib/api';
+import {api} from './lib/api';
 
 // Types
 
@@ -23,8 +23,7 @@ type VoidGenerator = Generator<void, void, void>;
 function* init(initAction){
 
   // Register methods for SVG
-  const canvasApi = api();
-  const registerCanvasApiAction = CommandActions.loadApi(canvasApi);
+  const registerCanvasApiAction = CommandActions.loadApi(api);
   yield put(registerCanvasApiAction);
 }
 

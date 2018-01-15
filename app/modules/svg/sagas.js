@@ -7,6 +7,7 @@ import * as AppActionTypes from '../../containers/app/action-types';
 import * as Actions from './actions';
 import * as CommandActions from '../../containers/command/actions';
 import * as AppActions from '../../containers/app/actions';
+import * as CanvasActions from '../../containers/canvas/actions';
 import api from './lib/api';
 
 // Types
@@ -34,6 +35,9 @@ function* init(initAction){
     properties: {}
   });
   yield put(createItemAction);
+
+  const selectCanvasAction = CanvasActions.selectNodes([createItemAction.itemKey]);
+  yield put(selectCanvasAction);
 }
 
 

@@ -19,4 +19,4 @@ export type Union =
 // Code
 
 export const createNode:CreateNodeCreator = ({nodeItemKey, name, parentNodeKey, childNodeKeys}) => ({ type:ActionTypes.CreateNode, nodeItemKey, name, parentNodeKey, childNodeKeys });
-export const setSelection:SelectNodeCreator = nodeItemKeys => ({ type: ActionTypes.SelectNode, nodeItemKeys });
+export const selectNodes:SelectNodeCreator = nodeItemKeys => ({ type: ActionTypes.SelectNode, nodeItemKeys });

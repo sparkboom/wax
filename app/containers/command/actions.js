@@ -11,7 +11,7 @@ type Match = {};
 
 export type SetTokens = {type:typeof ActionTypes.SetTokens , tokens:Tokens};
 export type FilterTokens = {type:typeof ActionTypes.FilterTokens, match:Match};
-export type LoadApi = {type:typeof ActionTypes.LoadApi, api:Types.Api};
+export type LoadApi = {type:typeof ActionTypes.LoadApi, api:Types.Package};
 export type UnloadApi = {type:typeof ActionTypes.UnloadApi, apiKey:string};
 export type CreateObject = {type:typeof ActionTypes.CreateObject, objectItemKey:string, instanceApiKey:string, classInterfaceKeys:Array<string>};
 
@@ -29,7 +29,7 @@ export type Union =
   export const setTokens:Tokens=>SetTokens = tokens => ({type:ActionTypes.SetTokens, tokens});
   export const filterTokens:Match=>FilterTokens = match => ({type:ActionTypes.FilterTokens, match});
   export const unloadApi:string=>UnloadApi = apiKey => ({type:ActionTypes.UnloadApi, apiKey});
-  export const loadApi:Types.Api=>LoadApi = api => ({type:ActionTypes.LoadApi, api});
+  export const loadApi:Types.Package=>LoadApi = api => ({type:ActionTypes.LoadApi, api});
   export const createObject:CreateObjectCreator = (objectItemKey, instanceApiKey, classInterfaceKeys) => ({type:ActionTypes.CreateObject, objectItemKey, instanceApiKey, classInterfaceKeys});
   export const loadInstanceApi:LoadInstanceApiCreator = (itemName, itemKey) => {
 

@@ -3,7 +3,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {RichInput, RichInputContainer} from './private';
-import {getUniqueClasses} from './selectors';
+import {currentContext, contextInterfaces} from './selectors';
 import * as Actions from './actions';
 import * as AppActions from '../app/actions';
 import * as Types from './types';
@@ -20,18 +20,22 @@ type Props = CommandConnectReduxProps & CommandDispatch;
 type CommandConnectReduxProps = {command:CommandState}=>CommandReduxProps;
 type CommandConnectDispatch = ((Actions.Union|AppActions.Union)=>void)=>CommandDispatch;
 
-//
+// Code
 
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {tokens, setTokens, executeInstructions, selectedClasses} = this.props;
+    let {tokens, setTokens, executeInstructions, currentContext, contextInterfaces} = this.props;
     return (
     <div>
+      <div style={{position:'fixed', width:'100%', top: 0, height:'100px'}} >
+        { `Interfaces: ${contextInterfaces && contextInterfaces.map( i => ` ${i.interfaceName} ` )}` }
+      </div>
       <RichInputContainer>
+
         <RichInput
           tokens={tokens}
-          context={selectedClasses}
+          context={currentContext}
           onSetTokens={setTokens}
           onExecuteActions={executeInstructions}
          />
@@ -42,7 +46,8 @@ class CommandLine extends React.Component<Props> {
 
 const connectProps:CommandConnectReduxProps = state => ({
   ...state.command,
-  selectedClasses: null, //getUniqueClasses(state),
+  currentContext: currentContext(state),
+  contextInterfaces: contextInterfaces(state),
 });
 
 const connectDispatch:CommandConnectDispatch = dispatch => ({

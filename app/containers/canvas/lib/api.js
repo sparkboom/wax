@@ -4,109 +4,106 @@ import shortid from 'shortid';
 
 // Code
 
-export default function api(){
+const apiCanvasKey = shortid.generate();
+const interfaceCanvasKey = shortid.generate();
+export const interfaceNodeKey = shortid.generate();
+export const interfaceParentNodeKey = shortid.generate();
+export const interfaceChildNodeKey = shortid.generate();
+export const interfaceGlobalKey = shortid.generate();
 
-  const apiCanvasKey = shortid.generate();
-  const interfaceCanvasKey = shortid.generate();
-  const interfaceNodeKey = shortid.generate();
-  const interfaceParentNodeKey = shortid.generate();
-  const interfaceChildNodeKey = shortid.generate();
-  const interfaceGlobalKey = shortid.generate();
+const methodRemoveNode = {
+  methodKey: shortid.generate(),
+  methodName: 'remove',
+  interfaceKey: interfaceNodeKey,
+  action: {type: 'CANVAS:REMOVE_NODE'}
+};
 
-  const methodRemoveNode = {
-    methodKey: shortid.generate(),
-    methodName: 'remove',
-    interfaceKey: interfaceNodeKey,
-    action: {type: 'CANVAS:REMOVE_NODE'}
-  };
+const methodSelectChildren = {
+  methodKey: shortid.generate(),
+  methodName: 'selectchildren',
+  interfaceKey: interfaceParentNodeKey,
+  action: {type: 'CANVAS:SELECT_CHILDREN'}
+};
 
-  const methodSelectChildren = {
-    methodKey: shortid.generate(),
-    methodName: 'selectchildren',
-    interfaceKey: interfaceParentNodeKey,
-    action: {type: 'CANVAS:SELECT_CHILDREN'}
-  };
+const methodSelectDescendents = {
+  methodKey: shortid.generate(),
+  methodName: 'selectdescendents',
+  interfaceKey: interfaceParentNodeKey,
+  action: {type: 'CANVAS:SELECT_DESCENDENTS'}
+};
 
-  const methodSelectDescendents = {
-    methodKey: shortid.generate(),
-    methodName: 'selectdescendents',
-    interfaceKey: interfaceParentNodeKey,
-    action: {type: 'CANVAS:SELECT_DESCENDENTS'}
-  };
+const methodSelectParent = {
+  methodKey: shortid.generate(),
+  methodName: 'selectparent',
+  interfaceKey: interfaceChildNodeKey,
+  action: {type: 'CANVAS:SELECT_PARENT'}
+};
 
-  const methodSelectParent = {
-    methodKey: shortid.generate(),
-    methodName: 'selectparent',
-    interfaceKey: interfaceChildNodeKey,
-    action: {type: 'CANVAS:SELECT_PARENT'}
-  };
+const methodSelectAll = {
+  methodKey: shortid.generate(),
+  methodName: 'selectall',
+  interfaceKey: interfaceGlobalKey,
+  action: {type: 'CANVAS:SELECT_ALL'}
+};
 
-  const methodSelectAll = {
-    methodKey: shortid.generate(),
-    methodName: 'selectall',
-    interfaceKey: interfaceGlobalKey,
-    action: {type: 'CANVAS:SELECT_ALL'}
-  };
+const interfaceCanvas = {
+  interfaceKey: interfaceCanvasKey,
+  apiKey: apiCanvasKey,
+  interfaceName : 'canvas',
+  interfaceType: 'CLASS',
+  methodKeys: [],
+};
 
-  const interfaceCanvas = {
-    interfaceKey: interfaceCanvasKey,
+const interfaceNode = {
+  interfaceKey: interfaceNodeKey,
+  apiKey: apiCanvasKey,
+  interfaceName: 'node',
+  interfaceType: 'CLASS',
+  methodKeys: []
+};
+
+const interfaceParentNode = {
+  interfaceKey: interfaceParentNodeKey,
+  apiKey: apiCanvasKey,
+  interfaceName: 'parentnode',
+  interfaceType: 'CLASS',
+  methodKeys: [methodSelectChildren.methodKey, methodSelectDescendents.methodKey]
+};
+
+const interfaceChildNode = {
+  interfaceKey: interfaceChildNodeKey,
+  apiKey: apiCanvasKey,
+  interfaceName: 'childnode',
+  interfaceType: 'CLASS',
+  methodKeys: [methodSelectParent.methodKey],
+};
+
+const interfaceGlobal = {
+  interfaceKey: interfaceGlobalKey,
+  apiKey: apiCanvasKey,
+  interfaceName: 'global',
+  interfaceType: 'CLASS',
+  methodKeys: [methodSelectAll.methodKey],
+};
+
+export const api = {
+  api:{
     apiKey: apiCanvasKey,
-    interfaceName : 'canvas',
-    interfaceType: 'CLASS',
-    methodKeys: [],
-  };
-
-  const interfaceNode = {
-    interfaceKey: interfaceNodeKey,
-    apiKey: apiCanvasKey,
-    interfaceName: 'node',
-    interfaceType: 'CLASS',
-    methodKeys: []
-  };
-
-  const interfaceParentNode = {
-    interfaceKey: interfaceParentNodeKey,
-    apiKey: apiCanvasKey,
-    interfaceName: 'parentnode',
-    interfaceType: 'CLASS',
-    methodKeys: [methodSelectChildren.methodKey, methodSelectDescendents.methodKey]
-  };
-
-  const interfaceChildNode = {
-    interfaceKey: interfaceChildNodeKey,
-    apiKey: apiCanvasKey,
-    interfaceName: 'childnode',
-    interfaceType: 'CLASS',
-    methodKeys: [methodSelectParent.methodKey],
-  };
-
-  const interfaceGlobal = {
-    interfaceKey: interfaceGlobalKey,
-    apiKey: apiCanvasKey,
-    interfaceName: 'global',
-    interfaceType: 'CLASS',
-    methodKeys: [methodSelectAll.methodKey],
-  };
-
-  return {
-    api:{
-      apiKey: apiCanvasKey,
-      apiName: 'canvas',
-      interfaceKeys: [interfaceCanvasKey, interfaceNodeKey, interfaceParentNodeKey, interfaceChildNodeKey, interfaceGlobalKey],
-    },
-    interfaces: [
-      interfaceCanvas,
-      interfaceNode,
-      interfaceParentNode,
-      interfaceChildNode,
-      interfaceGlobal,
-    ],
-    methods:[
-      methodRemoveNode,
-      methodSelectChildren,
-      methodSelectDescendents,
-      methodSelectParent,
-      methodSelectAll,
-    ],
-  }
+    apiName: 'canvas',
+    interfaceKeys: [interfaceCanvasKey, interfaceNodeKey, interfaceParentNodeKey, interfaceChildNodeKey, interfaceGlobalKey],
+  },
+  interfaces: [
+    interfaceCanvas,
+    interfaceNode,
+    interfaceParentNode,
+    interfaceChildNode,
+    interfaceGlobal,
+  ],
+  methods:[
+    methodRemoveNode,
+    methodSelectChildren,
+    methodSelectDescendents,
+    methodSelectParent,
+    methodSelectAll,
+  ],
 }

@@ -48,7 +48,11 @@ export type Token =
   | SuggestionToken;
 
 
-
+export type Package = {
+  api:Api,
+  interfaces:Array<Interface>,
+  methods:Array<Method>,
+};
 export type Interface = {
   interfaceKey:string,
   apiKey:string,
@@ -57,14 +61,10 @@ export type Interface = {
   interfaceType: 'CLASS' | 'INSTANCE',
 };
 export type Api = {
-  api:{
-    apiKey:string,
-    apiName:string,
-    objectItemKey?:string,
-    interfaceKeys:Array<string>,
-  },
-  interfaces:Array<Interface>,
-  methods:Array<Method>,
+  apiKey:string,
+  apiName:string,
+  objectItemKey?:string,
+  interfaceKeys:Array<string>,
 };
 export type Method = {
   methodKey:string,
