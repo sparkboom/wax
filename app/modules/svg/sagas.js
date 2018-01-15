@@ -21,7 +21,21 @@ function* init(initAction){
   const svgApi = api();
   let loadSvgApiAction = CommandActions.loadApi(svgApi);
   yield put(loadSvgApiAction);
+
+  // Create Svg item by default
+  let createItemAction = AppActions.createItem({
+    name:'svg',
+    parentNodeKey: 'root'
+  },{
+    classInterfaceKeys:[svgApi.api.interfaceKeys[0]]
+  },{
+    moduleKey:'svg',
+    classKey:'svg',
+    properties: {}
+  });
+  yield put(createItemAction);
 }
+
 
 function* createSvgItem(createItemAction:AppActions.CreateItem){
 
