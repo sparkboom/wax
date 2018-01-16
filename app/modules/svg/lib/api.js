@@ -15,7 +15,7 @@ export default function api(){
 
   const addCircleMethodAction = createItem({
     category: 'cir',
-    parentNodeKey: parentNodeKey,
+    parentNodeKey: null,
   },{
     classInterfaceKeys:[interfaceSvgShapeKey],
   },{
@@ -34,7 +34,7 @@ export default function api(){
 
   const addTriangleMethodAction = createItem({
     category: 'tri',
-    parentNodeKey: parentNodeKey,
+    parentNodeKey: null,
   },{
     classInterfaceKeys:[interfaceSvgShapeKey],
   },{
@@ -53,7 +53,7 @@ export default function api(){
 
   const addSquareMethodAction = createItem({
     category: 'sqr',
-    parentNodeKey: parentNodeKey,
+    parentNodeKey: null,
   },{
     classInterfaceKeys:[interfaceSvgShapeKey],
   },{

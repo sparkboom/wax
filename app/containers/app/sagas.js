@@ -1,6 +1,6 @@
 // @flow
 
-import {takeEvery, put, take, fork, cancel} from 'redux-saga/effects';
+import {takeEvery, put, select} from 'redux-saga/effects';
 import {delay} from 'redux-saga';
 
 import {toast} from 'react-toastify';
@@ -30,8 +30,8 @@ function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixe
   let executingCommands = [...action.instructions];
 
   for(let cmd of executingCommands){
-    yield put({...cmd.action, key: shortid.generate() });
-    yield put({...CommandActions.filterTokens({key:cmd.key}) });
+    yield put({...cmd.method.action });
+    yield put({...CommandActions.filterTokens({commandKey: cmd.commandKey}) });
     yield delay(200);
   }
 }
@@ -51,7 +51,7 @@ function* throwError(action):VoidGenerator{
 
 export default function* appSaga():VoidGenerator{
   yield takeEvery(ActionTypes.ExecuteInstructions, executeInstructions);
-  yield takeEvery(ActionTypes.Init, init); 
+  yield takeEvery(ActionTypes.Init, init);
   yield takeEvery(ActionTypes.GlobalError, globalError);
   yield takeEvery(ActionTypes.ThrowError, throwError);
 }

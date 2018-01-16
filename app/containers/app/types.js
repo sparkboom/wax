@@ -1,11 +1,12 @@
 // @flow
 
 export type Instruction = {
-  action:{
-    type:string,
+  method:{
+    action:{
+      type:string,
+    },
   },
-  command:string,
-  key:string,
+  commandKey:string,
 }
 
 export type NodeItem = {
