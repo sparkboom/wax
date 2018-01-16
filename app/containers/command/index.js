@@ -25,7 +25,7 @@ type CommandConnectDispatch = ((Actions.Union|AppActions.Union)=>void)=>CommandD
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {tokens, setTokens, executeInstructions, currentContext, contextInterfaces} = this.props;
+    let {tokens, methods, currentContext, contextInterfaces, setTokens, executeInstructions} = this.props;
     return (
     <div>
       <div style={{position:'fixed', width:'100%', top: 0, height:'100px'}} >
@@ -36,6 +36,7 @@ class CommandLine extends React.Component<Props> {
         <RichInput
           tokens={tokens}
           context={currentContext}
+          methods={methods}
           onSetTokens={setTokens}
           onExecuteActions={executeInstructions}
          />
@@ -45,7 +46,8 @@ class CommandLine extends React.Component<Props> {
 }
 
 const connectProps:CommandConnectReduxProps = state => ({
-  ...state.command,
+  tokens: state.command.tokens,
+  methods: state.command.methods,
   currentContext: currentContext(state),
   contextInterfaces: contextInterfaces(state),
 });

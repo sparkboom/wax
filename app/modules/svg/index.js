@@ -31,7 +31,7 @@ class Canvas extends React.Component<Props> {
     let {items, nodes, selection} = this.props;
     let keys = Object.keys(items);
     this.layout.reset();
-    let getShapeClassName = id => classNames({selected : false });
+    let getShapeClassName = id => classNames({selected : false});
 
     return (
     <svg width="100%" height="100%" >

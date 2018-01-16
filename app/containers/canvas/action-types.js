@@ -9,4 +9,4 @@ export const SelectNode:'CANVAS:SELECT_NODE' = 'CANVAS:SELECT_NODE';
 
 export type Union =
  | typeof CreateNode
- | typeof selectNode;
+ | typeof SelectNode;

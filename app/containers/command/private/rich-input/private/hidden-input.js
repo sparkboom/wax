@@ -9,8 +9,6 @@ export default styled.input.attrs({
   outline: none;
   color: #883355;
 
-  border: thin solid purple;
-
   &:focus {
     outline: none;
   }

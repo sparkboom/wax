@@ -2,14 +2,40 @@
 
 import * as AutoComplete from './auto-complete';
 import * as Types from '../../../types';
-
-// Types
-
-export type Tokenizer = Generator<Types.Token,void,void>;
+import shortid from 'shortid';
 
 // Code
 
 const UNICODE_OBJECT_REPLACEMENT_CHARACTER = '\uFFFC';
+
+const CaretToken = {
+  text: '',
+  type: 'CARET',
+  isSelected:true};
+
+const FinToken = {
+  text: '',
+  type: 'FIN'};
+
+const createSuggestionToken = suggestions => ({
+  type: 'SUGGESTION',
+  text: '',
+  isSelected:false,
+  suggestions,
+});
+
+const createCommandToken = method => ({
+  type: 'COMMAND',
+  text: UNICODE_OBJECT_REPLACEMENT_CHARACTER,
+  method,
+  commandKey: shortid.generate(),
+});
+
+const createSelectedTextToken = text => ({
+  type: 'TEXT',
+  text,
+  isSelected: true,
+});
 
 /**
 * Scans in character, by character through a string, yielding each one in turn.
@@ -18,14 +44,11 @@ const UNICODE_OBJECT_REPLACEMENT_CHARACTER = '\uFFFC';
 * A caret object is returned as well to help position it when the selection length is 0
 */
 // @ $FlowFixMe
-function* scanner(text:string, selectStart:number, selectEnd:number):Tokenizer{
+function* scanner(text:string, selectStart:number, selectEnd:number):Iterable<Types.Token>{
   for(let i=0; i<=text.length; i++){
 
     if (selectStart===selectEnd && i===selectStart){
-      yield {
-        text: '',
-        type: 'CARET',
-        isSelected:true};
+      yield CaretToken;
     }
 
     if (i<text.length){
@@ -37,18 +60,14 @@ function* scanner(text:string, selectStart:number, selectEnd:number):Tokenizer{
       };
     }
   }
-  yield {
-    type: 'FIN',
-    text: '',
-  };
+  yield FinToken;
 }
 
 /**
-* tokenizes styled items in the input field.
+* Tokenizes styled items in the input field.
 *
 */
-// $FlowFixMe
-export function* tokenize(text:string, tokens:Array<Types.Token>, selectStart:number, selectEnd:number):Tokenizer{
+export function* tokenize(text:string, tokens:Array<Types.Token>, selectStart:number, selectEnd:number):Generator<Types.Token,void,void>{
   const currentCommandTokens = tokens.filter(t => t.type==='COMMAND');
   let token = null;
   for(let newScan of scanner(text, selectStart, selectEnd)){
@@ -84,26 +103,22 @@ export function* tokenize(text:string, tokens:Array<Types.Token>, selectStart:nu
   yield token;
 }
 
-//export function* tokenizeWithSuggestion(tokens:Array<Types.Token>):Tokenizer{
-// $FlowFixMe
-export function* tokenizeWithSuggestion(context, tokens = []){
+export function* tokenizeWithSuggestion(context:string[], tokens:Types.Token[] =[], methodsByKey:{[string]:Types.Method} = {}):Iterable<Types.Token>{
 
-  let prevTokens = [null, null];
+  const isCaret = t => t && t.type==='CARET';
+  const isText = t => t && t.type==='TEXT';
+  const isAfterTextThenCaret = ts => isText(ts[0]) && isCaret(ts[1]);
+  const doesNextTextTokenBeginWithSpace = t => isText(t) && (t.text.length===0 || t.text[0].match(/\s/)!==null );
+
+  let prevTokens:Array<?Types.Token> = [null, null];
   for(let token of tokens){
-    if (tokens && (token.type==='TEXT' || token.type==='FIN')
-          && prevTokens[1] && prevTokens[1].type==='CARET'
-          && prevTokens[0] && prevTokens[0].type==='TEXT'){
+
+    if (isAfterTextThenCaret(prevTokens) && (token.type==='FIN' || doesNextTextTokenBeginWithSpace(token))){
 
       // if last 2 tokens was caret and text, and current is text,
       // we may be able to replace some forthcoming text with prediction
-      let suggestions = AutoComplete.suggest(context, prevTokens[0].text);
-      console.log('suggestions', suggestions);
-      let suggestionToken = {
-        type: 'SUGGESTION',
-        text: '',
-        isSelected:false,
-        suggestions,
-      };
+      let suggestions = AutoComplete.suggest(context, prevTokens[0].text, methodsByKey);
+      let suggestionToken = createSuggestionToken(suggestions);
       yield suggestionToken;
     }
 
@@ -111,12 +126,15 @@ export function* tokenizeWithSuggestion(context, tokens = []){
     prevTokens.shift();
     prevTokens.push(token);
   }
+
+  // shows when dot or alphanumeric shows must be whitespace or
+  //
 }
 
 /**
 *
 */
-export function* mergeTextTokens(tokens:Array<Types.Token>):Tokenizer{
+export function* mergeTextTokens(tokens:Iterable<Types.Token>):Iterable<Types.Token>{
 
   let textToken = null
   for(let token of tokens){
@@ -138,4 +156,49 @@ export function* mergeTextTokens(tokens:Array<Types.Token>):Tokenizer{
   if (textToken) {
     yield textToken;
   }
+}
+
+
+export function* completeSuggestion(tokens:Iterable<Types.Token>, method:Types.Method):Generator<Types.Token, void, void>{
+
+  let prevToken = null;
+  for(let token of tokens){
+    if(token.type === 'CARET'){
+      yield createCommandToken(method);
+    }else if(!!prevToken){
+      yield prevToken;
+    }
+    prevToken = token;
+  }
+  yield prevToken;
+}
+
+export function* commandsPriorToCaret(tokens:Iterable<Types.Token>):Iterable<Types.Token>{
+
+  let commands = [];
+  for(let token of tokens){
+    if (token.type === 'COMMAND'){
+      commands.push(token);
+    } else if (token.type === 'CARET'){
+      yield* commands;
+    }else {
+      commands = [];
+    }
+  }
+}
+
+export function* expandSelectedCommandTokens(tokens:Iterable<Types.Token>):Iterable<Types.Token>{
+
+  for(let token of tokens){
+    if (token.type === 'COMMAND' && token.isSelected === true){
+      yield createSelectedTextToken(`.${token.method.methodName}`);
+    } else {
+      yield token;
+    }
+  }
+}
+
+export function* expandSelectCommandAndMergeTokens(tokens:Array<Types.Token>):Generator<Types.Token, void, void> {
+
+  yield*  mergeTextTokens(expandSelectedCommandTokens(tokens));
 }

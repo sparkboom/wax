@@ -2,21 +2,20 @@
 
 import * as React from 'react';
 import {withTheme} from 'styled-components';
-import {Caret, InnerRichInput, InlineTextBlock, HiddenInput, PredictionInlineTextBlock, TokenInlineTextBlock} from './private';
-import classNames from 'classnames';
+import {InnerRichInput, HiddenInput} from './private';
 import keycode from 'keycode';
 import * as Selection from './lib/selection';
 import * as Types from '../../types';
-import {tokenize, tokenizeWithSuggestion, mergeTextTokens} from './lib/tokenizer';
+import * as Tokenizer from './lib/tokenizer';
 import range from 'lodash/range';
 import shortid from 'shortid';
-import get from 'lodash/get';
 
 // Types
 
 export type Props = {
   context:Array<string>,
   tokens:Array<Types.Token>,
+  methods:{[string]:Types.Method},
   onSetTokens: Array<Types.Token>=>void,
   onExecuteActions: Array<Types.Token>=>void,
   theme: any,
@@ -29,7 +28,10 @@ type State = {
 // Code
 
 class RichInput extends React.Component<Props, State> {
-  inputRef : ?Selection.SelectableInputElement = null;
+
+  inputRef:?Selection.SelectableInputElement = null;
+  selectedSuggestion:?Types.Suggestion = null;
+
   constructor(props : Props){
     super(props);
     this.state = {
@@ -37,7 +39,7 @@ class RichInput extends React.Component<Props, State> {
     };
   }
 
-  setTokens = (text, tokens, selectionStart, selectionEnd) => this.props.onSetTokens([...tokenize(text, tokens, selectionStart, selectionEnd)]);
+  setTokens = (text, tokens, selectionStart, selectionEnd) => this.props.onSetTokens([...Tokenizer.tokenize(text, tokens, selectionStart, selectionEnd)]);
 
   setFocus = (event:Event) => {
     if (document.activeElement === this.inputRef){
@@ -71,46 +73,27 @@ class RichInput extends React.Component<Props, State> {
     this.inputRef && this.setTokens(this.inputRef.value, tokens, index, index);
   };
 
-  onInputKeyDown = (event:KeyboardEvent, suggestion:?Types.Suggestion) => {
+  onInputKeyDown = (event:KeyboardEvent) => {
 
     let code:string = keycode(event);
     let {tokens, onSetTokens, onExecuteActions} = this.props;
-    let caretTokenIndex = tokens.findIndex(t => t.type==='CARET');
 
-    if (code === 'enter' && suggestion){
-      tokens = [...tokens];
-      tokens[caretTokenIndex-1] = {
-        type: 'COMMAND',
-        text: '\uFFFC',
-        command: suggestion.command,
-        action: suggestion.action,
-        key: shortid.generate(),
-      };
-      onSetTokens(tokens);
+    if (code === 'enter' && !!this.selectedSuggestion){
+
+      const method = this.props.methods[this.selectedSuggestion.methodKey];
+      const newTokens = [...Tokenizer.completeSuggestion(tokens, method)];
+      onSetTokens(newTokens);
     }
-    else if (code === 'enter' && caretTokenIndex>0){
-      let i = caretTokenIndex;
-      while(i>0 && tokens[i-1].type === 'COMMAND'){
-        i--;
-      }
-      let commands = tokens.slice(i, caretTokenIndex);
+    else if (code === 'enter'){
+
+      const commands = [...Tokenizer.commandsPriorToCaret(tokens)];
       if (commands.length>0){
         onSetTokens(tokens);
         onExecuteActions(commands);
       }
     }else if(code === 'esc'){
-      let newTokens = tokens.map(t => {
-        if (t.type === 'COMMAND' && t.isSelected === true){
-          return {
-            type: 'TEXT',
-            text: t.command,
-            isSelected: true,
-          }
-        }else {
-          return t;
-        }
-      })
-      newTokens = [...mergeTextTokens(newTokens)];
+
+      const newTokens = [...Tokenizer.expandSelectCommandAndMergeTokens(tokens)];
       onSetTokens(newTokens);
     }
   };
@@ -126,43 +109,28 @@ class RichInput extends React.Component<Props, State> {
   }
 
   render() {
-    let {tokens, context} = this.props;
+    let {tokens, context, methods} = this.props;
     tokens = tokens || [];
-    const innerRichInputClassName : string = classNames({
-      focussed: this.state.isFocussed
-    });
 
-    const tokensWithSuggestion = [...tokenizeWithSuggestion(context, tokens)] || [];
-    const suggestionToken:?Types.SuggestionToken = tokensWithSuggestion.find(t => t.type === 'SUGGESTION');
-    const suggestion:?Types.Suggestion = get(suggestionToken, 'suggestions[0]') || null;
-    const inlineElements = tokensWithSuggestion.map((t,i) => {
-      return {
-        'FIN': null,
-        'COMMAND': (<TokenInlineTextBlock key={i} isSelected={t.isSelected}>{t.command}</TokenInlineTextBlock>),
-        'CARET': (<Caret key={i} />),
-        'SUGGESTION': (<PredictionInlineTextBlock key={i} isSelected={t.isSelected}>{ suggestion && suggestion.prediction }</PredictionInlineTextBlock>),
-        'TEXT': (<InlineTextBlock
-                        key={i}
-                        isSelected={t.isSelected}
-                        onTextSelect={(charIndex:number) => this.setSelection(i, charIndex)}>
-                        {t.text}
-                </InlineTextBlock>),
-      }[t.type] || null;
-    });
+    const tokensWithSuggestion = [...Tokenizer.tokenizeWithSuggestion(context, tokens, methods)] || [];
 
     const inputValue:string = tokens.reduce((a,v)=> a+v.text, '');
+    const isFocussed = this.state.isFocussed;
 
     return (
       <div style={{width: '100%'}} onClick={this.setFocus} >
-        <InnerRichInput className={innerRichInputClassName}>
-          {inlineElements}
-        </InnerRichInput>
+        <InnerRichInput
+            isFocussed={isFocussed}
+            tokens={tokensWithSuggestion}
+            onTextSelect={(tokenIndex:number, charIndex:number) => this.setSelection(tokenIndex, charIndex)}
+            onSelectSuggestion={suggestion=> this.selectedSuggestion = suggestion}
+          />
 
         <HiddenInput
           innerRef={ref => this.inputRef = ref}
           onFocus={() => this.setState({isFocussed:true})}
           onBlur={() => this.setState({isFocussed:false})}
-          onKeyDown={(event:any) => this.onInputKeyDown(event, suggestion)}
+          onKeyDown={this.onInputKeyDown}
           onChange={() => this.onInputChange()}
           value={inputValue}  />
 

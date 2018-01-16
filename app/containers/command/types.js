@@ -2,18 +2,12 @@
 
 // Fundamentals
 export type Suggestion = {
-  command?:string,
-  action?:{
-  },
-  prediction:?string,
-  interfaceKey?:string,
-  matched:boolean,
+  predictionText:string,
+  methodKey:string,
 };
 
 export type BaseToken = {
-  key?:string,
   text:string,
-  isSelected:boolean,
 };
 export type FinToken = {
   type:'FIN',
@@ -21,13 +15,13 @@ export type FinToken = {
 };
 export type TextToken = BaseToken & {
   type:'TEXT',
+  isSelected:boolean,
 };
 export type CommandToken = BaseToken & {
   type:'COMMAND',
-  command:string,
-  action:{
-    type:string
-  }
+  method:Method,
+  isSelected:boolean,
+  commandKey:string,
 };
 export type CaretToken = {
   type:'CARET',

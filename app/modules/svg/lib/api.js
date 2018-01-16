@@ -75,7 +75,7 @@ export default function api(){
     apiKey: apiSvgKey,
     interfaceName : 'svg',
     interfaceType: 'CLASS',
-    methodKeys: [addCircleMethod.methodKey, addSquareMethod.methodKey, addSquareMethod.methodKey]
+    methodKeys: [addCircleMethod.methodKey, addSquareMethod.methodKey, addTriangleMethod.methodKey]
   };
 
   const interfaceSvgShape = {

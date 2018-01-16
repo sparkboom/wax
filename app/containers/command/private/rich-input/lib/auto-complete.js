@@ -4,8 +4,8 @@ import * as Types from '../../../types';
 // Types
 
 type TraverseState = {
-  text:string,
-  predictions:Array<Types.Suggestion>,
+  queryText:string,
+  suggestions:Array<Types.Suggestion>,
 };
 
 // Code
@@ -19,14 +19,14 @@ export const loadApi = (api:Types.Package) => {
   api.api.interfaceKeys.forEach( iKey => {
     const iface = api.interfaces.find( i => i.interfaceKey === iKey);
     iface && iface.methodKeys.forEach( mKey => {
-      const method = api.methods.find( i => i.interfaceKey === iKey);
-      method && indexMethod(iface, method.methodName, method.action);
+      const method = api.methods.find( m => m.methodKey === mKey);
+      method && indexMethod(iface, method.methodName, method.methodKey);
     })
   });
 };
 
-
-const indexMethod:(Types.Interface,string,any)=>void = (iface, methodName, action) => {
+type IndexMethod = (Types.Interface,string,any)=>void;
+const indexMethod:IndexMethod = (iface, methodName, methodKey) => {
   let ptr:any = MethodTreeByInterface;
   if(!ptr[iface.interfaceKey]){
     ptr[iface.interfaceKey] = {
@@ -35,62 +35,67 @@ const indexMethod:(Types.Interface,string,any)=>void = (iface, methodName, actio
   }
   ptr = ptr[iface.interfaceKey];
 
-  for(let ch of methodName){
+  const fullMethodName = '.'+methodName;
+  for(let ch of fullMethodName){
     if (!ptr[ch]){
       ptr[ch] = {};
     }
     ptr = ptr[ch];
   }
   ptr[ExecMarker] || (ptr[ExecMarker] = []);
-  ptr[ExecMarker].push(action);
+  ptr[ExecMarker].push(methodKey);
   console.log('MethodTreeByInterface', MethodTreeByInterface);
 };
 
-function traverseCommandTree(ptr:any, prediction:string, state:TraverseState){
+function traverseCommandTree(ptr:any, predictionText:string, state:TraverseState){
   for(let ch in ptr){
     if (ch === ExecMarker){
-      for(let action of ptr[ExecMarker]){
-        state.predictions.push({command:state.text+prediction, prediction, action, matched:true});
+      for(let methodKey of ptr[ExecMarker]){
+        state.suggestions.push({predictionText, methodKey});
       }
     } else {
-      traverseCommandTree(ptr[ch], prediction+ch, state);
+      traverseCommandTree(ptr[ch], predictionText+ch, state);
     }
   }
 }
 
-type Predictor = (Array<string>,string)=>Array<Types.Suggestion>;
-export const suggest:Predictor = (context=[], text) => {
-  let suggestions = [];
-  context.forEach(interfaceKey => {
-    let ifaceSuggestions = suggestionsForInterface(interfaceKey, text);
-    if (ifaceSuggestions !== NoMatch){
-      ifaceSuggestions.forEach(s => s.interfaceKey = interfaceKey);
-      suggestions = suggestions.concat(ifaceSuggestions);
-    }
-  });
-  return suggestions;
-}
-
-function suggestionsForInterface(interfaceKey:string, text:string):Array<Types.Suggestion> {
-  console.log('predict', interfaceKey, text);
-
+function suggestionsForInterface(interfaceKey:string, queryText:string):Array<Types.Suggestion> {
   let ptr:any = MethodTreeByInterface[interfaceKey];
   let ch;
 
   // Crawl through the 'linked list over the text'
-  for(ch of text){
+  for(ch of queryText){
     if (!ptr[ch]){
-      return [NoMatch];
+      return [];
     }
     ptr=ptr[ch];
   }
 
   // Now search for possible predictions
   let state:TraverseState = {
-    text,
-    predictions:[],
+    queryText,
+    suggestions:[],
   };
   traverseCommandTree(ptr, '', state);
 
-  return state.predictions;
+  return state.suggestions;
+}
+
+type Predictor = (Array<string>,string, {[string]:Types.Method})=>Array<Types.Suggestion>;
+
+export const suggest:Predictor = (context=[], queryText, allMethodsByKey) => {
+  // context is an array of interface keys. These are the selected interfaces relevant for us.
+
+  let suggestions = [];
+  for(let interfaceKey of context){
+    let ifaceSuggestions = suggestionsForInterface(interfaceKey, queryText);
+
+    if (ifaceSuggestions.length> 0){
+
+      ifaceSuggestions.forEach(s => allMethodsByKey[s.methodKey].interfaceKey === interfaceKey);
+      suggestions = suggestions.concat(ifaceSuggestions);
+    }
+  }
+
+  return suggestions;
 }
