@@ -1,6 +1,7 @@
 import {interfaceNodeKey, interfaceParentNodeKey, interfaceChildNodeKey, interfaceGlobalKey} from '../canvas/lib/api';
 import {createSelector} from 'reselect';
-import merge from 'lodash/merge';
+import mergeWith from 'lodash/mergeWith';
+import get from 'lodash/get';
 import intersection from 'lodash/intersection';
 
 // Code
@@ -44,27 +45,40 @@ const getClassInterfacesForSelectedObjectsByItemKey = createSelector(
 
 // Selector - Get Instance Interfaces for selection
 
-const getObject = (objects, itemKey) => objects && itemKey && objects[itemKey];
+const getObject = (objects, itemKey) => objects && objects[itemKey];
 const getInstanceApiKey = object => object && object.instanceApiKey;
-const getInstanceInterfaceFromApi = (apis, apiKey) => apis && apiKey && apis[apiKey].interfaces[0];
-const getInstanceInterfaceKeyByItemKey = (itemKey, objects, apis) => getInstanceInterfaceFromApi(apis, getInstanceApiKey(getObject(objects, itemKey)));
+const getInstanceInterfaceFromApi = (apis, apiKey) => get(apis,[apiKey, 'interfaceKeys', 0]);
+
 const getInstanceInterfacesForSelectedObjectByItemKey = createSelector(
-      getApis,
       getObjects,
+      getApis,
       getSelection,
-      (objects, apis, selection=[]) => selection.reduce((acc,itemKey) => {
-        acc[itemKey] = getInstanceInterfaceKeyByItemKey(itemKey, objects, apis);
-        return acc;
-      }, {}));
+      (objects, apis, selection=[]) => {
+
+        const instanceInterfaceKey = selection.reduce((acc,itemKey) => {
+
+          const obj = getObject(objects, itemKey);
+          const instanceApiKey = getInstanceApiKey(obj);
+          const instanceInterfaceFromApi = getInstanceInterfaceFromApi(apis, instanceApiKey);
+          acc[itemKey] = instanceInterfaceFromApi;
+          return acc;
+        }, {});
+
+        console.log('getInstanceInterfacesForSelectedObjectByItemKey', instanceInterfaceKey);
+        return instanceInterfaceKey;
+      });
 
 // Combine Interfaces
+
+// When we merge, we want to concat arrays, otherwise use default behaviour
+const mergeCustomizer = (objValue, srcValue) => Array.isArray(objValue)? objValue.concat(srcValue):undefined;
 
 export const currentContext = createSelector(
       getSelectedNodeInterfacesByItemKey,
       getClassInterfacesForSelectedObjectsByItemKey,
       getInstanceInterfacesForSelectedObjectByItemKey,
       (nodeInterfaceKeys, classInterfaceKeys, instanceInterfaceKeys) => {
-        const supportedInterfacesByItemKey = merge({}, nodeInterfaceKeys, classInterfaceKeys, instanceInterfaceKeys);
+        const supportedInterfacesByItemKey = mergeWith({}, nodeInterfaceKeys, classInterfaceKeys, instanceInterfaceKeys, mergeCustomizer);
         const commonInterfaceKeys = intersection(Object.values(supportedInterfacesByItemKey));
         return commonInterfaceKeys[0];
       },
