@@ -65,6 +65,23 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
         }
       };
 
+    case ActionTypes.CreateMethod:
+      const {interfaceKey, methodKey} = action.method;
+      const iface = state.interfaces[interfaceKey];
+      return {
+        ...state,
+        interfaces:{
+          ...state.interfaces,
+          [interfaceKey]:{
+            ...iface,
+            methodKeys:[...iface.methodKeys, methodKey],
+          },
+        },
+        methods:{
+          ...state.methods,
+          [methodKey]: action.method,
+        }
+      };
     default:
       (action: empty);
       return state;

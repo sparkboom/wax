@@ -28,8 +28,10 @@ class CommandLine extends React.Component<Props> {
     let {tokens, methods, currentContext, contextInterfaces, setTokens, executeInstructions} = this.props;
     return (
     <div>
-      <div style={{position:'fixed', width:'100%', top: 0, height:'100px'}} >
-        { `Interfaces: ${contextInterfaces && contextInterfaces.map( i => ` ${i.interfaceName} ` )}` }
+      <div style={{position:'fixed', width:'100%', top: 0, height:'100px', fontSize:'12px'}} >
+        { contextInterfaces && contextInterfaces.map(
+          (i, key) => (   <div key={key}>{!i? '<null>':`${i.interfaceName}(${i.interfaceKey})`}</div>   )
+        )}
       </div>
       <RichInputContainer>
 

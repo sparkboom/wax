@@ -61,6 +61,9 @@ function traverseCommandTree(ptr:any, predictionText:string, state:TraverseState
 
 function suggestionsForInterface(interfaceKey:string, queryText:string):Array<Types.Suggestion> {
   let ptr:any = MethodTreeByInterface[interfaceKey];
+  if (!ptr){
+    return [];
+  }
   let ch;
 
   // Crawl through the 'linked list over the text'
