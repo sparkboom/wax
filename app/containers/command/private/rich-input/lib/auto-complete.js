@@ -16,6 +16,7 @@ const ExecMarker = 'EXEC_MARKER';
 const InterfaceNameMarker = 'IFACE_NAME_MARKER';
 
 export const loadApi = (api:Types.Package) => {
+  console.log('load api',api);
   api.api.interfaceKeys.forEach( iKey => {
     const iface = api.interfaces.find( i => i.interfaceKey === iKey);
     iface && iface.methodKeys.forEach( mKey => {
@@ -44,54 +45,49 @@ const indexMethod:IndexMethod = (iface, methodName, methodKey) => {
   }
   ptr[ExecMarker] || (ptr[ExecMarker] = []);
   ptr[ExecMarker].push(methodKey);
-  console.log('MethodTreeByInterface', MethodTreeByInterface);
 };
 
-function traverseCommandTree(ptr:any, predictionText:string, state:TraverseState){
+function* traverseCommandTree(ptr:any, predictionText:string){
   for(let ch in ptr){
     if (ch === ExecMarker){
-      for(let methodKey of ptr[ExecMarker]){
-        state.suggestions.push({predictionText, methodKey});
-      }
+      yield* ptr[ExecMarker].map(methodKey => ({predictionText, methodKey}));
     } else {
-      traverseCommandTree(ptr[ch], predictionText+ch, state);
+      yield* traverseCommandTree(ptr[ch], predictionText+ch);
     }
   }
 }
 
-function suggestionsForInterface(interfaceKey:string, queryText:string):Array<Types.Suggestion> {
+function* suggestionsForInterface(interfaceKey:string, queryText:string):Generator<Types.Suggestion, void, void> {
   let ptr:any = MethodTreeByInterface[interfaceKey];
   if (!ptr){
-    return [];
+    return;
   }
-  let ch;
-
   // Crawl through the 'linked list over the text'
-  for(ch of queryText){
+  for(let ch of queryText){
     if (!ptr[ch]){
-      return [];
+      return;
     }
     ptr=ptr[ch];
   }
 
-  // Now search for possible predictions
-  let state:TraverseState = {
-    queryText,
-    suggestions:[],
-  };
-  traverseCommandTree(ptr, '', state);
+  yield* traverseCommandTree(ptr, '');
+}
 
-  return state.suggestions;
+type PredictorGen = (Array<string>,string, {[string]:Types.Method})=>Generator<Types.Suggestion, void, void>;
+export function* suggestGen(interfaceKeys:string[], queryText:string):Generator<Types.Suggestion, void, void> {
+
+  for(let interfaceKey of interfaceKeys){
+    yield* suggestionsForInterface(interfaceKey, queryText);
+  }
 }
 
 type Predictor = (Array<string>,string, {[string]:Types.Method})=>Array<Types.Suggestion>;
-
 export const suggest:Predictor = (context=[], queryText, allMethodsByKey) => {
   // context is an array of interface keys. These are the selected interfaces relevant for us.
 
   let suggestions = [];
   for(let interfaceKey of context){
-    let ifaceSuggestions = suggestionsForInterface(interfaceKey, queryText);
+    let ifaceSuggestions = [...suggestionsForInterface(interfaceKey, queryText)];
 
     if (ifaceSuggestions.length> 0){
 

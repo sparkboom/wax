@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {RichInput, RichInputContainer} from './private';
+import {RichInput, RichInputContainer, ContextList} from './private';
 import {currentContext, contextInterfaces} from './selectors';
 import * as Actions from './actions';
 import * as AppActions from '../app/actions';
@@ -28,11 +28,7 @@ class CommandLine extends React.Component<Props> {
     let {tokens, methods, currentContext, contextInterfaces, setTokens, executeInstructions} = this.props;
     return (
     <div>
-      <div style={{position:'fixed', width:'100%', top: 0, height:'100px', fontSize:'12px'}} >
-        { contextInterfaces && contextInterfaces.map(
-          (i, key) => (   <div key={key}>{!i? '<null>':`${i.interfaceName}(${i.interfaceKey})`}</div>   )
-        )}
-      </div>
+      <ContextList contextInterfaces={contextInterfaces} />
       <RichInputContainer>
 
         <RichInput

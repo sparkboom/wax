@@ -49,7 +49,7 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
           ...state.methods,
           ...newMethodsByKey,
         }
-      }
+      };
 
     case ActionTypes.UnloadApi:
       return state;

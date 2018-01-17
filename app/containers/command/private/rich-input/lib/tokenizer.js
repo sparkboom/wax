@@ -24,11 +24,12 @@ const createSuggestionToken = suggestions => ({
   suggestions,
 });
 
-const createCommandToken = method => ({
+const createCommandToken = (method:Types.Method) => ({
   type: 'COMMAND',
   text: UNICODE_OBJECT_REPLACEMENT_CHARACTER,
   method,
   commandKey: shortid.generate(),
+  isSelected:false,
 });
 
 const createSelectedTextToken = text => ({
@@ -68,7 +69,8 @@ function* scanner(text:string, selectStart:number, selectEnd:number):Iterable<Ty
 *
 */
 export function* tokenize(text:string, tokens:Array<Types.Token>, selectStart:number, selectEnd:number):Generator<Types.Token,void,void>{
-  const currentCommandTokens = tokens.filter(t => t.type==='COMMAND');
+  const currentCommandTokens = ((tokens.filter(t => t.type==='COMMAND'):any[]):Types.CommandToken[]);
+
   let token = null;
   for(let newScan of scanner(text, selectStart, selectEnd)){
 
@@ -100,24 +102,28 @@ export function* tokenize(text:string, tokens:Array<Types.Token>, selectStart:nu
 
     throw new Error(`Could not parse text`);
   }
-  yield token;
+  if (!!token){
+    yield token;
+  }
 }
 
 export function* tokenizeWithSuggestion(context:string[], tokens:Types.Token[] =[], methodsByKey:{[string]:Types.Method} = {}):Iterable<Types.Token>{
 
-  const isCaret = t => t && t.type==='CARET';
-  const isText = t => t && t.type==='TEXT';
+  const isCaret = t => !!t && t.type==='CARET';
+  const isText = t => !!t && t.type==='TEXT';
   const isAfterTextThenCaret = ts => isText(ts[0]) && isCaret(ts[1]);
   const doesNextTextTokenBeginWithSpace = t => isText(t) && (t.text.length===0 || t.text[0].match(/\s/)!==null );
 
   let prevTokens:Array<?Types.Token> = [null, null];
   for(let token of tokens){
 
-    if (isAfterTextThenCaret(prevTokens) && (token.type==='FIN' || doesNextTextTokenBeginWithSpace(token))){
+    if (isAfterTextThenCaret(prevTokens) && prevTokens[0] && (token.type==='FIN' || doesNextTextTokenBeginWithSpace(token))){
 
       // if last 2 tokens was caret and text, and current is text,
       // we may be able to replace some forthcoming text with prediction
-      let suggestions = AutoComplete.suggest(context, prevTokens[0].text, methodsByKey);
+      let suggestions = [...AutoComplete.suggestGen(context, prevTokens[0].text)];
+
+      //let suggestions = AutoComplete.suggest(context, prevTokens[0].text, methodsByKey);
       let suggestionToken = createSuggestionToken(suggestions);
       yield suggestionToken;
     }
@@ -164,13 +170,16 @@ export function* completeSuggestion(tokens:Iterable<Types.Token>, method:Types.M
   let prevToken = null;
   for(let token of tokens){
     if(token.type === 'CARET'){
-      yield createCommandToken(method);
+      const cmdToken:Types.CommandToken = createCommandToken(method);
+      yield cmdToken;
     }else if(!!prevToken){
       yield prevToken;
     }
     prevToken = token;
   }
-  yield prevToken;
+  if (prevToken){
+    yield prevToken;
+  }
 }
 
 export function* commandsPriorToCaret(tokens:Iterable<Types.Token>):Iterable<Types.Token>{
