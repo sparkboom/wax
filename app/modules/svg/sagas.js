@@ -1,6 +1,8 @@
 // @flow
 
-import {takeEvery, put} from 'redux-saga/effects';
+import {takeEvery, put, select} from 'redux-saga/effects';
+
+import {getName} from '../../lib/name-generator';
 
 import * as AppActionTypes from '../../containers/app/action-types';
 
@@ -8,7 +10,8 @@ import * as Actions from './actions';
 import * as CommandActions from '../../containers/command/actions';
 import * as AppActions from '../../containers/app/actions';
 import * as CanvasActions from '../../containers/canvas/actions';
-import api from './lib/api';
+import api, {interfaceSvgKey, interfaceSvgShapeKey} from './lib/api';
+import shortid from 'shortid';
 
 // Types
 
@@ -18,42 +21,46 @@ type VoidGenerator = Generator<void, void, void>;
 
 function* init(initAction){
 
-  // Register methods for SVG
-  const svgApi = api();
-  let loadSvgApiAction = CommandActions.loadApi(svgApi);
+  let loadSvgApiAction = CommandActions.loadApi(api);
   yield put(loadSvgApiAction);
 
   // Create Svg item by default
-  let createItemAction = AppActions.createItem({
-    name:'svg',
-    parentNodeKey: 'root'
-  },{
-    classInterfaceKeys:[svgApi.api.interfaceKeys[0]]
-  },{
-    moduleKey:'svg',
-    classKey:'svg',
-    properties: {}
-  });
-  yield put(createItemAction);
+  let createSvgction = {
+    type:'ALL:CREATE_ITEM',
+    parentItemKey: ['root'],
+    itemKey: shortid.generate(),
+    name: 'svg',
+    class: interfaceSvgKey,
+  };
+  yield put(createSvgction);
 
-  const selectCanvasAction = CanvasActions.selectNodes([createItemAction.itemKey]);
+  const selectCanvasAction = CanvasActions.selectNodes([createSvgction.itemKey]);
   yield put(selectCanvasAction);
 }
 
+function* willCreateShape(willCreateShapection){
+  const state = yield select();
 
-function* createSvgItem(createItemAction:AppActions.CreateItem){
+  if (state.canvas.selection.length===1){
+    const{type, ...properties} = willCreateShapection;
 
-  if (createItemAction.item.moduleKey !== 'svg'){
-    return;
-  }
+    let createShapection = {
+      type:'ALL:CREATE_ITEM',
+      parentItemKey: state.canvas.selection[0],
+      itemKey: shortid.generate(),
+      name: getName(willCreateShapection.shape),
+      class: interfaceSvgShapeKey,
+      properties,
+    };
+    yield put(createShapection);
 
-  if(createItemAction.item.classKey === 'shape'){
-    const createShapeAction = Actions.createShape(createItemAction.itemKey, createItemAction.item.properties.shape);
-    yield put(createShapeAction);
+  }else{
+
+    //failure steps
   }
 }
 
 export default function* svgSaga():Generator<void, void, void>{
   yield takeEvery(AppActionTypes.Init, init);
-  yield takeEvery(AppActionTypes.CreateItem, createSvgItem);
+  yield takeEvery('SVG:WILL_CREATE_SHAPE', willCreateShape);
 }

@@ -49,7 +49,7 @@ const methodSelectAll = {
 const interfaceCanvas = {
   interfaceKey: interfaceCanvasKey,
   apiKey: apiCanvasKey,
-  interfaceName : 'canvas',
+  interfaceName : '#canvas',
   interfaceType: 'CLASS',
   methodKeys: [],
 };
@@ -57,7 +57,7 @@ const interfaceCanvas = {
 const interfaceNode = {
   interfaceKey: interfaceNodeKey,
   apiKey: apiCanvasKey,
-  interfaceName: 'node',
+  interfaceName: '#node',
   interfaceType: 'CLASS',
   methodKeys: []
 };
@@ -65,7 +65,7 @@ const interfaceNode = {
 const interfaceParentNode = {
   interfaceKey: interfaceParentNodeKey,
   apiKey: apiCanvasKey,
-  interfaceName: 'parentnode',
+  interfaceName: '#parentnode',
   interfaceType: 'CLASS',
   methodKeys: [methodSelectChildren.methodKey, methodSelectDescendents.methodKey]
 };
@@ -73,7 +73,7 @@ const interfaceParentNode = {
 const interfaceChildNode = {
   interfaceKey: interfaceChildNodeKey,
   apiKey: apiCanvasKey,
-  interfaceName: 'childnode',
+  interfaceName: '#childnode',
   interfaceType: 'CLASS',
   methodKeys: [methodSelectParent.methodKey],
 };
@@ -81,7 +81,7 @@ const interfaceChildNode = {
 const interfaceGlobal = {
   interfaceKey: interfaceGlobalKey,
   apiKey: apiCanvasKey,
-  interfaceName: 'global',
+  interfaceName: '#global',
   interfaceType: 'CLASS',
   methodKeys: [methodSelectAll.methodKey],
 };

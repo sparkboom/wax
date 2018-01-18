@@ -13,7 +13,6 @@ type AppReducer = (typeof State, Actions.Union) => typeof State;
 const appReducer:AppReducer = (state = State.default, action) => {
   switch (action.type) {
     case ActionTypes.Init:
-    case ActionTypes.CreateItem:
     case ActionTypes.ExecuteInstructions:
     case ActionTypes.GlobalError:
     case ActionTypes.ThrowError:

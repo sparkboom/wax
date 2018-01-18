@@ -1,12 +1,14 @@
 // @flow
 
+import type {CreateItemActionType} from '../../shared/types';
+
 // Code
 
-export const CreateNode:'CANVAS:CREATE_NODE' = 'CANVAS:CREATE_NODE';
+export const CreateNode:CreateItemActionType = 'ALL:CREATE_ITEM';
 export const SelectNode:'CANVAS:SELECT_NODE' = 'CANVAS:SELECT_NODE';
 
 // Types
 
 export type Union =
- | typeof CreateNode
- | typeof SelectNode;
+ | typeof SelectNode
+ | typeof CreateNode;

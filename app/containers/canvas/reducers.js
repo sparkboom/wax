@@ -13,28 +13,36 @@ type CanvasReducer = (State.CanvasState, Actions.Union) => State.CanvasState;
 
 const canvasReducer:CanvasReducer = (state = State.default, action) => {
   switch (action.type) {
+
     case ActionTypes.CreateNode:
-      const parentNode = state.nodes[action.parentNodeKey];
-      const {type, ...node} = action;
+      const parentNode = state.nodes[action.parentItemKey];
       return {
         ...state,
-        nodes: {
+        nodes:{
           ...state.nodes,
-          [parentNode.nodeItemKey]:{
+          [action.parentItemKey]:{
             ...parentNode,
-            childNodeKeys:[...parentNode.childNodeKeys, action.nodeItemKey],
+            childNodeKeys:[...parentNode.childNodeKeys, action.itemKey],
           },
-          [node.nodeItemKey]:node
+          [action.itemKey]:{
+            nodeItemKey:action.itemKey,
+            name:action.name,
+            parentNodeKey:action.parentItemKey,
+            childNodeKeys: [],
+          }
         }
       };
+
     case ActionTypes.SelectNode:
       return {
         ...state,
         selection: [...action.nodeItemKeys],
       };
+
     default:
       (action: empty);
       return state;
+
   }
 };
 

@@ -55,31 +55,53 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
       return state;
 
     case ActionTypes.CreateObject:
-      const {type, ...newObject} = action;
 
+      const parentInterface = state.interfaces[action.parentItemKey];
+      const {itemKey, name, parentItemKey} = action;
       return {
         ...state,
-        objects: {
-          ...state.objects,
-          [action.objectItemKey]:newObject,
-        }
-      };
-
-    case ActionTypes.CreateMethod:
-      const {interfaceKey, methodKey} = action.method;
-      const iface = state.interfaces[interfaceKey];
-      return {
-        ...state,
-        interfaces:{
+        apis: {
+          ...state.apis,
+          [itemKey]:{
+            apiKey:itemKey,
+            apiName:name,
+            objectItemKey:itemKey,
+            interfaceKeys:[itemKey],
+          }
+        },
+        interfaces: {
           ...state.interfaces,
-          [interfaceKey]:{
-            ...iface,
-            methodKeys:[...iface.methodKeys, methodKey],
+          [itemKey]:{
+            interfaceKey:itemKey,
+            apiKey:itemKey,
+            interfaceName:name,
+            methodKeys:[],
+            interfaceType:'INSTANCE',
+          },
+          [parentItemKey]:{
+            ...parentInterface,
+            methodKeys:[...parentInterface.methodKeys, itemKey],
           },
         },
-        methods:{
+        methods: {
           ...state.methods,
-          [methodKey]: action.method,
+          [itemKey]:{
+            methodKey:itemKey,
+            methodName:name,
+            interfaceKey:parentItemKey,
+            action:{
+              type:'CANVAS:SELECT_NODE',
+              nodeItemKeys:[itemKey]
+            }
+          }
+        },
+        objects:{
+          ...state.objects,
+          [itemKey]:{
+            objectItemKey:itemKey,
+            instanceApiKey:itemKey,
+            classInterfaceKeys:[action.class],
+          }
         }
       };
     default:

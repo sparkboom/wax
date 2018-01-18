@@ -24,10 +24,11 @@ export const loadApi = (api:Types.Package) => {
       method && indexMethod(iface, method.methodName, method.methodKey);
     })
   });
+  console.log('MethodTreeByInterface', MethodTreeByInterface);
 };
 
 type IndexMethod = (Types.Interface,string,any)=>void;
-const indexMethod:IndexMethod = (iface, methodName, methodKey) => {
+export const indexMethod:IndexMethod = (iface, methodName, methodKey) => {
   let ptr:any = MethodTreeByInterface;
   if(!ptr[iface.interfaceKey]){
     ptr[iface.interfaceKey] = {

@@ -1,105 +1,73 @@
 // @flow
 
-import {createItem} from '../../../containers/app/actions';
 import shortid from 'shortid';
 import * as CommandTypes from '../../../containers/command/types';
 
 // Code
 
-export default function api(){
+const apiSvgKey = shortid.generate();
+export const interfaceSvgKey = shortid.generate();
+export const interfaceSvgShapeKey = shortid.generate();
 
-  const parentNodeKey = 'svg';
-  const apiSvgKey = shortid.generate();
-  const interfaceSvgKey = shortid.generate();
-  const interfaceSvgShapeKey = shortid.generate();
+const addCircleMethod:CommandTypes.Method = {
+  methodKey: shortid.generate(),
+  methodName: 'addcircle',
+  interfaceKey: interfaceSvgKey,
+  action: {
+    type: 'SVG:WILL_CREATE_SHAPE',
+    shape: 'circle',
+  },
+};
 
-  const addCircleMethodAction = createItem({
-    category: 'cir',
-    parentNodeKey: null,
-  },{
-    classInterfaceKeys:[interfaceSvgShapeKey],
-  },{
-    classKey:'shape',
-    moduleKey:'svg',
-    properties:{
-      shape: 'circle'
-    }
-  });
-  const addCircleMethod:CommandTypes.Method = {
-    methodKey: shortid.generate(),
-    methodName: 'addcircle',
-    interfaceKey: interfaceSvgKey,
-    action: addCircleMethodAction,
-  };
+const addTriangleMethod:CommandTypes.Method = {
+  methodKey: shortid.generate(),
+  methodName: 'addtriangle',
+  interfaceKey: interfaceSvgKey,
+  action: {
+    type: 'SVG:WILL_CREATE_SHAPE',
+    shape: 'triangle',
+  },
+};
 
-  const addTriangleMethodAction = createItem({
-    category: 'tri',
-    parentNodeKey: null,
-  },{
-    classInterfaceKeys:[interfaceSvgShapeKey],
-  },{
-    classKey:'shape',
-    moduleKey:'svg',
-    properties:{
-      shape: 'triangle'
-    }
-  });
-  const addTriangleMethod = {
-    methodKey: shortid.generate(),
-    methodName: 'addtriangle',
-    interfaceKey: interfaceSvgKey,
-    action: addTriangleMethodAction
-  };
+const addSquareMethod:CommandTypes.Method = {
+  methodKey: shortid.generate(),
+  methodName: 'addsquare',
+  interfaceKey: interfaceSvgKey,
+  action: {
+    type: 'SVG:WILL_CREATE_SHAPE',
+    shape: 'square',
+  },
+};
 
-  const addSquareMethodAction = createItem({
-    category: 'sqr',
-    parentNodeKey: null,
-  },{
-    classInterfaceKeys:[interfaceSvgShapeKey],
-  },{
-    classKey:'shape',
-    moduleKey:'svg',
-    properties:{
-      shape: 'square'
-    }
-  });
-  const addSquareMethod = {
-    methodKey: shortid.generate(),
-    methodName: 'addsquare',
-    interfaceKey: interfaceSvgKey,
-    action: addSquareMethodAction
-  };
+const interfaceSvg:CommandTypes.Interface = {
+  interfaceKey: interfaceSvgKey,
+  apiKey: apiSvgKey,
+  interfaceName : '#svg',
+  interfaceType: 'CLASS',
+  methodKeys: [addCircleMethod.methodKey, addSquareMethod.methodKey, addTriangleMethod.methodKey]
+};
 
-  const interfaceSvg = {
-    interfaceKey: interfaceSvgKey,
+const interfaceSvgShape:CommandTypes.Interface = {
+  interfaceKey: interfaceSvgShapeKey,
+  interfaceName: '#shape',
+  apiKey: apiSvgKey,
+  interfaceType: 'CLASS',
+  methodKeys: []
+};
+
+export default {
+  api:{
     apiKey: apiSvgKey,
-    interfaceName : 'svg',
-    interfaceType: 'CLASS',
-    methodKeys: [addCircleMethod.methodKey, addSquareMethod.methodKey, addTriangleMethod.methodKey]
-  };
-
-  const interfaceSvgShape = {
-    interfaceKey: interfaceSvgShapeKey,
-    interfaceName: 'shape',
-    apiKey: apiSvgKey,
-    interfaceType: 'CLASS',
-    methodKeys: []
-  };
-
-  return {
-    api:{
-      apiKey: apiSvgKey,
-      apiName: 'svg',
-      interfaceKeys: [interfaceSvgKey, interfaceSvgShapeKey],
-    },
-    interfaces: [
-      interfaceSvg,
-      interfaceSvgShape,
-    ],
-    methods:[
-      addCircleMethod,
-      addTriangleMethod,
-      addSquareMethod,
-    ],
-  }
+    apiName: 'svg',
+    interfaceKeys: [interfaceSvgKey, interfaceSvgShapeKey],
+  },
+  interfaces: [
+    interfaceSvg,
+    interfaceSvgShape,
+  ],
+  methods:[
+    addCircleMethod,
+    addTriangleMethod,
+    addSquareMethod,
+  ],
 }

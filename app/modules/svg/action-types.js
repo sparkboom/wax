@@ -1,6 +1,7 @@
 // @flow
+import type {CreateItemActionType} from '../../shared/types';
 
-export const CreateShape:'SVG:CREATE_SHAPE' = 'SVG:CREATE_SHAPE';
+export const CreateShape:CreateItemActionType = 'ALL:CREATE_ITEM';
 
 export type Union =
   | typeof CreateShape;

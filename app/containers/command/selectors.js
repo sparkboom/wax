@@ -64,7 +64,6 @@ const getInstanceInterfacesForSelectedObjectByItemKey = createSelector(
           return acc;
         }, {});
 
-        console.log('getInstanceInterfacesForSelectedObjectByItemKey', instanceInterfaceKey);
         return instanceInterfaceKey;
       });
 

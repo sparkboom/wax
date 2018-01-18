@@ -122,6 +122,7 @@ export function* tokenizeWithSuggestion(context:string[], tokens:Types.Token[] =
       // if last 2 tokens was caret and text, and current is text,
       // we may be able to replace some forthcoming text with prediction
       let suggestions = [...AutoComplete.suggestGen(context, prevTokens[0].text)];
+      console.log('suggestions', suggestions);
 
       //let suggestions = AutoComplete.suggest(context, prevTokens[0].text, methodsByKey);
       let suggestionToken = createSuggestionToken(suggestions);
