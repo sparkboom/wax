@@ -13,8 +13,8 @@ import type {CommandState} from './state';
 // Types
 type CommandReduxProps = CommandState;
 type CommandDispatch = {
-  executeInstructions : Array<AppTypes.Instruction>=>void,
-  setTokens : Array<Types.Token>=>void,
+  inputChange:(?string,string,number,number)=>void,
+  setSuggestion:?Types.Suggestion=>void,
 };
 type Props = CommandConnectReduxProps & CommandDispatch;
 type CommandConnectReduxProps = {command:CommandState}=>CommandReduxProps;
@@ -25,7 +25,7 @@ type CommandConnectDispatch = ((Actions.Union|AppActions.Union)=>void)=>CommandD
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {tokens, methods, currentContext, contextInterfaces, setTokens, executeInstructions} = this.props;
+    let {tokens, contextInterfaces, inputChange, setSuggestion, suggestion} = this.props;
     return (
     <div>
       <ContextList contextInterfaces={contextInterfaces} />
@@ -33,10 +33,10 @@ class CommandLine extends React.Component<Props> {
 
         <RichInput
           tokens={tokens}
-          context={currentContext}
-          methods={methods}
-          onSetTokens={setTokens}
-          onExecuteActions={executeInstructions}
+          suggestion={suggestion}
+
+          onInputChange={inputChange}
+          onSetSuggestion={setSuggestion}
          />
       </RichInputContainer>
     </div>);
@@ -45,14 +45,13 @@ class CommandLine extends React.Component<Props> {
 
 const connectProps:CommandConnectReduxProps = state => ({
   tokens: state.command.tokens,
-  methods: state.command.methods,
-  currentContext: currentContext(state),
+  suggestion: state.command.currentSuggestion,
   contextInterfaces: contextInterfaces(state),
 });
 
 const connectDispatch:CommandConnectDispatch = dispatch => ({
-  executeInstructions: instructions => dispatch(AppActions.executeInstructions(instructions)),
-  setTokens: tokens => dispatch(Actions.setTokens(tokens)),
+  inputChange: (key, text, selectStart, selectEnd) => dispatch(Actions.inputChange(key, text, selectStart, selectEnd)),
+  setSuggestion: suggestion => dispatch(Actions.setSuggestion(suggestion)),
 });
 
 export default connect(connectProps, connectDispatch)(CommandLine);

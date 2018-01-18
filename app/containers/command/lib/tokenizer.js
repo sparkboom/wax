@@ -183,7 +183,7 @@ export function* completeSuggestion(tokens:Iterable<Types.Token>, method:Types.M
   }
 }
 
-export function* commandsPriorToCaret(tokens:Iterable<Types.Token>):Iterable<Types.Token>{
+export function* commandsPriorToCaret(tokens:Iterable<Types.Token>):Generator<Types.CommandToken, void, void>{
 
   let commands = [];
   for(let token of tokens){

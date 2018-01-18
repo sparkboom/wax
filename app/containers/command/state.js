@@ -4,6 +4,7 @@ import * as Types from './types';
 
 export type CommandState = {
   +tokens: Array<Types.Token>,
+  currentSuggestion:?Types.Suggestion,
   +apis: {},
   +interfaces: {},
   +methods: {},
@@ -14,6 +15,7 @@ export type CommandState = {
 
 const initialState:CommandState = {
   tokens: [{type:'TEXT',text:'',isSelected:false}],
+  currentSuggestion:null,
   apis: {
     'root':{
       apiKey:'root',

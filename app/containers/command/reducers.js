@@ -5,6 +5,7 @@ import * as Actions from './actions';
 import * as Types from './types';
 import remove from 'lodash/remove';
 import * as State from './state';
+import get from 'lodash/get';
 
 // Types
 
@@ -16,9 +17,18 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
   switch (action.type) {
 
     case ActionTypes.SetTokens:
+      const suggestionToken:?Types.SuggestionToken = action.tokens.find(t => t.type==='SUGGESTION');
+      const suggestion = get(suggestionToken, 'suggestions[0]') || null;
       return {
         ...state,
         tokens: action.tokens,
+        currentSuggestion: suggestion,
+      };
+
+    case ActionTypes.SetSuggestion:
+      return {
+        ...state,
+        currentSuggestion: action.suggestion,
       };
 
     case ActionTypes.FilterTokens:

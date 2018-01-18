@@ -2,6 +2,8 @@
 
 import type {CreateItemActionType} from '../../shared/types';
 
+export const InputChange:'COMMAND:INPUT_CHANGE' = 'COMMAND:INPUT_CHANGE';
+export const SetSuggestion:'COMMAND:SET_SUGGESTION' = 'COMMAND:SET_SUGGESTION';
 export const SetTokens:'COMMAND:SET_TOKENS' = 'COMMAND:SET_TOKENS';
 export const FilterTokens:'COMMAND:FILTER_TOKENS' = 'COMMAND:FILTER_TOKENS';
 export const LoadApi:'COMMAND:LOAD_API' = 'COMMAND:LOAD_API';
@@ -13,4 +15,6 @@ export type Union =
   | typeof FilterTokens
   | typeof LoadApi
   | typeof UnloadApi
-  | typeof CreateObject;
+  | typeof CreateObject
+  | typeof InputChange
+  | typeof SetSuggestion;
