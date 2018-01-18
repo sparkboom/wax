@@ -8,6 +8,10 @@ import type {CreateItemAction} from '../../shared/types';
 
 export type CreateNode = CreateItemAction;
 export type SelectNode = {+type:typeof ActionTypes.SelectNode, +nodeItemKeys:Array<string>};
+export type SelectParent = {+type:typeof ActionTypes.SelectParent};
+export type SelectRoot = {+type:typeof ActionTypes.SelectRoot};
+export type Deselect = {+type:typeof ActionTypes.Deselect};
+export type SelectChildren = {+type:typeof ActionTypes.SelectChildren};
 
 export type CreateNodeCreator = Types.Node=>CreateNode;
 export type SelectNodeCreator = Array<string>=>SelectNode;
@@ -15,7 +19,10 @@ export type SelectNodeCreator = Array<string>=>SelectNode;
 export type Union =
   | CreateNode
   | SelectNode
-  | CreateItemAction;
+  | SelectParent
+  | SelectRoot
+  | Deselect
+  | SelectChildren;
 
 // Code
 

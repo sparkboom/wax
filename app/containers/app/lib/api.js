@@ -18,6 +18,13 @@ export default function api(){
     action: Actions.throwError(new Error('This is a test error')),
   };
 
+  const addSvgMethod:CommandTypes.Method = {
+    methodKey: shortid.generate(),
+    methodName: 'addsvg',
+    interfaceKey: interfaceAppKey,
+    action: {type:'SVG:WILL_CREATE_SVG'},
+  };
+
   const interfaceApp = {
     interfaceKey: interfaceAppKey,
     apiKey: apiAppKey,
@@ -37,7 +44,8 @@ export default function api(){
       interfaceApp
     ],
     methods:[
-      throwErrorMethod
+      throwErrorMethod,
+      addSvgMethod,
     ],
   };
 }

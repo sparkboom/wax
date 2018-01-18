@@ -22,12 +22,16 @@ const getNodeInterfaces = node => ([
   (node.childNodeKeys.length>0? interfaceParentNodeKey : null),
   (!!node.parentNodeKey? interfaceChildNodeKey : null)
 ].filter(e => e!==null));
+
 const getSelectedNodeInterfacesByItemKey = createSelector(
       getNodes,
       getSelection,
       (nodes, selection=[]) => {
         const selectedNodeInterfacesByKey = selection.reduce((acc,itemKey) => {
-          acc[itemKey] = getNodeInterfaces(nodes[itemKey]);
+          const node = nodes[itemKey];
+          if (node){
+            acc[itemKey] = getNodeInterfaces(nodes[itemKey]);
+          }
           return acc;
         }, {});
         return selectedNodeInterfacesByKey;
@@ -38,10 +42,16 @@ const getSelectedNodeInterfacesByItemKey = createSelector(
 const getClassInterfacesForSelectedObjectsByItemKey = createSelector(
       getObjects,
       getSelection,
-      (objects, selection=[]) => selection.reduce((acc,itemKey) => {
-        acc[itemKey] = objects[itemKey].classInterfaceKeys;
-        return acc;
-      }, {}));
+      (objects, selection=[]) => {
+        const selectedClassInterfacesByKey = selection.reduce((acc,itemKey) => {
+          const object = objects[itemKey];
+          if (object){
+            acc[itemKey] = objects[itemKey].classInterfaceKeys;
+          }
+          return acc;
+        }, {});
+        return selectedClassInterfacesByKey;
+      });
 
 // Selector - Get Instance Interfaces for selection
 
@@ -67,7 +77,6 @@ const getInstanceInterfacesForSelectedObjectByItemKey = createSelector(
         return instanceInterfaceKey;
       });
 
-// Combine Interfaces
 
 // When we merge, we want to concat arrays, otherwise use default behaviour
 const mergeCustomizer = (objValue, srcValue) => Array.isArray(objValue)? objValue.concat(srcValue):undefined;
@@ -78,13 +87,19 @@ export const currentContext = createSelector(
       getInstanceInterfacesForSelectedObjectByItemKey,
       (nodeInterfaceKeys, classInterfaceKeys, instanceInterfaceKeys) => {
         const supportedInterfacesByItemKey = mergeWith({}, nodeInterfaceKeys, classInterfaceKeys, instanceInterfaceKeys, mergeCustomizer);
-        const commonInterfaceKeys = intersection(Object.values(supportedInterfacesByItemKey));
-        return commonInterfaceKeys[0];
+        const commonInterfaceKeys = intersection(...Object.values(supportedInterfacesByItemKey));
+
+        return commonInterfaceKeys;
       },
 );
 
 export const contextInterfaces = createSelector(
       currentContext,
       getInterfaces,
-      (interfaceKeys, interfaces) => interfaceKeys && interfaceKeys.map( k => interfaces[k])
-);
+      (interfaceKeys, interfaces) => {
+        console.log('contextInterfaces interfaceKeys', interfaceKeys);
+        if (!interfaceKeys){
+          return [];
+        }
+        return interfaceKeys.map( k => interfaces[k]);
+      });

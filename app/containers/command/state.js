@@ -32,7 +32,13 @@ const initialState:CommandState = {
     },
   },
   methods: {},
-  objects: {},
+  objects: {
+    'root':{
+      objectItemKey:'root',
+      instanceApiKey:'root',
+      classInterfaceKeys:[],
+    }
+  },
 };
 
 export default initialState;

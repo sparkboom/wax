@@ -46,6 +46,20 @@ const methodSelectAll = {
   action: {type: 'CANVAS:SELECT_ALL'}
 };
 
+const methodSelectRoot = {
+  methodKey: shortid.generate(),
+  methodName: 'selectroot',
+  interfaceKey: interfaceGlobalKey,
+  action: {type: 'CANVAS:SELECT_ROOT'}
+};
+
+const methodDeselect = {
+  methodKey: shortid.generate(),
+  methodName: 'deselect',
+  interfaceKey: interfaceGlobalKey,
+  action: {type: 'CANVAS:DESELECT'}
+};
+
 const interfaceCanvas = {
   interfaceKey: interfaceCanvasKey,
   apiKey: apiCanvasKey,
@@ -83,7 +97,7 @@ const interfaceGlobal = {
   apiKey: apiCanvasKey,
   interfaceName: '#global',
   interfaceType: 'CLASS',
-  methodKeys: [methodSelectAll.methodKey],
+  methodKeys: [methodSelectAll.methodKey, methodSelectRoot.methodKey, methodDeselect.methodKey],
 };
 
 export const api = {
@@ -105,5 +119,7 @@ export const api = {
     methodSelectDescendents,
     methodSelectParent,
     methodSelectAll,
+    methodSelectRoot,
+    methodDeselect,
   ],
 }

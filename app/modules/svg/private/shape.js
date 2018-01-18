@@ -14,7 +14,6 @@ const _Shape =({shape, isSelected, ...props}) => {
     'triangle' : Triangle,
     'circle' : Circle,
   };
-  console.log('shape', shape, 'props', props);
   return map[shape](props) || null;
 };
 
