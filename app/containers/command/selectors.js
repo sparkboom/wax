@@ -18,7 +18,6 @@ const getSelection = props => props.canvas.selection;
 
 const getNodeInterfaces = node => ([
   interfaceNodeKey,
-  interfaceGlobalKey,
   (node.childNodeKeys.length>0? interfaceParentNodeKey : null),
   (!!node.parentNodeKey? interfaceChildNodeKey : null)
 ].filter(e => e!==null));
@@ -50,6 +49,7 @@ const getClassInterfacesForSelectedObjectsByItemKey = createSelector(
           }
           return acc;
         }, {});
+        
         return selectedClassInterfacesByKey;
       });
 
@@ -89,6 +89,7 @@ export const currentContext = createSelector(
         const supportedInterfacesByItemKey = mergeWith({}, nodeInterfaceKeys, classInterfaceKeys, instanceInterfaceKeys, mergeCustomizer);
         const commonInterfaceKeys = intersection(...Object.values(supportedInterfacesByItemKey));
 
+        commonInterfaceKeys.push(interfaceGlobalKey);
         return commonInterfaceKeys;
       },
 );

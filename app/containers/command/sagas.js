@@ -51,10 +51,12 @@ function* createObject(createObjectAction:Actions.CreateObject):Generator<mixed,
 
   const {itemKey, name, parentItemKey} = createObjectAction;
 
-  const state = yield select();
-  // $FlowFixMe
-  const parentInterface = state.command.interfaces[parentItemKey];
-  AutoComplete.indexMethod(parentInterface, name, itemKey);
+  if (parentItemKey){
+    const state = yield select();
+    // $FlowFixMe
+    const parentInterface = state.command.interfaces[parentItemKey];
+    AutoComplete.indexMethod(parentInterface, name, itemKey);
+  }
 }
 
 function* loadApi(action:Actions.LoadApi):Generator<mixed, void, void>{

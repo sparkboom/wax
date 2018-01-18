@@ -23,19 +23,19 @@ function* init(initAction){
 
   let loadSvgApiAction = CommandActions.loadApi(api);
   yield put(loadSvgApiAction);
+  //
+  // // Create Svg item by default
+  // let createSvgction = {
+  //   type:'ALL:CREATE_ITEM',
+  //   parentItemKey: ['root'],
+  //   itemKey: shortid.generate(),
+  //   name: 'svg',
+  //   class: interfaceSvgKey,
+  // };
+  // yield put(createSvgction);
 
-  // Create Svg item by default
-  let createSvgction = {
-    type:'ALL:CREATE_ITEM',
-    parentItemKey: ['root'],
-    itemKey: shortid.generate(),
-    name: 'svg',
-    class: interfaceSvgKey,
-  };
-  yield put(createSvgction);
-
-  const selectCanvasAction = CanvasActions.selectNodes([createSvgction.itemKey]);
-  yield put(selectCanvasAction);
+  // const selectCanvasAction = CanvasActions.selectNodes([createSvgction.itemKey]);
+  // yield put(selectCanvasAction);
 }
 
 function* willCreateShape(willCreateShapection){

@@ -16,23 +16,30 @@ const canvasReducer:CanvasReducer = (state = State.default, action) => {
   switch (action.type) {
 
     case ActionTypes.CreateNode:
-      const parentNode = state.nodes[action.parentItemKey];
-      return {
+
+      const newState = {
         ...state,
         nodes:{
           ...state.nodes,
-          [action.parentItemKey]:{
-            ...parentNode,
-            childNodeKeys:[...parentNode.childNodeKeys, action.itemKey],
-          },
           [action.itemKey]:{
             nodeItemKey:action.itemKey,
             name:action.name,
-            parentNodeKey:action.parentItemKey,
+            parentNodeKey:null,
             childNodeKeys: [],
           }
         }
       };
+
+      if (action.parentItemKey){
+        const parentNode = state.nodes[action.parentItemKey];
+        newState[action.parentItemKey] = {
+          ...parentNode,
+          childNodeKeys:[...parentNode.childNodeKeys, action.itemKey],
+        };
+        newState[action.itemKey].parentNodeKey = action.parentItemKey;
+      }
+
+      return newState;
 
     case ActionTypes.SelectNode:
       return {

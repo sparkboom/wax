@@ -16,31 +16,10 @@ export type CommandState = {
 const initialState:CommandState = {
   tokens: [{type:'TEXT',text:'',isSelected:false}],
   currentSuggestion:null,
-  apis: {
-    'root':{
-      apiKey:'root',
-      apiName:'root',
-      objectItemKey:'root',
-      interfaceKeys:['root']
-    },
-  },
-  interfaces: {
-    'root':{
-      interfaceKey:'root',
-      apiKey:'root',
-      interfaceName:'root',
-      methodKeys:[],
-      interfaceType:'INSTANCE',
-    },
-  },
+  apis: {},
+  interfaces: {},
   methods: {},
-  objects: {
-    'root':{
-      objectItemKey:'root',
-      instanceApiKey:'root',
-      classInterfaceKeys:[],
-    }
-  },
+  objects: {},
 };
 
 export default initialState;

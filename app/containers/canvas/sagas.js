@@ -20,6 +20,8 @@ function* init(initAction){
   // Register methods for SVG
   const registerCanvasApiAction = CommandActions.loadApi(api);
   yield put(registerCanvasApiAction);
+
+  
 }
 
 export default function* appSaga():VoidGenerator{

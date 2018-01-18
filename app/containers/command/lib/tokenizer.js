@@ -1,7 +1,7 @@
 // @flow
 
 import * as AutoComplete from './auto-complete';
-import * as Types from '../../../types';
+import * as Types from '../types';
 import shortid from 'shortid';
 
 // Code

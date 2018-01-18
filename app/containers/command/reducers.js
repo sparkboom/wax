@@ -66,9 +66,8 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
 
     case ActionTypes.CreateObject:
 
-      const parentInterface = state.interfaces[action.parentItemKey];
       const {itemKey, name, parentItemKey} = action;
-      return {
+      const newState = {
         ...state,
         apis: {
           ...state.apis,
@@ -88,22 +87,6 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
             methodKeys:[],
             interfaceType:'INSTANCE',
           },
-          [parentItemKey]:{
-            ...parentInterface,
-            methodKeys:[...parentInterface.methodKeys, itemKey],
-          },
-        },
-        methods: {
-          ...state.methods,
-          [itemKey]:{
-            methodKey:itemKey,
-            methodName:name,
-            interfaceKey:parentItemKey,
-            action:{
-              type:'CANVAS:SELECT_NODE',
-              nodeItemKeys:[itemKey]
-            }
-          }
         },
         objects:{
           ...state.objects,
@@ -114,6 +97,34 @@ const commandReducer:CommandReducer = (state = State.default, action) => {
           }
         }
       };
+
+      //add changes to parent items
+      if (parentItemKey){
+
+        const parentInterface = state.interfaces[action.parentItemKey];
+
+        // add object selector method to parent interface
+        newState.interfaces[parentItemKey] = {
+          ...parentInterface,
+          methodKeys:[...parentInterface.methodKeys, itemKey],
+        };
+        newState.methods[itemKey] = {
+          methodKey:itemKey,
+          methodName:name,
+          interfaceKey:parentItemKey,
+          action:{
+            type:'CANVAS:SELECT_NODE',
+            nodeItemKeys:[itemKey]
+          }
+        };
+      }
+
+      return newState;
+
+
+    case ActionTypes.InputChange:
+      return state;
+
     default:
       (action: empty);
       return state;

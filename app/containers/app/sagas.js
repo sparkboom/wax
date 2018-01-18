@@ -9,8 +9,7 @@ import * as ActionTypes from './action-types';
 import * as CanvasActionTypes from '../canvas/action-types';
 import * as Actions from './actions';
 import * as CommandActions from '../command/actions';
-
-import api from './lib/api';
+import {api, interfaceAppKey} from './lib/api';
 
 // Types
 
@@ -21,9 +20,19 @@ type VoidGenerator = Generator<void, void, void>;
 function* init(initAction){
 
   // Register App methods
-  const appApi = api();
-  const loadAppApiAction = CommandActions.loadApi(appApi);
+  const loadAppApiAction = CommandActions.loadApi(api);
   yield put(loadAppApiAction);
+
+
+  // Create Root item by default
+  let createRootAction = {
+    type:'ALL:CREATE_ITEM',
+    parentItemKey: null,
+    itemKey: 'root',
+    name: 'root',
+    class: interfaceAppKey,
+  };
+  yield put(createRootAction);
 }
 
 function* executeInstructions(action:Actions.ExecuteInstructions):Generator<mixed, void, void>{
