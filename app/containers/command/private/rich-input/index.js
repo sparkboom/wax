@@ -113,7 +113,6 @@ class RichInput extends React.Component<Props, State> {
     tokens = tokens || [];
 
     const tokensWithSuggestion = [...Tokenizer.tokenizeWithSuggestion(context, tokens, methods)] || [];
-
     const inputValue:string = tokens.reduce((a,v)=> a+v.text, '');
     const isFocussed = this.state.isFocussed;
 

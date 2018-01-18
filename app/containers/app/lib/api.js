@@ -30,7 +30,6 @@ export default function api(){
     apiKey: apiAppKey,
     interfaceName : 'app',
     interfaceType: 'CLASS',
-    //nodeKey: n/a for class interfaces,
     methodKeys: [throwErrorMethod.methodKey],
   };
 
