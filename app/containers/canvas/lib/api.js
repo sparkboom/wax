@@ -20,21 +20,21 @@ const methodRemoveNode = {
 
 const methodSelectChildren = {
   methodKey: shortid.generate(),
-  methodName: 'selectchildren',
+  methodName: 'children',
   interfaceKey: interfaceParentNodeKey,
   action: {type: 'CANVAS:SELECT_CHILDREN'}
 };
 
 const methodSelectDescendents = {
   methodKey: shortid.generate(),
-  methodName: 'selectdescendents',
+  methodName: 'descendents',
   interfaceKey: interfaceParentNodeKey,
   action: {type: 'CANVAS:SELECT_DESCENDENTS'}
 };
 
 const methodSelectParent = {
   methodKey: shortid.generate(),
-  methodName: 'selectparent',
+  methodName: 'parent',
   interfaceKey: interfaceChildNodeKey,
   action: {type: 'CANVAS:SELECT_PARENT'}
 };
@@ -48,7 +48,7 @@ const methodSelectAll = {
 
 const methodSelectRoot = {
   methodKey: shortid.generate(),
-  methodName: 'selectroot',
+  methodName: 'root',
   interfaceKey: interfaceGlobalKey,
   action: {type: 'CANVAS:SELECT_ROOT'}
 };

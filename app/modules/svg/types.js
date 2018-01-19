@@ -1,7 +1,12 @@
 // @flow
 
 // Fundamentals
+export type Svg = {
+  itemKey:string,
+};
+
+
 export type Shape = {
   shape:string,
-  shapeItemKey:string,
+  itemKey:string,
 };

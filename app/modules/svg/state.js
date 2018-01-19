@@ -5,6 +5,9 @@ import * as Types from './types';
 // Types
 
 export type SVGState = {
+  svg:{
+    [string]:Types.Svg
+  },
   items: {
     [string]:Types.Shape
   },
@@ -13,6 +16,6 @@ export type SVGState = {
 // Code
 
 export default {
-  items: {
-  },
+  svg:{},
+  items: {},
 }

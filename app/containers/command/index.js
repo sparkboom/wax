@@ -11,6 +11,7 @@ import * as AppTypes from '../app/types';
 import type {CommandState} from './state';
 
 // Types
+
 type CommandReduxProps = CommandState;
 type CommandDispatch = {
   inputChange:(?string,string,number,number)=>void,
@@ -25,7 +26,7 @@ type CommandConnectDispatch = ((Actions.Union|AppActions.Union)=>void)=>CommandD
 class CommandLine extends React.Component<Props> {
 
   render() {
-    let {tokens, contextInterfaces, inputChange, setSuggestion, suggestion} = this.props;
+    const {tokens, contextInterfaces, inputChange, setSuggestion, suggestion} = this.props;
     return (
     <div>
       <ContextList contextInterfaces={contextInterfaces} />

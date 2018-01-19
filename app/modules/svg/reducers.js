@@ -14,22 +14,34 @@ type SVGReducer = (State.SVGState, Actions.Union) => State.SVGState;
 const svgReducer:SVGReducer = (state = State.default, action) => {
 
   switch (action.type) {
-    case ActionTypes.CreateShape:
+    case ActionTypes.CreateItem:
 
-      if (action.class!==Api.interfaceSvgShapeKey){
+      if (action.class===Api.interfaceSvgKey){
+        return {
+          ...state,
+          svg: {
+            ...state.svg,
+            [action.itemKey]:{
+              key:action.itemKey
+            }
+          }
+        };
+      }else if (action.class===Api.interfaceSvgShapeKey){
+
+        return {
+          ...state,
+          items: {
+            ...state.items,
+            [action.itemKey]:{
+              key:action.itemKey,
+              ...action.properties
+            }
+          }
+        };
+      }else {
+
         return state;
       }
-
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          [action.itemKey]:{
-            key:action.itemKey,
-            ...action.properties
-          }
-        }
-      };
 
     default:
       (action: empty)

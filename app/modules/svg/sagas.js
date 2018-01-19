@@ -23,19 +23,28 @@ function* init(initAction){
 
   let loadSvgApiAction = CommandActions.loadApi(api);
   yield put(loadSvgApiAction);
-  //
-  // // Create Svg item by default
-  // let createSvgction = {
-  //   type:'ALL:CREATE_ITEM',
-  //   parentItemKey: ['root'],
-  //   itemKey: shortid.generate(),
-  //   name: 'svg',
-  //   class: interfaceSvgKey,
-  // };
-  // yield put(createSvgction);
+}
 
-  // const selectCanvasAction = CanvasActions.selectNodes([createSvgction.itemKey]);
-  // yield put(selectCanvasAction);
+function* willCreateSvg(willCreateSvgAction){
+  const state = yield select();
+
+  // Only create an SVG if it is in root, and no toher SVG exists!
+  if (state.canvas.selection.length===1 && state.canvas.selection[0] === 'root' && Object.keys(state.svg.svg).length ===0){
+
+    let createSvgAction = {
+      type:'ALL:CREATE_ITEM',
+      parentItemKey: 'root',
+      itemKey: shortid.generate(),
+      name: 'svg',
+      class: interfaceSvgKey,
+      properties : {},
+    };
+    yield put(createSvgAction);
+
+  }else{
+
+    //failure steps
+  }
 }
 
 function* willCreateShape(willCreateShapection){
@@ -63,4 +72,5 @@ function* willCreateShape(willCreateShapection){
 export default function* svgSaga():Generator<void, void, void>{
   yield takeEvery(AppActionTypes.Init, init);
   yield takeEvery('SVG:WILL_CREATE_SHAPE', willCreateShape);
+  yield takeEvery('SVG:WILL_CREATE_SVG', willCreateSvg);
 }

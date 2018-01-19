@@ -32,11 +32,11 @@ const canvasReducer:CanvasReducer = (state = State.default, action) => {
 
       if (action.parentItemKey){
         const parentNode = state.nodes[action.parentItemKey];
-        newState[action.parentItemKey] = {
+        newState.nodes[action.parentItemKey] = {
           ...parentNode,
           childNodeKeys:[...parentNode.childNodeKeys, action.itemKey],
         };
-        newState[action.itemKey].parentNodeKey = action.parentItemKey;
+        newState.nodes[action.itemKey].parentNodeKey = action.parentItemKey;
       }
 
       return newState;
